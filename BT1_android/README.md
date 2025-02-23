@@ -1,4 +1,4 @@
-# YÊU CẦU: Viết chương trình quản lý lớp học CNTT:
+# I.YÊU CẦU: Viết chương trình quản lý lớp học CNTT:
 1. Mỗi sinh viên sẽ có các thông tin:
   - Thông tin sinh viên: FirstName, LastName, Birthdate, Address, Class,
   - Điểm môn học:
@@ -11,7 +11,7 @@
 3. Mỗi lớp sẽ có các phương thức xác định số sinh viên theo rank điểm: A, B, C, D & <D
 4. Chương trình chính sẽ hiển thị ra danh sách các lớp, khi người dùng nhập mã 1 lớp sẽ hiển thị danh sách sinh viên và tổng kết số người theo rank: A, B, C, D & <D
 
-# Chương Trình
+# II. CHƯƠNG TRÌNH:
 ## 1. Mô tả tổng quan
 - Chương trình Quản lý lớp học CNTT giúp theo dõi danh sách sinh viên, tính điểm trung bình, xếp loại sinh viên theo các mức A, B, C, D, <D, và thống kê số lượng sinh viên theo từng xếp hạng trong mỗi lớp học.
 - Giao diện đồ họa (GUI) được thiết kế bằng Java Swing, hiển thị danh sách lớp học, sinh viên và tổng kết số lượng sinh viên theo từng loại điểm.
