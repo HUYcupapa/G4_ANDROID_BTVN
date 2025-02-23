@@ -27,6 +27,7 @@ public class QLSV extends JFrame {
         LopHoc class1 = new LopHoc("CNTT1");
         LopHoc class2 = new LopHoc("CNTT2");
 
+        // Thêm sinh viên 1:
         Map<String, Double> grades1 = Map.of(
             "Lập trình hướng đối tượng", 9.0,
             "Quản lý dự án", 8.5,
@@ -36,6 +37,7 @@ public class QLSV extends JFrame {
         );
         class1.addStudent(new SinhVien("Nguyen", "An", "2000-01-01", "Hanoi", "CNTT1", grades1));
 
+        //Thêm sinh viên 2:
         Map<String, Double> grades2 = Map.of(
             "Lập trình hướng đối tượng", 7.0,
             "Quản lý dự án", 6.0,
