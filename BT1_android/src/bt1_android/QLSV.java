@@ -45,7 +45,31 @@ public class QLSV extends JFrame {
             "Cơ sở dữ liệu", 6.0,
             "Lập trình ứng dụng cho TBDĐ", 5.5
         );
+         Map<String, Double> grades2_1 = Map.of(
+            "Lập trình hướng đối tượng", 9.0,
+            "Quản lý dự án", 9.0,
+            "Học Máy", 9.5,
+            "Cơ sở dữ liệu", 9.0,
+            "Lập trình ứng dụng cho TBDĐ", 9.5
+        );
+         Map<String, Double> grades2_2 = Map.of(
+            "Lập trình hướng đối tượng", 7.0,
+            "Quản lý dự án", 8.0,
+            "Học Máy", 7.5,
+            "Cơ sở dữ liệu", 7.0,
+            "Lập trình ứng dụng cho TBDĐ", 6.5
+        );
+
+        
         class2.addStudent(new SinhVien("Tran", "Binh", "2001-02-02", "HCM", "CNTT2", grades2));
+        class2.addStudent(new SinhVien("Nguyen", "Duc", "2001-03-03", "HCM", "CNTT2", grades2_1));
+        class2.addStudent(new SinhVien("Nguyen", "Trung Kien", "2001-04-04", "HCM", "CNTT2", grades2));
+        class2.addStudent(new SinhVien("Hoang", "Quoc Anh", "2001-02-02", "HCM", "CNTT2", grades2_2));
+        class2.addStudent(new SinhVien("Pham", "Ha My", "2001-02-01", "HCM", "CNTT2", grades2_1));
+        class2.addStudent(new SinhVien("Pham", "Gia Bach", "2001-12-02", "HCM", "CNTT2", grades2_1));
+        class2.addStudent(new SinhVien("Nguyen", "Quoc Bao", "2001-04-02", "HCM", "CNTT2", grades2_1));
+        class2.addStudent(new SinhVien("Le", "Duc Loi", "2001-11-09", "HCM", "CNTT2", grades2));
+        class2.addStudent(new SinhVien("Le", "Bao Han", "2001-02-21", "HCM", "CNTT2", grades2_2));
 
         classes.put("CNTT1", class1);
         classes.put("CNTT2", class2);
