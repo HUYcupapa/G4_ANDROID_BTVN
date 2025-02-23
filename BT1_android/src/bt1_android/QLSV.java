@@ -45,6 +45,21 @@ public class QLSV extends JFrame {
             "Cơ sở dữ liệu", 6.0,
             "Lập trình ứng dụng cho TBDĐ", 5.5
         );
+
+        //Thêm 10 Sinh viên lớp CNTT1:
+        Map<String, Double> grades1_1 = Map.of(
+            "Lập trình hướng đối tượng", 4.0,
+            "Quản lý dự án", 7.5,
+            "Học Máy", 6.0,
+            "Cơ sở dữ liệu", 6.5,
+            "Lập trình ứng dụng cho TBDĐ", 9.0
+        );
+
+        class1.addStudent(new SinhVien("Nguyen", "Ba", "2001-01-02", "HN", "CNTT1", grades1_1));
+        
+        
+
+        //Thêm 10 Sinh viên lớp CNTT2:
          Map<String, Double> grades2_1 = Map.of(
             "Lập trình hướng đối tượng", 9.0,
             "Quản lý dự án", 9.0,
@@ -70,10 +85,16 @@ public class QLSV extends JFrame {
         class2.addStudent(new SinhVien("Nguyen", "Quoc Bao", "2001-04-02", "HCM", "CNTT2", grades2_1));
         class2.addStudent(new SinhVien("Le", "Duc Loi", "2001-11-09", "HCM", "CNTT2", grades2));
         class2.addStudent(new SinhVien("Le", "Bao Han", "2001-02-21", "HCM", "CNTT2", grades2_2));
+        //DONE THÊM SV CNTT2
 
+
+        //Thêm lớp mới vào bảng:
         classes.put("CNTT1", class1);
         classes.put("CNTT2", class2);
 
+
+
+        //CODE GUI Ở ĐÂY:
         setLayout(new BorderLayout(10, 10));
 
         JPanel topPanel = new JPanel();
