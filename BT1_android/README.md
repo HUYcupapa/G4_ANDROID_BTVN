@@ -1,4 +1,5 @@
-# I.YÊU CẦU: Viết chương trình quản lý lớp học CNTT:
+# I.YÊU CẦU: 
+## Viết chương trình quản lý lớp học CNTT:
 1. Mỗi sinh viên sẽ có các thông tin:
   - Thông tin sinh viên: FirstName, LastName, Birthdate, Address, Class,
   - Điểm môn học:
