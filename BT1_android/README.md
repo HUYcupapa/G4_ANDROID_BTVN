@@ -62,7 +62,7 @@ Chương trình được tổ chức thành 3 file chính:
   + ✔️ Hiển thị tổng số sinh viên theo từng rank (JTextArea)
   + ✔️ Bảng có thể lọc, hiển thị điểm trung bình và xếp hạng của từng sinh viên
 
-## 5.Giao diện chương trình:
+## 5. Giao diện chương trình:
 - Giao diện khi khởi động:
   
 ![image](https://github.com/user-attachments/assets/d171c5b6-181a-44a8-9208-27da9e04f581)
