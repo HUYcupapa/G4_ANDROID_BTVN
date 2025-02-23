@@ -41,12 +41,12 @@ Chương trình được tổ chức thành 3 file chính:
 
 - Phương thức chính:
 - ✅ getAverageGrade() – Tính điểm trung bình dựa trên tất cả môn học.
-- ✅ getRank() – Xếp loại sinh viên theo điểm trung bình:
-  + A: >= 9.0
-  + B: >= 8.0
-  + C: >= 6.5
-  + D: >= 5.0
-  + <D: < 5.0
+- ✅ getRank() – Xếp loại sinh viên theo điểm trung bình đã tính ở hàm getAverageGrade():
+  + A: ĐTB >= 9.0
+  + B: ĐTB >= 8.0
+  + C: ĐTB >= 6.5
+  + D: ĐTB >= 5.0
+  + <D: ĐTB < 5.0
     
 ### 4.2. Lớp LopHoc (LopHoc.java)
 - Quản lý danh sách sinh viên của từng lớp.
@@ -64,7 +64,10 @@ Chương trình được tổ chức thành 3 file chính:
 
 ## 5.Giao diện chương trình:
 - Giao diện khi khởi động:
+  
 ![image](https://github.com/user-attachments/assets/d171c5b6-181a-44a8-9208-27da9e04f581)
+
 - Bấm chọn 1 lớp trên combobox "Chọn lớp" và bấm button "Xem lớp", chương trình sẽ hiển thị danh sách các sinh viên trong lớp dưới dạng bảng và thống kê rank của lớp:
+
 ![image](https://github.com/user-attachments/assets/ad7b9f96-43fd-4369-b46e-4a5c1127cc6b)
 ![image](https://github.com/user-attachments/assets/3ee4f70a-3549-4365-ab36-c3d3b5bf17ca)
