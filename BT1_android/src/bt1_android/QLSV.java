@@ -47,6 +47,7 @@ public class QLSV extends JFrame {
         );
 
         //Thêm 10 Sinh viên lớp CNTT1:
+        // #1:
         Map<String, Double> grades1_1 = Map.of(
             "Lập trình hướng đối tượng", 4.0,
             "Quản lý dự án", 7.5,
@@ -54,8 +55,98 @@ public class QLSV extends JFrame {
             "Cơ sở dữ liệu", 6.5,
             "Lập trình ứng dụng cho TBDĐ", 9.0
         );
-
         class1.addStudent(new SinhVien("Nguyen", "Ba", "2001-01-02", "HN", "CNTT1", grades1_1));
+
+        //#2:
+        Map<String, Double> grades1_2 = Map.of(
+            "Lập trình hướng đối tượng", 6.5,
+            "Quản lý dự án", 5.0,
+            "Học Máy", 8.0,
+            "Cơ sở dữ liệu", 7.5,
+            "Lập trình ứng dụng cho TBDĐ", 9.5
+        );
+        class1.addStudent(new SinhVien("Tran", "An", "2001-02-15", "HCM", "CNTT1", grades1_2));
+
+        //#3:
+        Map<String, Double> grades1_3 = Map.of(
+            "Lập trình hướng đối tượng", 7.0,
+            "Quản lý dự án", 8.5,
+            "Học Máy", 5.5,
+            "Cơ sở dữ liệu", 4.5,
+            "Lập trình ứng dụng cho TBDĐ", 6.0
+        );
+        class1.addStudent(new SinhVien("Le", "Duy", "2001-03-22", "DN", "CNTT1", grades1_3));
+
+        //#4:
+        Map<String, Double> grades1_4 = Map.of(
+            "Lập trình hướng đối tượng", 5.5,
+            "Quản lý dự án", 6.0,
+            "Học Máy", 7.5,
+            "Cơ sở dữ liệu", 8.0,
+            "Lập trình ứng dụng cho TBDĐ", 4.0
+        );
+        class1.addStudent(new SinhVien("Pham", "Minh", "2001-04-10", "CT", "CNTT1", grades1_4));
+
+        //#5:
+        Map<String, Double> grades1_5 = Map.of(
+            "Lập trình hướng đối tượng", 8.0,
+            "Quản lý dự án", 9.5,
+            "Học Máy", 6.5,
+            "Cơ sở dữ liệu", 5.0,
+            "Lập trình ứng dụng cho TBDĐ", 7.0
+        );
+        class1.addStudent(new SinhVien("Vo", "Tuan", "2001-05-18", "VT", "CNTT1", grades1_5));
+
+        //#6:
+        Map<String, Double> grades1_6 = Map.of(
+            "Lập trình hướng đối tượng", 9.5,
+            "Quản lý dự án", 7.0,
+            "Học Máy", 4.5,
+            "Cơ sở dữ liệu", 6.0,
+            "Lập trình ứng dụng cho TBDĐ", 8.5
+        );
+        class1.addStudent(new SinhVien("Dang", "Hieu", "2001-06-25", "QN", "CNTT1", grades1_6));
+
+        //#7:
+        Map<String, Double> grades1_7 = Map.of(
+            "Lập trình hướng đối tượng", 4.5,
+            "Quản lý dự án", 6.5,
+            "Học Máy", 9.0,
+            "Cơ sở dữ liệu", 7.5,
+            "Lập trình ứng dụng cho TBDĐ", 5.0
+        );
+        class1.addStudent(new SinhVien("Ho", "Phuc", "2001-07-30", "PY", "CNTT1", grades1_7));
+
+        //#8:
+        Map<String, Double> grades1_8 = Map.of(
+            "Lập trình hướng đối tượng", 7.5,
+            "Quản lý dự án", 5.5,
+            "Học Máy", 8.5,
+            "Cơ sở dữ liệu", 6.0,
+            "Lập trình ứng dụng cho TBDĐ", 4.0
+        );
+        class1.addStudent(new SinhVien("Ngo", "Tam", "2001-08-14", "NT", "CNTT1", grades1_8));
+
+        //#9:
+        Map<String, Double> grades1_9 = Map.of(
+            "Lập trình hướng đối tượng", 6.0,
+            "Quản lý dự án", 4.5,
+            "Học Máy", 5.0,
+            "Cơ sở dữ liệu", 9.5,
+            "Lập trình ứng dụng cho TBDĐ", 7.5
+        );
+        class1.addStudent(new SinhVien("Trinh", "Long", "2001-09-05", "LA", "CNTT1", grades1_9));
+
+        //#10:
+        Map<String, Double> grades1_10 = Map.of(
+            "Lập trình hướng đối tượng", 9.0,
+            "Quản lý dự án", 8.0,
+            "Học Máy", 7.0,
+            "Cơ sở dữ liệu", 5.5,
+            "Lập trình ứng dụng cho TBDĐ", 6.5
+        );
+        class1.addStudent(new SinhVien("Ly", "Quang", "2001-10-12", "TG", "CNTT1", grades1_10));
+
         
         
 
