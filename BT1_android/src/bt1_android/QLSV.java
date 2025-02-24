@@ -175,7 +175,15 @@ Map<String, Double> gradesNew3 = Map.of(
 );
 class1.addStudent(new SinhVien("Tran", "Lan Luy", "2003-06-21", "TA", "CNTT1", gradesNew3));
 
-        
+        // Thêm sinh viên mới vào lớp CNTT1:
+Map<String, Double> gradesNew4 = Map.of(
+    "Lập trình hướng đối tượng", 6.0,
+    "Quản lý dự án", 7.5,
+    "Học Máy", 8.5,
+    "Cơ sở dữ liệu", 9.0
+);
+class1.addStudent(new SinhVien("Tran", "Ha Lan", "2000-06-21", "HN", "CNTT1", gradesNew4));
+
         
 
         //Thêm 10 Sinh viên lớp CNTT2:
