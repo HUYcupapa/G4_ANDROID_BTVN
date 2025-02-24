@@ -220,6 +220,14 @@ class1.addStudent(new SinhVien("Tran", "Long Duy", "2000-09-21", "HN", "CNTT1", 
         class2.addStudent(new SinhVien("Le", "Duc Loi", "2001-11-09", "HCM", "CNTT2", grades2));
         class2.addStudent(new SinhVien("Le", "Bao Han", "2001-02-21", "HCM", "CNTT2", grades2_2));
         class2.addStudent(new SinhVien("Duc", "Hoang", "2001-03-21", "HCM", "CNTT2", grades2));
+
+        Map<String, Double> gradesNe = Map.of(
+    "Lập trình hướng đối tượng", 7.0,
+    "Quản lý dự án", 6.5,
+    "Học Máy", 8.0,
+    "Cơ sở dữ liệu", 8.5
+);
+class2.addStudent(new SinhVien("Le", "Mai Anh", "2004-03-22", "ĐA", "CNTT2", gradesNe));
         //DONE THÊM SV CNTT2
 
 
