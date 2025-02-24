@@ -25,10 +25,11 @@
 - 🔹 Hiển thị thông tin sinh viên dưới dạng bảng có thể lọc theo lớp.
 
 ## 3. Cấu trúc chương trình
-Chương trình được tổ chức thành 3 file chính:
+Chương trình được tổ chức thành 4 file chính:
 - SinhVien.java: Định nghĩa lớp SinhVien, chứa thông tin cá nhân và điểm số của sinh viên.
 - LopHoc.java: Quản lý danh sách sinh viên trong một lớp học và thực hiện thống kê số lượng theo rank.
-- QLSV.java (chương trình chính): Hiển thị giao diện người dùng (GUI), cho phép lựa chọn lớp học, xem danh sách sinh viên và tổng kết số lượng theo từng hạng điểm.
+- QLSV.java: thêm data sinh viên vào trong file này.
+- GUI.java (chương trình chính): Hiển thị giao diện người dùng (GUI), cho phép lựa chọn lớp học, xem danh sách sinh viên và tổng kết số lượng theo từng hạng điểm.
 
 ## 4. Chi tiết các lớp
 ### 4.1. Lớp SinhVien (SinhVien.java)
@@ -55,7 +56,12 @@ Chương trình được tổ chức thành 3 file chính:
 + ✅ getRankSummary() – Thống kê số lượng sinh viên theo từng xếp loại A, B, C, D, <D.
 + ✅ displayStudents() – In danh sách sinh viên của lớp ra màn hình console.
 
-### 4.3. Chương trình chính (QLSV.java)
+### 4.3. Lớp QLSV (QLSV.java)
+- Lưu trữ thông tin các sinh viên
+- Xử lý thông tin sinh viên
+- Gửi thông tin sinh viên đến lớp GUI để hiển thị.
+  
+### 4.4. Chương trình chính (GUI.java)
 - Giao diện đồ họa (GUI) được thiết kế bằng Java Swing, có các tính năng chính:
   + ✔️ Chọn lớp từ danh sách thả xuống (JComboBox)
   + ✔️ Hiển thị danh sách sinh viên trong lớp (JTable)
