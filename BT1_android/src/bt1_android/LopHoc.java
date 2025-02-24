@@ -9,6 +9,14 @@ public class LopHoc {
     String className;
     List<SinhVien> DSSV;
 
+    public String getClassName(){
+        return className;
+    }
+
+    public List<SinhVien> getDSSV(){
+        return DSSV;
+    }
+
     public LopHoc(String className) {
         this.className = className;
         this.DSSV = new ArrayList<>();
