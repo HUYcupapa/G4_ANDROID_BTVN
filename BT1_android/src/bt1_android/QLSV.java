@@ -147,6 +147,16 @@ public class QLSV extends JFrame {
         );
         class1.addStudent(new SinhVien("Ly", "Quang", "2001-10-12", "TG", "CNTT1", grades1_10));
 
+        // Thêm sinh viên mới vào lớp CNTT1:
+Map<String, Double> gradesNew = Map.of(
+    "Lập trình hướng đối tượng", 7.0,
+    "Quản lý dự án", 7.7,
+    "Học Máy", 8.0,
+    "Cơ sở dữ liệu", 8.0
+);
+class1.addStudent(new SinhVien("Tran", "An Ha", "2003-03-09", "ĐN", "CNTT1", gradesNew));
+
+
         
         
 
