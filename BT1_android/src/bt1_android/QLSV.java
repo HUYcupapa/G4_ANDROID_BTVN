@@ -167,7 +167,16 @@ public class QLSV extends JFrame {
         );
 
         
-        
+        class2.addStudent(new SinhVien("Tran", "Binh", "2001-02-02", "HCM", "CNTT2", grades2));
+        class2.addStudent(new SinhVien("Nguyen", "Duc", "2001-03-03", "HCM", "CNTT2", grades2_1));
+        class2.addStudent(new SinhVien("Nguyen", "Trung Kien", "2001-04-04", "HCM", "CNTT2", grades2));
+        class2.addStudent(new SinhVien("Hoang", "Quoc Anh", "2001-02-02", "HCM", "CNTT2", grades2_2));
+        class2.addStudent(new SinhVien("Pham", "Ha My", "2001-02-01", "HCM", "CNTT2", grades2_1));
+        class2.addStudent(new SinhVien("Pham", "Gia Bach", "2001-12-02", "HCM", "CNTT2", grades2_1));
+        class2.addStudent(new SinhVien("Nguyen", "Quoc Bao", "2001-04-02", "HCM", "CNTT2", grades2_1));
+        class2.addStudent(new SinhVien("Le", "Duc Loi", "2001-11-09", "HCM", "CNTT2", grades2));
+        class2.addStudent(new SinhVien("Le", "Bao Han", "2001-02-21", "HCM", "CNTT2", grades2_2));
+        class2.addStudent(new SinhVien("Duc", "Hoang", "2001-03-21", "HCM", "CNTT2", grades2));
         //DONE THÊM SV CNTT2
 
 
