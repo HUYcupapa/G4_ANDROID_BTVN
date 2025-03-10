@@ -1,6 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools">
+    xmlns:tools="http://schemas.android.com/tools"
+    package="com.example.myapplication">
+
+    <!-- Cấp quyền sử dụng Internet -->
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.RECEIVE_SMS" />
+    <uses-permission android:name="android.permission.READ_SMS" />
 
     <application
         android:allowBackup="true"
@@ -12,15 +18,31 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MyApplication"
         tools:targetApi="31">
-        <activity
-            android:name=".MainActivity"
+
+        <!-- Khai báo tất cả Activity -->
+        <activity android:name="com.example.myapplication.ForgotPassActivity"
+            android:exported="false" />
+        <activity android:name="com.example.myapplication.LoginOtpActivity"
+            android:exported="false" />
+        <activity android:name="com.example.myapplication.SignupActivity"
+            android:exported="false" />
+        <activity android:name="com.example.myapplication.LoginActivity"
+            android:exported="false" />
+        <activity android:name="com.example.myapplication.HomeActivity"
+            android:exported="true" />
+
+        <!-- MainActivity là màn hình khởi động chính -->
+        <activity android:name="com.example.myapplication.MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <!-- ChoiceLoginActivity để chọn phương thức đăng nhập -->
+        <activity android:name="com.example.myapplication.ChoiceLoginActivity"
+            android:exported="true" />
     </application>
 
 </manifest>
