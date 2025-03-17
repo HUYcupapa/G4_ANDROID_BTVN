@@ -1,7 +1,7 @@
 {
     "logs": [
         {
-            "outputFile": "com.example.myapplication.app-mergeDebugResources-54:/values-w600dp-v13/values-w600dp-v13.xml",
+            "outputFile": "com.example.myapplication.app-mergeDebugResources-55:/values-w600dp-v13/values-w600dp-v13.xml",
             "map": [
                 {
                     "source": "E:\\AH_ANROID\\MyApplication\\app\\src\\main\\res\\values-w600dp\\dimens.xml",

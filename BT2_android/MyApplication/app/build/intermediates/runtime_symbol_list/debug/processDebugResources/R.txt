@@ -137,6 +137,7 @@ int attr alpha 0x7f030031
 int attr alphabeticModifiers 0x7f030032
 int attr altSrc 0x7f030033
 int attr alwaysExpand 0x7f030034
+int attr ambientEnabled 0x7f030529
 int attr animateCircleAngleTo 0x7f030035
 int attr animateMenuItems 0x7f030036
 int attr animateNavigationIcon 0x7f030037
@@ -244,6 +245,13 @@ int attr buttonStyle 0x7f03009c
 int attr buttonStyleSmall 0x7f03009d
 int attr buttonTint 0x7f03009e
 int attr buttonTintMode 0x7f03009f
+int attr cameraBearing 0x7f03052a
+int attr cameraMaxZoomPreference 0x7f03052b
+int attr cameraMinZoomPreference 0x7f03052c
+int attr cameraTargetLat 0x7f03052d
+int attr cameraTargetLng 0x7f03052e
+int attr cameraTilt 0x7f03052f
+int attr cameraZoom 0x7f030530
 int attr cardBackgroundColor 0x7f0300a0
 int attr cardCornerRadius 0x7f0300a1
 int attr cardElevation 0x7f0300a2
@@ -734,6 +742,10 @@ int attr labelVisibilityMode 0x7f030286
 int attr largeFontVerticalOffsetAdjustment 0x7f030287
 int attr lastBaselineToBottomHeight 0x7f030288
 int attr lastItemDecorated 0x7f030289
+int attr latLngBoundsNorthEastLatitude 0x7f030531
+int attr latLngBoundsNorthEastLongitude 0x7f030532
+int attr latLngBoundsSouthWestLatitude 0x7f030533
+int attr latLngBoundsSouthWestLongitude 0x7f030534
 int attr launchSingleTop 0x7f03028a
 int attr layout 0x7f03028b
 int attr layoutDescription 0x7f03028c
@@ -830,6 +842,7 @@ int attr listPreferredItemPaddingEnd 0x7f0302e6
 int attr listPreferredItemPaddingLeft 0x7f0302e7
 int attr listPreferredItemPaddingRight 0x7f0302e8
 int attr listPreferredItemPaddingStart 0x7f0302e9
+int attr liteMode 0x7f030535
 int attr logo 0x7f0302ea
 int attr logoAdjustViewBounds 0x7f0302eb
 int attr logoDescription 0x7f0302ec
@@ -852,6 +865,8 @@ int attr lottie_repeatMode 0x7f0302fc
 int attr lottie_scale 0x7f0302fd
 int attr lottie_speed 0x7f0302fe
 int attr lottie_url 0x7f0302ff
+int attr mapId 0x7f030536
+int attr mapType 0x7f030537
 int attr marginHorizontal 0x7f030300
 int attr marginLeftSystemWindowInsets 0x7f030301
 int attr marginRightSystemWindowInsets 0x7f030302
@@ -1370,11 +1385,20 @@ int attr triggerId 0x7f030502
 int attr triggerReceiver 0x7f030503
 int attr triggerSlack 0x7f030504
 int attr ttcIndex 0x7f030505
+int attr uiCompass 0x7f030538
+int attr uiMapToolbar 0x7f030539
+int attr uiRotateGestures 0x7f03053a
+int attr uiScrollGestures 0x7f03053b
+int attr uiScrollGesturesDuringRotateOrZoom 0x7f03053c
+int attr uiTiltGestures 0x7f03053d
+int attr uiZoomControls 0x7f03053e
+int attr uiZoomGestures 0x7f03053f
 int attr upDuration 0x7f030506
 int attr uri 0x7f030507
 int attr useCompatPadding 0x7f030508
 int attr useDrawerArrowDrawable 0x7f030509
 int attr useMaterialThemeColors 0x7f03050a
+int attr useViewLifecycle 0x7f030540
 int attr values 0x7f03050b
 int attr verticalOffset 0x7f03050c
 int attr verticalOffsetWithText 0x7f03050d
@@ -1405,6 +1429,7 @@ int attr windowNoTitle 0x7f030525
 int attr yearSelectedStyle 0x7f030526
 int attr yearStyle 0x7f030527
 int attr yearTodayStyle 0x7f030528
+int attr zOrderOnTop 0x7f030541
 int bool abc_action_bar_embed_tabs 0x7f040000
 int bool abc_config_actionMenuItemAllCaps 0x7f040001
 int bool mtrl_btn_textappearance_all_caps 0x7f040002
@@ -3335,6 +3360,7 @@ int id browser_actions_menu_item_text 0x7f08006d
 int id browser_actions_menu_items 0x7f08006e
 int id browser_actions_menu_view 0x7f08006f
 int id btnLogin 0x7f080070
+int id btnOpenMap 0x7f080227
 int id btnOtp 0x7f080071
 int id btnemail 0x7f080072
 int id btngetotp 0x7f080073
@@ -3358,6 +3384,8 @@ int id checkbox 0x7f080084
 int id checked 0x7f080085
 int id chronometer 0x7f080086
 int id circle_center 0x7f080087
+int id cityCountry 0x7f080230
+int id cityName 0x7f080231
 int id clear_text 0x7f080088
 int id clip_horizontal 0x7f080089
 int id clip_vertical 0x7f08008a
@@ -3469,6 +3497,7 @@ int id homeAsUp 0x7f0800f3
 int id honorRequest 0x7f0800f4
 int id horizontal 0x7f0800f5
 int id horizontal_only 0x7f0800f6
+int id hybrid 0x7f08022b
 int id icon 0x7f0800f7
 int id icon_group 0x7f0800f8
 int id icon_only 0x7f0800f9
@@ -3501,6 +3530,8 @@ int id locale 0x7f080113
 int id lottie_layer_name 0x7f080114
 int id ltr 0x7f080115
 int id m3_side_sheet 0x7f080116
+int id map 0x7f08022c
+int id mapFragment 0x7f080232
 int id marquee 0x7f080117
 int id masked 0x7f080118
 int id match_constraint 0x7f080119
@@ -3620,6 +3651,7 @@ int id progress_horizontal 0x7f08018a
 int id radio 0x7f08018b
 int id ratio 0x7f08018c
 int id rectangles 0x7f08018d
+int id recyclerView 0x7f08022d
 int id report_drawn 0x7f08018e
 int id restart 0x7f08018f
 int id reverse 0x7f080190
@@ -3631,6 +3663,7 @@ int id right_side 0x7f080195
 int id rounded 0x7f080196
 int id row_index_key 0x7f080197
 int id rtl 0x7f080198
+int id satellite 0x7f08022e
 int id save_non_transition_alpha 0x7f080199
 int id save_overlay_view 0x7f08019a
 int id sawtooth 0x7f08019b
@@ -3709,6 +3742,7 @@ int id tag_transition_group 0x7f0801e3
 int id tag_unhandled_key_event_manager 0x7f0801e4
 int id tag_unhandled_key_listeners 0x7f0801e5
 int id tag_window_insets_animation_callback 0x7f0801e6
+int id terrain 0x7f08022f
 int id text 0x7f0801e7
 int id text2 0x7f0801e8
 int id textEnd 0x7f0801e9
@@ -3895,6 +3929,7 @@ int layout activity_home 0x7f0b001e
 int layout activity_login 0x7f0b001f
 int layout activity_login_otp 0x7f0b0020
 int layout activity_main 0x7f0b0021
+int layout activity_maps 0x7f0b0074
 int layout activity_signup 0x7f0b0022
 int layout browser_actions_context_menu_page 0x7f0b0023
 int layout browser_actions_context_menu_row 0x7f0b0024
@@ -3916,6 +3951,7 @@ int layout design_text_input_end_icon 0x7f0b0033
 int layout design_text_input_start_icon 0x7f0b0034
 int layout ime_base_split_test_activity 0x7f0b0035
 int layout ime_secondary_split_test_activity 0x7f0b0036
+int layout item_city 0x7f0b0075
 int layout m3_alert_dialog 0x7f0b0037
 int layout m3_alert_dialog_actions 0x7f0b0038
 int layout m3_alert_dialog_title 0x7f0b0039
@@ -6661,6 +6697,33 @@ int styleable LottieAnimationView_lottie_repeatMode 13
 int styleable LottieAnimationView_lottie_scale 14
 int styleable LottieAnimationView_lottie_speed 15
 int styleable LottieAnimationView_lottie_url 16
+int[] styleable MapAttrs { 0x7f03004d, 0x7f030529, 0x7f03052a, 0x7f03052b, 0x7f03052c, 0x7f03052d, 0x7f03052e, 0x7f03052f, 0x7f030530, 0x7f030531, 0x7f030532, 0x7f030533, 0x7f030534, 0x7f030535, 0x7f030536, 0x7f030537, 0x7f030538, 0x7f030539, 0x7f03053a, 0x7f03053b, 0x7f03053c, 0x7f03053d, 0x7f03053e, 0x7f03053f, 0x7f030540, 0x7f030541 }
+int styleable MapAttrs_backgroundColor 0
+int styleable MapAttrs_ambientEnabled 1
+int styleable MapAttrs_cameraBearing 2
+int styleable MapAttrs_cameraMaxZoomPreference 3
+int styleable MapAttrs_cameraMinZoomPreference 4
+int styleable MapAttrs_cameraTargetLat 5
+int styleable MapAttrs_cameraTargetLng 6
+int styleable MapAttrs_cameraTilt 7
+int styleable MapAttrs_cameraZoom 8
+int styleable MapAttrs_latLngBoundsNorthEastLatitude 9
+int styleable MapAttrs_latLngBoundsNorthEastLongitude 10
+int styleable MapAttrs_latLngBoundsSouthWestLatitude 11
+int styleable MapAttrs_latLngBoundsSouthWestLongitude 12
+int styleable MapAttrs_liteMode 13
+int styleable MapAttrs_mapId 14
+int styleable MapAttrs_mapType 15
+int styleable MapAttrs_uiCompass 16
+int styleable MapAttrs_uiMapToolbar 17
+int styleable MapAttrs_uiRotateGestures 18
+int styleable MapAttrs_uiScrollGestures 19
+int styleable MapAttrs_uiScrollGesturesDuringRotateOrZoom 20
+int styleable MapAttrs_uiTiltGestures 21
+int styleable MapAttrs_uiZoomControls 22
+int styleable MapAttrs_uiZoomGestures 23
+int styleable MapAttrs_useViewLifecycle 24
+int styleable MapAttrs_zOrderOnTop 25
 int[] styleable MaterialAlertDialog { 0x7f03004e, 0x7f03004f, 0x7f030050, 0x7f030051, 0x7f030055 }
 int styleable MaterialAlertDialog_backgroundInsetBottom 0
 int styleable MaterialAlertDialog_backgroundInsetEnd 1

@@ -8,11 +8,23 @@
         android:minSdkVersion="23"
         android:targetSdkVersion="34" />
 
-    <!-- Cấp quyền sử dụng Internet -->
+    <!-- Cấp quyền truy cập Internet và vị trí -->
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.RECEIVE_SMS" />
-    <uses-permission android:name="android.permission.READ_SMS" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <!-- Include required permissions for Google Maps API to run. -->
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
+    <uses-feature
+        android:glEsVersion="0x00020000"
+        android:required="true" />
+
+    <queries>
+
+        <!-- Needs to be explicitly declared on Android R+ -->
+        <package android:name="com.google.android.apps.maps" />
+    </queries>
+
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="com.google.android.finsky.permission.BIND_GET_INSTALL_REFERRER_SERVICE" />
     <uses-permission android:name="com.google.android.gms.permission.AD_ID" />
@@ -40,26 +52,14 @@
         android:testOnly="true"
         android:theme="@style/Theme.MyApplication" >
 
-        <!-- Khai báo tất cả Activity -->
-        <activity
-            android:name="com.example.myapplication.ForgotPassActivity"
-            android:exported="false" />
-        <activity
-            android:name="com.example.myapplication.LoginOtpActivity"
-            android:exported="false" />
-        <activity
-            android:name="com.example.myapplication.SignupActivity"
-            android:exported="false" />
+        <!-- Khai báo API Key của Google Maps -->
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyD88lQgGXHV5qERgU5cj0Q_F5j01i1dy6s" />
+
+        <!-- LoginActivity là màn hình khởi động chính -->
         <activity
             android:name="com.example.myapplication.LoginActivity"
-            android:exported="false" />
-        <activity
-            android:name="com.example.myapplication.HomeActivity"
-            android:exported="true" />
-
-        <!-- MainActivity là màn hình khởi động chính -->
-        <activity
-            android:name="com.example.myapplication.MainActivity"
             android:exported="true" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -68,10 +68,36 @@
             </intent-filter>
         </activity>
 
+        <!-- HomeActivity (Màn hình sau khi đăng nhập) -->
+        <activity
+            android:name="com.example.myapplication.HomeActivity"
+            android:exported="true" />
+
+        <!-- Các màn hình khác -->
+        <activity
+            android:name="com.example.myapplication.SignupActivity"
+            android:exported="false" />
+        <activity
+            android:name="com.example.myapplication.LoginOtpActivity"
+            android:exported="false" />
+        <activity
+            android:name="com.example.myapplication.ForgotPassActivity"
+            android:exported="false" />
+
+        <!-- MainActivity (Map) nhưng không phải là launcher -->
+        <activity
+            android:name="com.example.myapplication.MainActivity"
+            android:exported="true" />
+
         <!-- ChoiceLoginActivity để chọn phương thức đăng nhập -->
         <activity
             android:name="com.example.myapplication.ChoiceLoginActivity"
             android:exported="true" />
+
+        <!-- Needs to be explicitly declared on P+ -->
+        <uses-library
+            android:name="org.apache.http.legacy"
+            android:required="false" />
 
         <service
             android:name="com.google.firebase.components.ComponentDiscoveryService"

@@ -3,10 +3,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.example.myapplication">
 
-    <!-- Cấp quyền sử dụng Internet -->
-    <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.RECEIVE_SMS" />
-    <uses-permission android:name="android.permission.READ_SMS" />
+    <!-- Cấp quyền truy cập Internet và vị trí -->
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
 
     <application
         android:allowBackup="true"
@@ -19,30 +19,39 @@
         android:theme="@style/Theme.MyApplication"
         tools:targetApi="31">
 
-        <!-- Khai báo tất cả Activity -->
-        <activity android:name="com.example.myapplication.ForgotPassActivity"
-            android:exported="false" />
-        <activity android:name="com.example.myapplication.LoginOtpActivity"
-            android:exported="false" />
-        <activity android:name="com.example.myapplication.SignupActivity"
-            android:exported="false" />
-        <activity android:name="com.example.myapplication.LoginActivity"
-            android:exported="false" />
-        <activity android:name="com.example.myapplication.HomeActivity"
-            android:exported="true" />
+        <!-- Khai báo API Key của Google Maps -->
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyD88lQgGXHV5qERgU5cj0Q_F5j01i1dy6s"/>
 
-        <!-- MainActivity là màn hình khởi động chính -->
-        <activity android:name="com.example.myapplication.MainActivity"
+        <!-- LoginActivity là màn hình khởi động chính -->
+        <activity android:name="com.example.myapplication.LoginActivity"
             android:exported="true">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
+                <action android:name="android.intent.action.MAIN"/>
+                <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
 
+        <!-- HomeActivity (Màn hình sau khi đăng nhập) -->
+        <activity android:name="com.example.myapplication.HomeActivity"
+            android:exported="true"/>
+
+        <!-- Các màn hình khác -->
+        <activity android:name="com.example.myapplication.SignupActivity"
+            android:exported="false"/>
+        <activity android:name="com.example.myapplication.LoginOtpActivity"
+            android:exported="false"/>
+        <activity android:name="com.example.myapplication.ForgotPassActivity"
+            android:exported="false"/>
+
+        <!-- MainActivity (Map) nhưng không phải là launcher -->
+        <activity android:name="com.example.myapplication.MainActivity"
+            android:exported="true"/>
+
         <!-- ChoiceLoginActivity để chọn phương thức đăng nhập -->
         <activity android:name="com.example.myapplication.ChoiceLoginActivity"
-            android:exported="true" />
-    </application>
+            android:exported="true"/>
 
+    </application>
 </manifest>
