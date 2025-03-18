@@ -16,8 +16,11 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.SetOptions;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class HomeActivity extends FragmentActivity implements OnMapReadyCallback, CityAdapter.OnItemClickListener {
 
@@ -31,7 +34,6 @@ public class HomeActivity extends FragmentActivity implements OnMapReadyCallback
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        // Kiểm tra đăng nhập
         if (FirebaseAuth.getInstance().getCurrentUser() == null) {
             startActivity(new Intent(this, LoginActivity.class));
             finish();
@@ -39,41 +41,77 @@ public class HomeActivity extends FragmentActivity implements OnMapReadyCallback
         }
 
         setContentView(R.layout.activity_home);
-
-        // Khởi tạo Firestore
         db = FirebaseFirestore.getInstance();
 
-        // Khởi tạo RecyclerView
         recyclerView = findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         cityList = new ArrayList<>();
         cityAdapter = new CityAdapter(cityList, this);
         recyclerView.setAdapter(cityAdapter);
 
-        // Load dữ liệu từ Firestore
-        loadCities();
+        deleteAllCities(() -> {
+            addDefaultCities();
+            loadCities();
+        });
 
-        // Khởi tạo Google Map
-        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.mapFragment);
+        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.mapFragment);
         if (mapFragment != null) {
             mapFragment.getMapAsync(this);
         }
     }
 
+    /**
+     * Xóa toàn bộ dữ liệu cũ trong Firestore
+     */
+    private void deleteAllCities(Runnable onComplete) {
+        db.collection("cities").get().addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                for (QueryDocumentSnapshot document : task.getResult()) {
+                    db.collection("cities").document(document.getId()).delete()
+                            .addOnSuccessListener(aVoid -> Log.d("Firestore", "Đã xóa thành phố: " + document.getId()))
+                            .addOnFailureListener(e -> Log.e("Firestore", "Lỗi khi xóa thành phố", e));
+                }
+            }
+            onComplete.run();  // Chạy tiếp khi xóa xong
+        });
+    }
+
+    /**
+     * Thêm danh sách thành phố mặc định vào Firestore
+     */
+    private void addDefaultCities() {
+        String[] cityNames = {"Los Angeles", "Beijing", "Tokyo"};
+        double[][] coordinates = {
+                {34.0522, -118.2437},
+                {39.9042, 116.4074},
+                {35.6895, 139.6917}
+        };
+
+        for (int i = 0; i < cityNames.length; i++) {
+            String cityName = cityNames[i];
+            double lat = coordinates[i][0];
+            double lng = coordinates[i][1];
+
+            Map<String, Object> cityData = new HashMap<>();
+            cityData.put("name", cityName);
+            cityData.put("latitude", lat);
+            cityData.put("longitude", lng);
+
+            db.collection("cities").document(cityName).set(cityData, SetOptions.merge())
+                    .addOnSuccessListener(aVoid -> Log.d("Firestore", "Thêm thành phố: " + cityName))
+                    .addOnFailureListener(e -> Log.e("Firestore", "Lỗi thêm thành phố", e));
+        }
+    }
+
+    /**
+     * Load danh sách thành phố từ Firestore lên RecyclerView
+     */
     private void loadCities() {
         db.collection("cities").get().addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
                 cityList.clear();
                 for (QueryDocumentSnapshot document : task.getResult()) {
                     City city = document.toObject(City.class);
-
-                    // Nếu Firestore chưa có tọa độ, bỏ qua thành phố đó
-                    if (!document.contains("latitude") || !document.contains("longitude")) {
-                        Log.e("Firestore", "Thiếu tọa độ cho: " + city.getName());
-                        continue;
-                    }
-
                     cityList.add(city);
                 }
                 cityAdapter.notifyDataSetChanged();
@@ -86,11 +124,8 @@ public class HomeActivity extends FragmentActivity implements OnMapReadyCallback
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-
-        // Đặt vị trí mặc định là Hà Nội
-        LatLng hanoi = new LatLng(21.0285, 105.8542);
-        mMap.addMarker(new MarkerOptions().position(hanoi).title("Hà Nội, Việt Nam"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(hanoi, 5));
+        LatLng defaultLocation = new LatLng(21.0285, 105.8542);
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(defaultLocation, 5));
     }
 
     @Override

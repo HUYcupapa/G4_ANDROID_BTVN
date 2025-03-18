@@ -13,8 +13,8 @@
         android:id="@+id/btnOpenMap"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Mo Ban Do"
-        android:layout_centerInParent="true"/>
-
-
+        android:text="Mở Bản Đồ"
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="20dp"/>
 </RelativeLayout>

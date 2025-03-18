@@ -1,11 +1,11 @@
 [
     {
-        "merged": "C:\\Users\\dell\\.gradle\\daemon\\8.7\\com.example.myapplication.app-mergeDebugResources-56:\\layout\\item_city.xml",
-        "source": "C:\\Users\\dell\\.gradle\\daemon\\8.7\\com.example.myapplication.app-main-59:\\layout\\item_city.xml"
+        "merged": "com.example.myapplication.app-mergeDebugResources-56:/layout/activity_maps.xml",
+        "source": "com.example.myapplication.app-main-59:/layout/activity_maps.xml"
     },
     {
-        "merged": "com.example.myapplication.app-mergeDebugResources-56:/layout/activity_home.xml",
-        "source": "com.example.myapplication.app-main-59:/layout/activity_home.xml"
+        "merged": "C:\\Users\\dell\\.gradle\\daemon\\8.7\\com.example.myapplication.app-mergeDebugResources-56:\\layout\\item_city.xml",
+        "source": "C:\\Users\\dell\\.gradle\\daemon\\8.7\\com.example.myapplication.app-main-59:\\layout\\item_city.xml"
     },
     {
         "merged": "C:\\Users\\dell\\.gradle\\daemon\\8.7\\com.example.myapplication.app-mergeDebugResources-56:\\layout\\activity_signup.xml",

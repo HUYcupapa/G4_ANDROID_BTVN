@@ -1,13 +1,12 @@
+// CityAdapter.java
 package com.example.myapplication;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
-
 import java.util.List;
 
 public class CityAdapter extends RecyclerView.Adapter<CityAdapter.CityViewHolder> {
@@ -35,7 +34,6 @@ public class CityAdapter extends RecyclerView.Adapter<CityAdapter.CityViewHolder
     public void onBindViewHolder(@NonNull CityViewHolder holder, int position) {
         City city = cityList.get(position);
         holder.cityName.setText(city.getName());
-
         holder.itemView.setOnClickListener(v -> listener.onItemClick(city));
     }
 

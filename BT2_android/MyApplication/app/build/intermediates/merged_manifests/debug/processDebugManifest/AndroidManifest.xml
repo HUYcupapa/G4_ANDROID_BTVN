@@ -12,6 +12,7 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+
     <!-- Include required permissions for Google Maps API to run. -->
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
@@ -57,9 +58,9 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyD88lQgGXHV5qERgU5cj0Q_F5j01i1dy6s" />
 
-        <!-- LoginActivity là màn hình khởi động chính -->
+        <!-- ChoiceLoginActivity là màn hình khởi động chính -->
         <activity
-            android:name="com.example.myapplication.LoginActivity"
+            android:name="com.example.myapplication.ChoiceLoginActivity"
             android:exported="true" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -67,6 +68,14 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <!-- LoginActivity -->
+        <activity
+            android:name="com.example.myapplication.LoginActivity"
+            android:exported="true" />
+        <activity
+            android:name="com.example.myapplication.MapsActivity"
+            android:exported="true" />
 
         <!-- HomeActivity (Màn hình sau khi đăng nhập) -->
         <activity
@@ -84,16 +93,10 @@
             android:name="com.example.myapplication.ForgotPassActivity"
             android:exported="false" />
 
-        <!-- MainActivity (Map) nhưng không phải là launcher -->
+        <!-- MainActivity -->
         <activity
             android:name="com.example.myapplication.MainActivity"
             android:exported="true" />
-
-        <!-- ChoiceLoginActivity để chọn phương thức đăng nhập -->
-        <activity
-            android:name="com.example.myapplication.ChoiceLoginActivity"
-            android:exported="true" />
-
         <!-- Needs to be explicitly declared on P+ -->
         <uses-library
             android:name="org.apache.http.legacy"
