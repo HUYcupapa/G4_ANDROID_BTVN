@@ -12,8 +12,7 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
-
-    <!-- Include required permissions for Google Maps API to run. -->
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" /> <!-- Include required permissions for Google Maps API to run. -->
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <uses-feature
@@ -53,12 +52,12 @@
         android:testOnly="true"
         android:theme="@style/Theme.MyApplication" >
 
-        <!-- Khai báo API Key của Google Maps -->
+        <!-- API Key của Google Maps -->
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyD88lQgGXHV5qERgU5cj0Q_F5j01i1dy6s" />
 
-        <!-- ChoiceLoginActivity là màn hình khởi động chính -->
+        <!-- MainActivity (Màn hình splash) -->
         <activity
             android:name="com.example.myapplication.ChoiceLoginActivity"
             android:exported="true" >
@@ -69,35 +68,60 @@
             </intent-filter>
         </activity>
 
-        <!-- LoginActivity -->
+        <!-- ChoiceLoginActivity: Màn hình lựa chọn đăng nhập -->
+        <activity
+            android:name="com.example.myapplication.MainActivity"
+            android:exported="false" />
+
+        <!-- LoginActivity: Xử lý đăng nhập -->
         <activity
             android:name="com.example.myapplication.LoginActivity"
-            android:exported="true" />
-        <activity
-            android:name="com.example.myapplication.MapsActivity"
-            android:exported="true" />
+            android:exported="false" />
 
-        <!-- HomeActivity (Màn hình sau khi đăng nhập) -->
+        <!-- CheckProfileActivity: Kiểm tra hồ sơ sau khi đăng nhập -->
+        <activity
+            android:name="com.example.myapplication.CheckProfileActivity"
+            android:exported="false" />
+
+        <!-- ProfileActivity: Nếu chưa có hồ sơ thì vào đây -->
+        <activity
+            android:name="com.example.myapplication.ProfileActivity"
+            android:exported="false" />
+
+        <!-- HomeActivity: Nếu đã có hồ sơ thì vào đây -->
         <activity
             android:name="com.example.myapplication.HomeActivity"
-            android:exported="true" />
+            android:exported="false" />
+        <activity
+            android:name="com.example.myapplication.profile.ViewProfileActivity"
+            android:exported="false" />
 
-        <!-- Các màn hình khác -->
+        <!-- MapsActivity: Màn hình bản đồ -->
+        <activity
+            android:name="com.example.myapplication.MapsActivity"
+            android:exported="false" />
+
+        <!-- SignupActivity: Đăng ký tài khoản -->
         <activity
             android:name="com.example.myapplication.SignupActivity"
             android:exported="false" />
+
+        <!-- LoginOtpActivity: Xác thực OTP -->
         <activity
             android:name="com.example.myapplication.LoginOtpActivity"
             android:exported="false" />
+
+        <!-- ForgotPassActivity: Quên mật khẩu -->
         <activity
             android:name="com.example.myapplication.ForgotPassActivity"
             android:exported="false" />
-
-        <!-- MainActivity -->
         <activity
-            android:name="com.example.myapplication.MainActivity"
-            android:exported="true" />
-        <!-- Needs to be explicitly declared on P+ -->
+            android:name="com.google.android.libraries.places.widget.AutocompleteActivity"
+            android:exported="false"
+            android:label="@string/places_autocomplete_label"
+            android:theme="@style/PlacesAutocompleteOverlay"
+            android:windowSoftInputMode="adjustResize" >
+        </activity> <!-- Needs to be explicitly declared on P+ -->
         <uses-library
             android:name="org.apache.http.legacy"
             android:required="false" />
@@ -277,7 +301,24 @@
             <intent-filter>
                 <action android:name="androidx.profileinstaller.action.BENCHMARK_OPERATION" />
             </intent-filter>
-        </receiver> <!-- The activities will be merged into the manifest of the hosting app. -->
+        </receiver>
+
+        <service
+            android:name="com.google.android.datatransport.runtime.backends.TransportBackendDiscovery"
+            android:exported="false" >
+            <meta-data
+                android:name="backend:com.google.android.datatransport.cct.CctBackendFactory"
+                android:value="cct" />
+        </service>
+        <service
+            android:name="com.google.android.datatransport.runtime.scheduling.jobscheduling.JobInfoSchedulerService"
+            android:exported="false"
+            android:permission="android.permission.BIND_JOB_SERVICE" >
+        </service>
+
+        <receiver
+            android:name="com.google.android.datatransport.runtime.scheduling.jobscheduling.AlarmManagerSchedulerBroadcastReceiver"
+            android:exported="false" /> <!-- The activities will be merged into the manifest of the hosting app. -->
         <activity
             android:name="com.google.android.play.core.common.PlayCoreDialogWrapperActivity"
             android:exported="false"

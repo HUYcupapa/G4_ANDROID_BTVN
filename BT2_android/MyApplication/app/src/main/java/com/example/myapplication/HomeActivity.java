@@ -7,6 +7,11 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
+import android.widget.Toast;
+
+import com.example.myapplication.profile.ViewProfileActivity;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -14,9 +19,12 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.SetOptions;
+import com.google.firebase.firestore.DocumentReference;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -29,6 +37,8 @@ public class HomeActivity extends FragmentActivity implements OnMapReadyCallback
     private RecyclerView recyclerView;
     private CityAdapter cityAdapter;
     private List<City> cityList;
+    private FirebaseUser user;
+    private Button btnViewProfile;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,12 +52,20 @@ public class HomeActivity extends FragmentActivity implements OnMapReadyCallback
 
         setContentView(R.layout.activity_home);
         db = FirebaseFirestore.getInstance();
+        user = FirebaseAuth.getInstance().getCurrentUser();
 
         recyclerView = findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         cityList = new ArrayList<>();
         cityAdapter = new CityAdapter(cityList, this);
         recyclerView.setAdapter(cityAdapter);
+
+        btnViewProfile = findViewById(R.id.btnViewProfile);
+        btnViewProfile.setOnClickListener(v -> {
+            startActivity(new Intent(HomeActivity.this, ViewProfileActivity.class));
+        });
+
+        checkUserProfile();
 
         deleteAllCities(() -> {
             addDefaultCities();
@@ -60,9 +78,6 @@ public class HomeActivity extends FragmentActivity implements OnMapReadyCallback
         }
     }
 
-    /**
-     * Xóa toàn bộ dữ liệu cũ trong Firestore
-     */
     private void deleteAllCities(Runnable onComplete) {
         db.collection("cities").get().addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
@@ -72,13 +87,10 @@ public class HomeActivity extends FragmentActivity implements OnMapReadyCallback
                             .addOnFailureListener(e -> Log.e("Firestore", "Lỗi khi xóa thành phố", e));
                 }
             }
-            onComplete.run();  // Chạy tiếp khi xóa xong
+            onComplete.run();
         });
     }
 
-    /**
-     * Thêm danh sách thành phố mặc định vào Firestore
-     */
     private void addDefaultCities() {
         String[] cityNames = {"Los Angeles", "Beijing", "Tokyo"};
         double[][] coordinates = {
@@ -103,9 +115,6 @@ public class HomeActivity extends FragmentActivity implements OnMapReadyCallback
         }
     }
 
-    /**
-     * Load danh sách thành phố từ Firestore lên RecyclerView
-     */
     private void loadCities() {
         db.collection("cities").get().addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
@@ -133,5 +142,30 @@ public class HomeActivity extends FragmentActivity implements OnMapReadyCallback
         LatLng cityLocation = new LatLng(city.getLatitude(), city.getLongitude());
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(cityLocation, 10));
         mMap.addMarker(new MarkerOptions().position(cityLocation).title(city.getName()));
+    }
+
+    private void checkUserProfile() {
+        if (user == null) {
+            Toast.makeText(this, "Bạn chưa đăng nhập!", Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent(this, ChoiceLoginActivity.class);
+            startActivity(intent);
+            finish();
+            return;
+        }
+
+        String userId = user.getUid();
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+        db.collection("users").document(userId).get()
+                .addOnSuccessListener(documentSnapshot -> {
+                    if (documentSnapshot.exists()) {
+                        Toast.makeText(this, "Chào mừng bạn!", Toast.LENGTH_SHORT).show();
+                    } else {
+                        Intent intent = new Intent(this, ProfileActivity.class);
+                        startActivity(intent);
+                        finish();
+                    }
+                })
+                .addOnFailureListener(e -> Toast.makeText(this, "Lỗi khi lấy dữ liệu!", Toast.LENGTH_SHORT).show());
     }
 }

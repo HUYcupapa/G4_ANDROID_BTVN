@@ -19,13 +19,13 @@
         android:theme="@style/Theme.MyApplication"
         tools:targetApi="31">
 
-        <!-- Khai báo API Key của Google Maps -->
+        <!-- API Key của Google Maps -->
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyD88lQgGXHV5qERgU5cj0Q_F5j01i1dy6s"/>
 
-        <!-- ChoiceLoginActivity là màn hình khởi động chính -->
-        <activity android:name="com.example.myapplication.ChoiceLoginActivity"
+        <!-- MainActivity (Màn hình splash) -->
+        <activity android:name=".ChoiceLoginActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
@@ -33,29 +33,44 @@
             </intent-filter>
         </activity>
 
-        <!-- LoginActivity -->
-        <activity android:name="com.example.myapplication.LoginActivity"
-            android:exported="true"/>
-
-        <activity android:name="com.example.myapplication.MapsActivity"
-            android:exported="true"/>
-
-
-        <!-- HomeActivity (Màn hình sau khi đăng nhập) -->
-        <activity android:name="com.example.myapplication.HomeActivity"
-            android:exported="true"/>
-
-        <!-- Các màn hình khác -->
-        <activity android:name="com.example.myapplication.SignupActivity"
-            android:exported="false"/>
-        <activity android:name="com.example.myapplication.LoginOtpActivity"
-            android:exported="false"/>
-        <activity android:name="com.example.myapplication.ForgotPassActivity"
+        <!-- ChoiceLoginActivity: Màn hình lựa chọn đăng nhập -->
+        <activity android:name=".MainActivity"
             android:exported="false"/>
 
-        <!-- MainActivity  -->
-        <activity android:name="com.example.myapplication.MainActivity"
-            android:exported="true"/>
+        <!-- LoginActivity: Xử lý đăng nhập -->
+        <activity android:name=".LoginActivity"
+            android:exported="false"/>
+
+        <!-- CheckProfileActivity: Kiểm tra hồ sơ sau khi đăng nhập -->
+        <activity android:name=".CheckProfileActivity"
+            android:exported="false"/>
+
+        <!-- ProfileActivity: Nếu chưa có hồ sơ thì vào đây -->
+        <activity android:name=".ProfileActivity"
+            android:exported="false"/>
+
+        <!-- HomeActivity: Nếu đã có hồ sơ thì vào đây -->
+        <activity android:name=".HomeActivity"
+            android:exported="false"/>
+
+        <activity android:name=".profile.ViewProfileActivity" android:exported="false"/>
+
+
+        <!-- MapsActivity: Màn hình bản đồ -->
+        <activity android:name=".MapsActivity"
+            android:exported="false"/>
+
+        <!-- SignupActivity: Đăng ký tài khoản -->
+        <activity android:name=".SignupActivity"
+            android:exported="false"/>
+
+        <!-- LoginOtpActivity: Xác thực OTP -->
+        <activity android:name=".LoginOtpActivity"
+            android:exported="false"/>
+
+        <!-- ForgotPassActivity: Quên mật khẩu -->
+        <activity android:name=".ForgotPassActivity"
+            android:exported="false"/>
     </application>
 
 </manifest>

@@ -8,6 +8,7 @@ import android.os.Looper;
 import com.airbnb.lottie.LottieAnimationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 public class MainActivity extends AppCompatActivity {
     @Override
@@ -26,14 +27,26 @@ public class MainActivity extends AppCompatActivity {
                 FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
                 if (user != null) {
-                    // Nếu đã đăng nhập, chuyển đến HomeActivity
-                    startActivity(new Intent(MainActivity.this, HomeActivity.class));
+                    FirebaseFirestore.getInstance().collection("users").document(user.getUid())
+                            .get()
+                            .addOnSuccessListener(documentSnapshot -> {
+                                if (documentSnapshot.exists()) {
+                                    startActivity(new Intent(MainActivity.this, HomeActivity.class));
+                                } else {
+                                    startActivity(new Intent(MainActivity.this, ProfileActivity.class));
+                                }
+                                finish();
+                            })
+                            .addOnFailureListener(e -> {
+                                startActivity(new Intent(MainActivity.this, ChoiceLoginActivity.class));
+                                finish();
+                            });
                 } else {
-                    // Nếu chưa đăng nhập, chuyển đến ChoiceLoginActivity
                     startActivity(new Intent(MainActivity.this, ChoiceLoginActivity.class));
+                    finish();
                 }
-                finish(); // Đóng MainActivity để không quay lại khi nhấn Back
             }
         }, 3000);
+
     }
 }

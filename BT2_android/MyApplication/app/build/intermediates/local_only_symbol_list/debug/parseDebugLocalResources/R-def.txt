@@ -13,6 +13,8 @@ id back
 id btnLogin
 id btnOpenMap
 id btnOtp
+id btnSave
+id btnViewProfile
 id btnemail
 id btngetotp
 id btnloginotp
@@ -22,6 +24,8 @@ id cityCountry
 id cityName
 id edemail
 id edemailLg
+id editTextName
+id editTextPhone
 id edmail
 id edotp
 id edpassword
@@ -31,6 +35,8 @@ id edrppassword
 id map
 id mapFragment
 id recyclerView
+id tvName
+id tvPhone
 id txtForgerPass
 id txtLogin
 id txtSignup
@@ -41,7 +47,9 @@ layout activity_login
 layout activity_login_otp
 layout activity_main
 layout activity_maps
+layout activity_profile
 layout activity_signup
+layout activity_view_profile
 layout item_city
 mipmap ic_launcher
 mipmap ic_launcher_round

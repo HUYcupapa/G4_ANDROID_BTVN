@@ -1,42 +1,50 @@
 [
     {
-        "merged": "com.example.myapplication.app-mergeDebugResources-56:/layout/activity_maps.xml",
-        "source": "com.example.myapplication.app-main-59:/layout/activity_maps.xml"
+        "merged": "C:\\Users\\dell\\.gradle\\daemon\\8.7\\com.example.myapplication.app-mergeDebugResources-57:\\layout\\activity_signup.xml",
+        "source": "C:\\Users\\dell\\.gradle\\daemon\\8.7\\com.example.myapplication.app-main-60:\\layout\\activity_signup.xml"
     },
     {
-        "merged": "C:\\Users\\dell\\.gradle\\daemon\\8.7\\com.example.myapplication.app-mergeDebugResources-56:\\layout\\item_city.xml",
-        "source": "C:\\Users\\dell\\.gradle\\daemon\\8.7\\com.example.myapplication.app-main-59:\\layout\\item_city.xml"
+        "merged": "com.example.myapplication.app-mergeDebugResources-57:/layout/activity_view_profile.xml",
+        "source": "com.example.myapplication.app-main-60:/layout/activity_view_profile.xml"
     },
     {
-        "merged": "C:\\Users\\dell\\.gradle\\daemon\\8.7\\com.example.myapplication.app-mergeDebugResources-56:\\layout\\activity_signup.xml",
-        "source": "C:\\Users\\dell\\.gradle\\daemon\\8.7\\com.example.myapplication.app-main-59:\\layout\\activity_signup.xml"
+        "merged": "C:\\Users\\dell\\.gradle\\daemon\\8.7\\com.example.myapplication.app-mergeDebugResources-57:\\layout\\activity_login.xml",
+        "source": "C:\\Users\\dell\\.gradle\\daemon\\8.7\\com.example.myapplication.app-main-60:\\layout\\activity_login.xml"
     },
     {
-        "merged": "C:\\Users\\dell\\.gradle\\daemon\\8.7\\com.example.myapplication.app-mergeDebugResources-56:\\layout\\activity_forgot_pass.xml",
-        "source": "C:\\Users\\dell\\.gradle\\daemon\\8.7\\com.example.myapplication.app-main-59:\\layout\\activity_forgot_pass.xml"
+        "merged": "C:\\Users\\dell\\.gradle\\daemon\\8.7\\com.example.myapplication.app-mergeDebugResources-57:\\layout\\activity_main.xml",
+        "source": "C:\\Users\\dell\\.gradle\\daemon\\8.7\\com.example.myapplication.app-main-60:\\layout\\activity_main.xml"
     },
     {
-        "merged": "C:\\Users\\dell\\.gradle\\daemon\\8.7\\com.example.myapplication.app-mergeDebugResources-56:\\layout\\activity_login.xml",
-        "source": "C:\\Users\\dell\\.gradle\\daemon\\8.7\\com.example.myapplication.app-main-59:\\layout\\activity_login.xml"
+        "merged": "C:\\Users\\dell\\.gradle\\daemon\\8.7\\com.example.myapplication.app-mergeDebugResources-57:\\layout\\activity_forgot_pass.xml",
+        "source": "C:\\Users\\dell\\.gradle\\daemon\\8.7\\com.example.myapplication.app-main-60:\\layout\\activity_forgot_pass.xml"
     },
     {
-        "merged": "C:\\Users\\dell\\.gradle\\daemon\\8.7\\com.example.myapplication.app-mergeDebugResources-56:\\layout\\activity_maps.xml",
-        "source": "C:\\Users\\dell\\.gradle\\daemon\\8.7\\com.example.myapplication.app-main-59:\\layout\\activity_maps.xml"
+        "merged": "C:\\Users\\dell\\.gradle\\daemon\\8.7\\com.example.myapplication.app-mergeDebugResources-57:\\layout\\item_city.xml",
+        "source": "C:\\Users\\dell\\.gradle\\daemon\\8.7\\com.example.myapplication.app-main-60:\\layout\\item_city.xml"
     },
     {
-        "merged": "C:\\Users\\dell\\.gradle\\daemon\\8.7\\com.example.myapplication.app-mergeDebugResources-56:\\layout\\activity_login_otp.xml",
-        "source": "C:\\Users\\dell\\.gradle\\daemon\\8.7\\com.example.myapplication.app-main-59:\\layout\\activity_login_otp.xml"
+        "merged": "C:\\Users\\dell\\.gradle\\daemon\\8.7\\com.example.myapplication.app-mergeDebugResources-57:\\layout\\activity_login_otp.xml",
+        "source": "C:\\Users\\dell\\.gradle\\daemon\\8.7\\com.example.myapplication.app-main-60:\\layout\\activity_login_otp.xml"
     },
     {
-        "merged": "C:\\Users\\dell\\.gradle\\daemon\\8.7\\com.example.myapplication.app-mergeDebugResources-56:\\layout\\activity_main.xml",
-        "source": "C:\\Users\\dell\\.gradle\\daemon\\8.7\\com.example.myapplication.app-main-59:\\layout\\activity_main.xml"
+        "merged": "com.example.myapplication.app-mergeDebugResources-57:/layout/activity_home.xml",
+        "source": "com.example.myapplication.app-main-60:/layout/activity_home.xml"
     },
     {
-        "merged": "C:\\Users\\dell\\.gradle\\daemon\\8.7\\com.example.myapplication.app-mergeDebugResources-56:\\layout\\activity_home.xml",
-        "source": "C:\\Users\\dell\\.gradle\\daemon\\8.7\\com.example.myapplication.app-main-59:\\layout\\activity_home.xml"
+        "merged": "C:\\Users\\dell\\.gradle\\daemon\\8.7\\com.example.myapplication.app-mergeDebugResources-57:\\layout\\activity_choice_login.xml",
+        "source": "C:\\Users\\dell\\.gradle\\daemon\\8.7\\com.example.myapplication.app-main-60:\\layout\\activity_choice_login.xml"
     },
     {
-        "merged": "C:\\Users\\dell\\.gradle\\daemon\\8.7\\com.example.myapplication.app-mergeDebugResources-56:\\layout\\activity_choice_login.xml",
-        "source": "C:\\Users\\dell\\.gradle\\daemon\\8.7\\com.example.myapplication.app-main-59:\\layout\\activity_choice_login.xml"
+        "merged": "C:\\Users\\dell\\.gradle\\daemon\\8.7\\com.example.myapplication.app-mergeDebugResources-57:\\layout\\activity_home.xml",
+        "source": "C:\\Users\\dell\\.gradle\\daemon\\8.7\\com.example.myapplication.app-main-60:\\layout\\activity_home.xml"
+    },
+    {
+        "merged": "C:\\Users\\dell\\.gradle\\daemon\\8.7\\com.example.myapplication.app-mergeDebugResources-57:\\layout\\activity_profile.xml",
+        "source": "C:\\Users\\dell\\.gradle\\daemon\\8.7\\com.example.myapplication.app-main-60:\\layout\\activity_profile.xml"
+    },
+    {
+        "merged": "C:\\Users\\dell\\.gradle\\daemon\\8.7\\com.example.myapplication.app-mergeDebugResources-57:\\layout\\activity_maps.xml",
+        "source": "C:\\Users\\dell\\.gradle\\daemon\\8.7\\com.example.myapplication.app-main-60:\\layout\\activity_maps.xml"
     }
 ]
