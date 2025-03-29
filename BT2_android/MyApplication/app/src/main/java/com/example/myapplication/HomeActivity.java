@@ -1,16 +1,24 @@
 package com.example.myapplication;
 
 import androidx.annotation.NonNull;
+import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
+import android.location.Location;
+import android.Manifest;
 
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.maps.model.LatLng;
+
+import com.example.myapplication.GPS_CAFE.Cafe;
 import com.example.myapplication.profile.ViewProfileActivity;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -24,6 +32,9 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.SetOptions;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.tasks.OnSuccessListener;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -42,9 +53,11 @@ public class HomeActivity extends FragmentActivity implements OnMapReadyCallback
     private CityAdapter cityAdapter;
     private List<City> cityList;
     private FirebaseUser user;
-    private Button btnViewProfile;
+    private Button btnViewProfile, btnShowCafes;
     private AutoCompleteTextView autoCompleteSearch;
-
+    private Location currentLocation;
+    private FusedLocationProviderClient fusedLocationClient;
+    private Button btnCurrentLocation;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,17 +73,27 @@ public class HomeActivity extends FragmentActivity implements OnMapReadyCallback
         db = FirebaseFirestore.getInstance();
         user = FirebaseAuth.getInstance().getCurrentUser();
         autoCompleteSearch = findViewById(R.id.autoCompleteSearch);
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
+        btnShowCafes = findViewById(R.id.btnShowCafes);
 
         recyclerView = findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         cityList = new ArrayList<>();
         cityAdapter = new CityAdapter(cityList, this);
         recyclerView.setAdapter(cityAdapter);
+        btnCurrentLocation = findViewById(R.id.btnCurrentLocation);
 
         btnViewProfile = findViewById(R.id.btnViewProfile);
         btnViewProfile.setOnClickListener(v -> {
             startActivity(new Intent(HomeActivity.this, ViewProfileActivity.class));
         });
+
+        btnCurrentLocation.setOnClickListener(v -> {
+            getCurrentLocation();  // Lấy vị trí hiện tại
+           // Hiển thị quán cà phê gần đó
+        });
+
+        btnShowCafes.setOnClickListener(v -> showNearbyCafes());
 
         checkUserProfile();
 
@@ -98,6 +121,8 @@ public class HomeActivity extends FragmentActivity implements OnMapReadyCallback
             searchCityOnMap(selectedCity);
         });
 
+        getCurrentLocation();
+
 
 
     }
@@ -114,6 +139,8 @@ public class HomeActivity extends FragmentActivity implements OnMapReadyCallback
             onComplete.run();
         });
     }
+
+
 
     private void addDefaultCities() {
         String[] cityNames = {"Los Angeles", "Beijing", "Tokyo"};
@@ -222,8 +249,73 @@ public class HomeActivity extends FragmentActivity implements OnMapReadyCallback
         } else {
             Toast.makeText(this, "Không tìm thấy vị trí!", Toast.LENGTH_SHORT).show();
         }
+
     }
 
 
 
+
+    private List<Cafe> getCafeList() {
+        List<Cafe> cafes = new ArrayList<>();
+        cafes.add(new Cafe("The Coffee House", 21.028511, 105.804817)); // Nguyễn Chí Thanh, Hà Nội
+        cafes.add(new Cafe("Highlands Coffee", 21.025292, 105.852871)); // Hồ Gươm, Hà Nội
+        cafes.add(new Cafe("Cộng Cà Phê", 21.035978, 105.853987)); // 35A Nguyễn Hữu Huân, Hà Nội
+        return cafes;
+    }
+
+
+
+    private void getCurrentLocation() {
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
+                ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+
+            // Yêu cầu quyền nếu chưa được cấp
+            ActivityCompat.requestPermissions(this, new String[]{
+                    Manifest.permission.ACCESS_FINE_LOCATION,
+                    Manifest.permission.ACCESS_COARSE_LOCATION
+            }, 100);
+            return;
+        }
+
+        fusedLocationClient.getLastLocation().addOnSuccessListener(this, new OnSuccessListener<Location>() {
+            @Override
+            public void onSuccess(Location location) {
+                if (location != null) {
+                    currentLocation = location;
+                    LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
+                    mMap.clear();
+
+                    mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15));
+                    mMap.addMarker(new MarkerOptions().position(latLng).title("Vị trí của bạn"));
+
+
+                }
+            }
+        });
+    }
+
+
+
+
+    private void showNearbyCafes() {
+        if (currentLocation == null) {
+            Toast.makeText(this, "Vị trí hiện tại chưa sẵn sàng!", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        List<Cafe> cafes = getCafeList();
+        for (Cafe cafe : cafes) {
+            Location cafeLocation = new Location("");
+            cafeLocation.setLatitude(cafe.getLat());
+            cafeLocation.setLongitude(cafe.getLng());
+
+            float distance = currentLocation.distanceTo(cafeLocation);
+            if (distance < 500000000) { // Giới hạn 5km
+                LatLng cafeLatLng = new LatLng(cafe.getLat(), cafe.getLng());
+                mMap.addMarker(new MarkerOptions().position(cafeLatLng).title(cafe.getName()));
+            }
+        }
+
+
+    }
 }

@@ -8,21 +8,21 @@
     android:padding="16dp"
     tools:context=".HomeActivity">
 
-    <!-- RecyclerView danh sách thành phố -->
+    <!-- RecyclerView danh sách thành phố (Giảm chiều cao để giao diện thoáng hơn) -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:scrollbars="vertical" />
+        android:layout_height="200dp"
+        android:scrollbars="vertical"
+        android:background="@android:color/darker_gray"
+        android:padding="8dp"/>
 
     <Button
         android:id="@+id/btnViewProfile"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Xem Hồ Sơ"/>
-
-
+        android:text="Xem Hồ Sơ"
+        android:layout_marginTop="8dp"/>
 
     <AutoCompleteTextView
         android:id="@+id/autoCompleteSearch"
@@ -32,6 +32,22 @@
         android:padding="10dp"
         android:textColor="#000000"
         android:background="@android:drawable/editbox_background"/>
+
+    <Button
+        android:id="@+id/btnCurrentLocation"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Vị trí hiện tại"
+        android:layout_marginTop="8dp"
+ />
+
+    <Button
+        android:id="@+id/btnShowCafes"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Hiện CAFE"
+        android:layout_marginTop="8dp"/>
+
 
     <!-- Google Map Fragment -->
     <fragment
