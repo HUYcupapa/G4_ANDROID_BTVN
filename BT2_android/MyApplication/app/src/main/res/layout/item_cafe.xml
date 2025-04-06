@@ -6,17 +6,10 @@
     android:padding="8dp">
 
     <TextView
-        android:id="@+id/cityName"
+        android:id="@+id/cafeName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="City Name"
+        android:text="Cafe Name"
         android:textSize="18sp"
         android:textStyle="bold"/>
-
-    <TextView
-        android:id="@+id/cityCountry"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Country"
-        android:textSize="14sp"/>
 </LinearLayout>
