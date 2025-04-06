@@ -1,4 +1,4 @@
-package com.example.myapplication.GPS_CAFE;
+package com.example.myapplication.Model;
 
 public class Cafe {
     private String name;
