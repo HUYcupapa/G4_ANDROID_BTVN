@@ -1,63 +1,52 @@
 package com.example.myapplication;
 
-import android.os.Bundle;
-import android.widget.Toast;
-
-import androidx.activity.EdgeToEdge;
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
-import android.util.Log;
-import com.google.firebase.auth.FirebaseUser;
-
-
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.AuthResult;
+import android.content.Intent;
+import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
+import com.airbnb.lottie.LottieAnimationView;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 public class MainActivity extends AppCompatActivity {
-
-    private FirebaseAuth mAuth;
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.activity_main);
-        mAuth = FirebaseAuth.getInstance();
 
-        String email = "huygbnguyen63@gmail.com";
-        String pass = "upin@210904";
+        LottieAnimationView animationView = findViewById(R.id.animationView);
+        animationView.setAnimation("loading.json");
+        animationView.loop(true);
+        animationView.playAnimation();
 
-        mAuth.createUserWithEmailAndPassword(email, pass).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+        new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
             @Override
-            public void onComplete(@NonNull Task<AuthResult> task) {
+            public void run() {
+                FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
-                if(task.isSuccessful()){
-                    Log.d("Main", "createUserWithEmail:success");
-                    FirebaseUser user = mAuth.getCurrentUser();
-
-                    Toast.makeText(getApplicationContext(),user.getEmail(), Toast.LENGTH_LONG).show();
-
-
-                } else{
-
-                    Log.w("Main", "createUserWithEmail:failure", task.getException());
-                    Toast.makeText(MainActivity.this, task.getException().getMessage(), Toast.LENGTH_SHORT).show();
-
-
-
-
+                if (user != null) {
+                    FirebaseFirestore.getInstance().collection("users").document(user.getUid())
+                            .get()
+                            .addOnSuccessListener(documentSnapshot -> {
+                                if (documentSnapshot.exists()) {
+                                    startActivity(new Intent(MainActivity.this, HomeActivity.class));
+                                } else {
+                                    startActivity(new Intent(MainActivity.this, ProfileActivity.class));
+                                }
+                                finish();
+                            })
+                            .addOnFailureListener(e -> {
+                                startActivity(new Intent(MainActivity.this, ChoiceLoginActivity.class));
+                                finish();
+                            });
+                } else {
+                    startActivity(new Intent(MainActivity.this, ChoiceLoginActivity.class));
+                    finish();
                 }
-
             }
-        });
-
-
+        }, 3000);
 
     }
 }
