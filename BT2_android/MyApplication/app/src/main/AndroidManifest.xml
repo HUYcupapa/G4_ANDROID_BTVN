@@ -11,9 +11,9 @@
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
-        android:icon="@mipmap/ic_launcher"
-        android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_round"
+        android:icon="@drawable/app_coffee"
+        android:label="My Coffee"
+        android:roundIcon="@drawable/ic_launcher_background"
         android:supportsRtl="true"
         android:theme="@style/Theme.MyApplication"
         tools:targetApi="31">
@@ -51,9 +51,6 @@
         <activity
             android:name=".Activites.CheckProfileActivity$ViewProfileActivity"
             android:exported="false" /> <!-- MapsActivity: Màn hình bản đồ -->
-        <activity
-            android:name=".Activites.MapsActivity"
-            android:exported="false" /> <!-- SignupActivity: Đăng ký tài khoản -->
         <activity
             android:name=".Activites.SignupActivity"
             android:exported="false" /> <!-- LoginOtpActivity: Xác thực OTP -->
