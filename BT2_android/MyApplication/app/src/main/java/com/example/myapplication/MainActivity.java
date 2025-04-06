@@ -21,32 +21,33 @@ public class MainActivity extends AppCompatActivity {
         animationView.loop(true);
         animationView.playAnimation();
 
-        new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        new Handler(Looper.getMainLooper()).postDelayed(() -> {
+            FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
-                if (user != null) {
-                    FirebaseFirestore.getInstance().collection("users").document(user.getUid())
-                            .get()
-                            .addOnSuccessListener(documentSnapshot -> {
-                                if (documentSnapshot.exists()) {
-                                    startActivity(new Intent(MainActivity.this, HomeActivity.class));
+            if (user != null) {
+                FirebaseFirestore.getInstance().collection("users").document(user.getUid())
+                        .get()
+                        .addOnSuccessListener(documentSnapshot -> {
+                            if (documentSnapshot.exists()) {
+                                String role = documentSnapshot.getString("role");
+                                if (role != null && role.equals("Admin")) {
+                                    startActivity(new Intent(MainActivity.this, AdminActivity.class));
                                 } else {
-                                    startActivity(new Intent(MainActivity.this, ProfileActivity.class));
+                                    startActivity(new Intent(MainActivity.this, HomeActivity.class));
                                 }
-                                finish();
-                            })
-                            .addOnFailureListener(e -> {
-                                startActivity(new Intent(MainActivity.this, ChoiceLoginActivity.class));
-                                finish();
-                            });
-                } else {
-                    startActivity(new Intent(MainActivity.this, ChoiceLoginActivity.class));
-                    finish();
-                }
+                            } else {
+                                startActivity(new Intent(MainActivity.this, ProfileActivity.class));
+                            }
+                            finish();
+                        })
+                        .addOnFailureListener(e -> {
+                            startActivity(new Intent(MainActivity.this, ChoiceLoginActivity.class));
+                            finish();
+                        });
+            } else {
+                startActivity(new Intent(MainActivity.this, ChoiceLoginActivity.class));
+                finish();
             }
         }, 3000);
-
     }
 }

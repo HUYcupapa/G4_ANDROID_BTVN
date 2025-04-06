@@ -20,13 +20,17 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.PhoneAuthCredential;
 import com.google.firebase.auth.PhoneAuthOptions;
 import com.google.firebase.auth.PhoneAuthProvider;
+import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 public class LoginOtpActivity extends AppCompatActivity {
     private EditText edphone, edotp;
     private Button btnloginotp, btngetotp;
     private FirebaseAuth mAuth;
+    private FirebaseFirestore db;
     private PhoneAuthProvider.OnVerificationStateChangedCallbacks mCallbacks;
     private String smsVerifyId;
     private PhoneAuthProvider.ForceResendingToken resendToken;
@@ -41,11 +45,11 @@ public class LoginOtpActivity extends AppCompatActivity {
         btngetotp = findViewById(R.id.btngetotp);
         btnloginotp = findViewById(R.id.btnloginotp);
         mAuth = FirebaseAuth.getInstance();
+        db = FirebaseFirestore.getInstance();
 
         LottieAnimationView back = findViewById(R.id.back);
         back.setOnClickListener(view -> finish());
 
-        // Xử lý callback khi gửi OTP
         mCallbacks = new PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
             @Override
             public void onVerificationCompleted(@NonNull PhoneAuthCredential phoneAuthCredential) {
@@ -58,8 +62,7 @@ public class LoginOtpActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onCodeSent(@NonNull String verificationId,
-                                   PhoneAuthProvider.ForceResendingToken token) {
+            public void onCodeSent(@NonNull String verificationId, PhoneAuthProvider.ForceResendingToken token) {
                 smsVerifyId = verificationId;
                 resendToken = token;
                 Toast.makeText(LoginOtpActivity.this, "OTP đã được gửi!", Toast.LENGTH_SHORT).show();
@@ -68,7 +71,6 @@ public class LoginOtpActivity extends AppCompatActivity {
 
         btngetotp.setOnClickListener(view -> {
             String phoneNumber = edphone.getText().toString().trim();
-
             if (phoneNumber.isEmpty()) {
                 Toast.makeText(LoginOtpActivity.this, "Vui lòng nhập số điện thoại", Toast.LENGTH_SHORT).show();
                 return;
@@ -77,20 +79,15 @@ public class LoginOtpActivity extends AppCompatActivity {
                 Toast.makeText(LoginOtpActivity.this, "Số điện thoại chỉ được chứa các kí tự số", Toast.LENGTH_SHORT).show();
                 return;
             }
-
-            // Gửi OTP
             sendOTP(phoneNumber);
         });
 
         btnloginotp.setOnClickListener(view -> {
             String userOTP = edotp.getText().toString();
-
             if (userOTP.isEmpty()) {
                 Toast.makeText(LoginOtpActivity.this, "Vui lòng nhập OTP!", Toast.LENGTH_SHORT).show();
                 return;
             }
-
-            // Xác minh OTP
             verifyOtp(userOTP);
         });
     }
@@ -98,8 +95,8 @@ public class LoginOtpActivity extends AppCompatActivity {
     private void sendOTP(String phoneNumber) {
         PhoneAuthOptions options =
                 PhoneAuthOptions.newBuilder(mAuth)
-                        .setPhoneNumber("+84" + phoneNumber) // Số điện thoại cần xác minh
-                        .setTimeout(60L, TimeUnit.SECONDS) // Thời gian chờ trước khi gửi lại OTP
+                        .setPhoneNumber("+84" + phoneNumber)
+                        .setTimeout(60L, TimeUnit.SECONDS)
                         .setActivity(this)
                         .setCallbacks(mCallbacks)
                         .build();
@@ -111,7 +108,6 @@ public class LoginOtpActivity extends AppCompatActivity {
             Toast.makeText(this, "Bạn chưa nhận được mã OTP!", Toast.LENGTH_SHORT).show();
             return;
         }
-
         PhoneAuthCredential credential = PhoneAuthProvider.getCredential(smsVerifyId, code);
         signInWithPhoneAuthCredential(credential);
     }
@@ -121,9 +117,41 @@ public class LoginOtpActivity extends AppCompatActivity {
                 .addOnCompleteListener(this, task -> {
                     if (task.isSuccessful()) {
                         Toast.makeText(LoginOtpActivity.this, "Đăng Nhập Thành Công!", Toast.LENGTH_SHORT).show();
-                        Intent intent = new Intent(LoginOtpActivity.this, HomeActivity.class);
-                        startActivity(intent);
-                        finish(); // Đóng LoginOtpActivity để không quay lại
+                        String userId = mAuth.getCurrentUser().getUid();
+                        db.collection("users").document(userId).get()
+                                .addOnSuccessListener(documentSnapshot -> {
+                                    if (documentSnapshot.exists()) {
+                                        String role = documentSnapshot.getString("role");
+                                        if (role != null && role.equals("Admin")) {
+                                            startActivity(new Intent(LoginOtpActivity.this, AdminActivity.class));
+                                        } else {
+                                            startActivity(new Intent(LoginOtpActivity.this, HomeActivity.class));
+                                        }
+                                        finish();
+                                    } else {
+                                        Map<String, Object> userData = new HashMap<>();
+                                        userData.put("phone", edphone.getText().toString().trim());
+                                        userData.put("role", "Customer");
+                                        db.collection("users").document(userId)
+                                                .set(userData)
+                                                .addOnSuccessListener(aVoid -> {
+                                                    startActivity(new Intent(LoginOtpActivity.this, ProfileActivity.class));
+                                                    finish();
+                                                })
+                                                .addOnFailureListener(e -> {
+                                                    Toast.makeText(LoginOtpActivity.this, "Lỗi khi lưu thông tin!", Toast.LENGTH_SHORT).show();
+                                                    mAuth.signOut();
+                                                    startActivity(new Intent(LoginOtpActivity.this, ChoiceLoginActivity.class));
+                                                    finish();
+                                                });
+                                    }
+                                })
+                                .addOnFailureListener(e -> {
+                                    Toast.makeText(LoginOtpActivity.this, "Lỗi khi kiểm tra vai trò!", Toast.LENGTH_SHORT).show();
+                                    mAuth.signOut();
+                                    startActivity(new Intent(LoginOtpActivity.this, ChoiceLoginActivity.class));
+                                    finish();
+                                });
                     } else {
                         edotp.setError("OTP Không Đúng");
                         if (task.getException() instanceof FirebaseAuthInvalidCredentialsException) {
