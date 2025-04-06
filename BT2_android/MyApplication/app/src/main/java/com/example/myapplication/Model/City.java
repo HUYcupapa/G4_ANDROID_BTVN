@@ -1,4 +1,4 @@
-package com.example.myapplication;
+package com.example.myapplication.Model;
 
 public class City {
     private String name;
