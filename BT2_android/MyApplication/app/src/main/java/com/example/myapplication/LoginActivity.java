@@ -10,12 +10,14 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 public class LoginActivity extends AppCompatActivity {
     private TextInputEditText edEmail, edPassword;
     private Button btnLogin;
     private FirebaseAuth mAuth;
     private TextView txtSignup, txtForgerPass;
+    private FirebaseFirestore db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,6 +25,7 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
 
         mAuth = FirebaseAuth.getInstance();
+        db = FirebaseFirestore.getInstance();
         edEmail = findViewById(R.id.edemailLg);
         edPassword = findViewById(R.id.edpasswordLg);
         btnLogin = findViewById(R.id.btnLogin);
@@ -31,19 +34,8 @@ public class LoginActivity extends AppCompatActivity {
 
         btnLogin.setOnClickListener(v -> loginUser());
 
-        txtSignup.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startActivity(new Intent(LoginActivity.this, SignupActivity.class));
-            }
-        });
-
-        txtForgerPass.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startActivity(new Intent(LoginActivity.this, ForgotPassActivity.class));
-            }
-        });
+        txtSignup.setOnClickListener(view -> startActivity(new Intent(LoginActivity.this, SignupActivity.class)));
+        txtForgerPass.setOnClickListener(view -> startActivity(new Intent(LoginActivity.this, ForgotPassActivity.class)));
     }
 
     private void loginUser() {
@@ -61,9 +53,27 @@ public class LoginActivity extends AppCompatActivity {
 
         mAuth.signInWithEmailAndPassword(email, password)
                 .addOnSuccessListener(authResult -> {
-                    // ✅ Sau khi đăng nhập thành công → Kiểm tra hồ sơ
-                    startActivity(new Intent(LoginActivity.this, CheckProfileActivity.class));
-                    finish();
+                    String userId = mAuth.getCurrentUser().getUid();
+                    db.collection("users").document(userId).get()
+                            .addOnSuccessListener(documentSnapshot -> {
+                                if (documentSnapshot.exists()) {
+                                    String role = documentSnapshot.getString("role");
+                                    if (role != null && role.equals("Admin")) {
+                                        startActivity(new Intent(LoginActivity.this, AdminActivity.class));
+                                    } else {
+                                        startActivity(new Intent(LoginActivity.this, CheckProfileActivity.class));
+                                    }
+                                    finish();
+                                } else {
+                                    startActivity(new Intent(LoginActivity.this, ProfileActivity.class));
+                                    finish();
+                                }
+                            })
+                            .addOnFailureListener(e -> {
+                                Toast.makeText(LoginActivity.this, "Lỗi khi kiểm tra vai trò!", Toast.LENGTH_SHORT).show();
+                                startActivity(new Intent(LoginActivity.this, ChoiceLoginActivity.class));
+                                finish();
+                            });
                 })
                 .addOnFailureListener(e -> Toast.makeText(this, "Sai Tài Khoản Hoặc Mật khẩu!", Toast.LENGTH_SHORT).show());
     }
