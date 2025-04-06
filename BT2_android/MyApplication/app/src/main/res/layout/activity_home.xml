@@ -1,58 +1,56 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:padding="16dp"
-    tools:context=".HomeActivity">
+    android:layout_height="match_parent">
 
-    <!-- RecyclerView danh sách thành phố (Giảm chiều cao để giao diện thoáng hơn) -->
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerView"
+    <!-- Toolbar -->
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
         android:layout_width="match_parent"
-        android:layout_height="200dp"
-        android:scrollbars="vertical"
-        android:background="@android:color/darker_gray"
-        android:padding="8dp"/>
+        android:layout_height="?attr/actionBarSize"
+        android:background="?attr/colorPrimary">
 
-    <Button
-        android:id="@+id/btnViewProfile"
+        <TextView
+            android:id="@+id/toolbar_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Chào mừng đến MyCoffee!"
+            android:textColor="@color/white"
+            android:textSize="18sp"
+            android:layout_gravity="start" />
+        <ImageView
+            android:id="@+id/account_icon"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:src="@drawable/ic_account"
+            android:layout_gravity="end" />
+
+        <ImageView
+            android:id="@+id/notification_icon"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:src="@drawable/ic_notification"
+            android:layout_gravity="end"
+            android:layout_marginEnd="16dp" />
+
+
+    </androidx.appcompat.widget.Toolbar>
+
+    <!-- FrameLayout để chứa Fragment -->
+    <FrameLayout
+        android:id="@+id/fragment_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/toolbar"
+        android:layout_above="@id/bottom_navigation" />
+
+    <!-- Bottom Navigation Bar -->
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottom_navigation"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Xem Hồ Sơ"
-        android:layout_marginTop="8dp"/>
+        android:layout_alignParentBottom="true"
+        app:menu="@menu/bottom_nav_menu" />
 
-    <AutoCompleteTextView
-        android:id="@+id/autoCompleteSearch"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Nhập địa điểm..."
-        android:padding="10dp"
-        android:textColor="#000000"
-        android:background="@android:drawable/editbox_background"/>
-
-    <Button
-        android:id="@+id/btnCurrentLocation"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Vị trí hiện tại"
-        android:layout_marginTop="8dp"
- />
-
-    <Button
-        android:id="@+id/btnShowCafes"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Hiện CAFE"
-        android:layout_marginTop="8dp"/>
-
-
-    <!-- Google Map Fragment -->
-    <fragment
-        android:id="@+id/mapFragment"
-        android:layout_width="match_parent"
-        android:layout_height="300dp"
-        class="com.google.android.gms.maps.SupportMapFragment"/>
-</LinearLayout>
+</RelativeLayout>
