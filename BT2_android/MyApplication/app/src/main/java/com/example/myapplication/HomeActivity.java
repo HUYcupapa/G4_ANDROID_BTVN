@@ -19,7 +19,6 @@ import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.model.LatLng;
 
 import com.example.myapplication.Model.Cafe;
-import com.example.myapplication.profile.ViewProfileActivity;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -82,7 +81,7 @@ public class HomeActivity extends FragmentActivity implements OnMapReadyCallback
 
         btnViewProfile = findViewById(R.id.btnViewProfile);
         btnViewProfile.setOnClickListener(v -> {
-            startActivity(new Intent(HomeActivity.this, ViewProfileActivity.class));
+            startActivity(new Intent(HomeActivity.this, CheckProfileActivity.ViewProfileActivity.class));
         });
 
         btnCurrentLocation.setOnClickListener(v -> {

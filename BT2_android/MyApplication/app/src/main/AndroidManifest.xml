@@ -53,7 +53,7 @@
         <activity android:name=".HomeActivity"
             android:exported="false"/>
 
-        <activity android:name=".profile.ViewProfileActivity" android:exported="false"/>
+        <activity android:name=".CheckProfileActivity$ViewProfileActivity" android:exported="false"/>
 
 
         <!-- MapsActivity: Màn hình bản đồ -->
