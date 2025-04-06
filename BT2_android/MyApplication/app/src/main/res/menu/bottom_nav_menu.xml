@@ -3,17 +3,17 @@
     <item
         android:id="@+id/nav_home"
         android:icon="@drawable/ic_home"
-        android:title="Trang chủ" />
+        android:title="Trang Chủ" />
     <item
         android:id="@+id/nav_checkin"
         android:icon="@drawable/ic_checkin"
-        android:title="Check-in" />
+        android:title="Check - in" />
     <item
         android:id="@+id/nav_search"
         android:icon="@drawable/ic_search"
-        android:title="Tìm kiếm" />
+        android:title="Tìm Kiếm" />
     <item
         android:id="@+id/nav_rewards"
         android:icon="@drawable/ic_rewards"
-        android:title="Giải thưởng" />
+        android:title="Giải Thưởng" />
 </menu>
