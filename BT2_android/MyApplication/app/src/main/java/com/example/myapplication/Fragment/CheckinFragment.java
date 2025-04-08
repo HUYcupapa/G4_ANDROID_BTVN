@@ -1,6 +1,7 @@
 package com.example.myapplication.Fragment;
 
 import android.Manifest;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
@@ -9,32 +10,67 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.Toast;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
-import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
-import com.example.myapplication.Model.Cafe;
+import com.example.myapplication.Activities.CafeDetailActivity;
 import com.example.myapplication.R;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.tasks.OnSuccessListener;
-import java.util.ArrayList;
-import java.util.List;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.GeoPoint;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class CheckinFragment extends Fragment {
 
     private FusedLocationProviderClient fusedLocationProviderClient;
     private Location currentLocation;
-    private List<Cafe> cafeList;
+    private FirebaseFirestore db;
+    private FirebaseAuth mAuth;
+    private ActivityResultLauncher<String[]> locationPermissionLauncher;
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        // Khởi tạo ActivityResultLauncher để yêu cầu quyền
+        locationPermissionLauncher = registerForActivityResult(
+                new ActivityResultContracts.RequestMultiplePermissions(),
+                result -> {
+                    // Thay thế getOrDefault bằng cách kiểm tra thủ công để tương thích API 23
+                    boolean fineLocationGranted = result.containsKey(Manifest.permission.ACCESS_FINE_LOCATION) ?
+                            result.get(Manifest.permission.ACCESS_FINE_LOCATION) : false;
+                    boolean coarseLocationGranted = result.containsKey(Manifest.permission.ACCESS_COARSE_LOCATION) ?
+                            result.get(Manifest.permission.ACCESS_COARSE_LOCATION) : false;
+
+                    if (fineLocationGranted) {
+                        getCurrentLocation();
+                    } else if (coarseLocationGranted) {
+                        getCurrentLocation();
+                    } else {
+                        Toast.makeText(requireContext(), "Bạn cần cấp quyền để sử dụng tính năng này!", Toast.LENGTH_SHORT).show();
+                    }
+                }
+        );
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_checkin, container, false);
 
+        // Khởi tạo Firestore và Auth
+        db = FirebaseFirestore.getInstance();
+        mAuth = FirebaseAuth.getInstance();
+
         // Khởi tạo FusedLocationProviderClient
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(requireActivity());
-
-        // Lấy danh sách quán cà phê
-        cafeList = getCafeList();
 
         // Xử lý nút Check-in
         Button btnCheckin = view.findViewById(R.id.btn_checkin);
@@ -47,39 +83,18 @@ public class CheckinFragment extends Fragment {
     }
 
     private void getCurrentLocation() {
-        if (ActivityCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
-                ActivityCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}, 100);
+        // Kiểm tra quyền
+        if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
+                ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            locationPermissionLauncher.launch(new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION});
             return;
         }
 
-        fusedLocationProviderClient.getLastLocation().addOnSuccessListener(requireActivity(), new OnSuccessListener<Location>() {
-            @Override
-            public void onSuccess(Location location) {
-                if (location != null) {
-                    currentLocation = location;
-                }
+        fusedLocationProviderClient.getLastLocation().addOnSuccessListener(requireActivity(), location -> {
+            if (location != null) {
+                currentLocation = location;
             }
         });
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (requestCode == 100 && grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-            getCurrentLocation();
-        } else {
-            Toast.makeText(requireContext(), "Bạn cần cấp quyền để sử dụng tính năng này!", Toast.LENGTH_SHORT).show();
-        }
-    }
-
-    private List<Cafe> getCafeList() {
-        List<Cafe> cafes = new ArrayList<>();
-        cafes.add(new Cafe("The Coffee House", 21.028511, 105.804817));
-        cafes.add(new Cafe("Highlands Coffee", 21.025292, 105.852871));
-        cafes.add(new Cafe("Cộng Cà Phê", 21.035978, 105.853987));
-        cafes.add(new Cafe("Cafe Thái Hà", 21.014708100199694, 105.81942573865054));
-        return cafes;
     }
 
     private void checkin() {
@@ -88,26 +103,97 @@ public class CheckinFragment extends Fragment {
             return;
         }
 
-        boolean canCheckin = false;
-        String cafeName = "";
-        for (Cafe cafe : cafeList) {
-            Location cafeLocation = new Location("");
-            cafeLocation.setLatitude(cafe.getLat());
-            cafeLocation.setLongitude(cafe.getLng());
+        if (mAuth.getCurrentUser() == null) {
+            Toast.makeText(requireContext(), "Vui lòng đăng nhập để check-in!", Toast.LENGTH_SHORT).show();
+            return;
+        }
 
-            float distance = currentLocation.distanceTo(cafeLocation);
-            if (distance < 5000) { // Giới hạn 50m
-                canCheckin = true;
-                cafeName = cafe.getName();
-                break;
+        String userId = mAuth.getCurrentUser().getUid();
+        GeoPoint userGeoPoint = new GeoPoint(currentLocation.getLatitude(), currentLocation.getLongitude());
+
+        // Khai báo các biến ngoài lambda
+        final boolean[] canCheckin = {false};
+        final String[] cafeId = {""};
+        final String[] cafeName = {""};
+        final double[] ratingStar = {0.0};
+        final String[] address = {""};
+        final String[] description = {""};
+        final String[] image1 = {""};
+        final String[] activity = {""};
+
+        // Truy vấn các quán cà phê từ Firestore
+        db.collection("cafes").get().addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                for (QueryDocumentSnapshot document : task.getResult()) {
+                    GeoPoint cafeLocation = document.getGeoPoint("location");
+                    String name = document.getString("name");
+
+                    if (cafeLocation != null && name != null) {
+                        Location loc = new Location("");
+                        loc.setLatitude(cafeLocation.getLatitude());
+                        loc.setLongitude(cafeLocation.getLongitude());
+
+                        float distance = currentLocation.distanceTo(loc);
+                        if (distance <= 5000) { // Cách 50m thì được checkin
+                            canCheckin[0] = true;
+                            cafeId[0] = document.getId();
+                            cafeName[0] = name;
+                            ratingStar[0] = document.getDouble("ratingStar") != null ? document.getDouble("ratingStar") : 0.0;
+                            address[0] = document.getString("address") != null ? document.getString("address") : "";
+                            description[0] = document.getString("description");
+                            image1[0] = document.getString("image1");
+                            activity[0] = document.getString("activity");
+                            break;
+                        }
+                    }
+                }
+
+                if (canCheckin[0]) {
+                    // Lưu check-in vào Firestore
+                    Map<String, Object> checkinData = new HashMap<>();
+                    checkinData.put("userId", userId);
+                    checkinData.put("cafeId", cafeId[0]);
+                    checkinData.put("cafeName", cafeName[0]);
+                    checkinData.put("timestamp", com.google.firebase.firestore.FieldValue.serverTimestamp());
+                    checkinData.put("location", userGeoPoint);
+
+                    db.collection("checkins").add(checkinData)
+                            .addOnSuccessListener(documentReference -> {
+                                Toast.makeText(requireContext(), "Check-in thành công tại " + cafeName[0], Toast.LENGTH_SHORT).show();
+                                updateUserPoints(userId); // Thêm 1 điểm
+
+                                // Chuyển hướng sang CafeDetailActivity
+                                Intent intent = new Intent(requireContext(), CafeDetailActivity.class);
+                                intent.putExtra("cafeId", cafeId[0]);
+                                intent.putExtra("cafeName", cafeName[0]);
+                                intent.putExtra("ratingStar", ratingStar[0]);
+                                intent.putExtra("address", address[0]);
+                                intent.putExtra("description", description[0]);
+                                intent.putExtra("image1", image1[0]);
+                                intent.putExtra("activity", activity[0]);
+                                startActivity(intent);
+                            })
+                            .addOnFailureListener(e -> Toast.makeText(requireContext(), "Lỗi khi check-in!", Toast.LENGTH_SHORT).show());
+                } else {
+                    Toast.makeText(requireContext(), "Không có quán cà phê nào trong vòng 50m!", Toast.LENGTH_SHORT).show();
+                }
+            } else {
+                Toast.makeText(requireContext(), "Lỗi khi tải danh sách quán!", Toast.LENGTH_SHORT).show();
             }
-        }
+        });
+    }
 
-        if (canCheckin) {
-            Toast.makeText(requireContext(), "Check-in thành công tại " + cafeName, Toast.LENGTH_SHORT).show();
-            // TODO: Lưu thông tin check-in vào Firestore
-        } else {
-            Toast.makeText(requireContext(), "Không có quán cà phê nào trong vòng 50m!", Toast.LENGTH_SHORT).show();
-        }
+    private void updateUserPoints(String userId) {
+        DocumentReference userRef = db.collection("users").document(userId);
+        userRef.get().addOnSuccessListener(documentSnapshot -> {
+            Long currentPoints = documentSnapshot.getLong("points");
+            int newPoints = (currentPoints != null ? currentPoints.intValue() : 0) + 1;
+
+            userRef.update("points", newPoints)
+                    .addOnSuccessListener(aVoid -> {
+                        // Có thể thêm thông báo nếu muốn
+                    })
+                    .addOnFailureListener(e -> Toast.makeText(requireContext(), "Lỗi khi cập nhật điểm!", Toast.LENGTH_SHORT).show());
+        });
     }
 }

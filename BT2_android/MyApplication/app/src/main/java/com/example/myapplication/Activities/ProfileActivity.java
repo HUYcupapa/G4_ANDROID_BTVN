@@ -1,11 +1,10 @@
-package com.example.myapplication.Activites;
+package com.example.myapplication.Activities;
 
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Log;
-import android.util.Patterns;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
