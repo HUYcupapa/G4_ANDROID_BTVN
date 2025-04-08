@@ -1,11 +1,10 @@
-package com.example.myapplication.Activites;
+package com.example.myapplication.Activities;
 
 import static androidx.constraintlayout.helper.widget.MotionEffect.TAG;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.util.Patterns;
