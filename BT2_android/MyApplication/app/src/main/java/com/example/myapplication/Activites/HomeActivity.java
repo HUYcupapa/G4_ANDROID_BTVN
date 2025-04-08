@@ -56,7 +56,7 @@ public class HomeActivity extends AppCompatActivity {
             // TODO: Mở activity hoặc dialog thông báo
         });
         findViewById(R.id.account_icon).setOnClickListener(v -> {
-            startActivity(new Intent(this, CheckProfileActivity.ViewProfileActivity.class));
+            startActivity(new Intent(this, ProfileActivity.class));
         });
 
         // Thiết lập Bottom Navigation
