@@ -35,13 +35,13 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:padding="12dp">
+            android:padding="16dp">
 
             <!-- Tiêu đề Bộ Lọc -->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Lọc Quán Cà Phê"
+                android:text="☕ Lọc Quán Cà Phê"
                 android:textSize="18sp"
                 android:textStyle="bold"
                 android:textColor="@color/text_primary"
@@ -51,7 +51,16 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
+
+            <ImageView
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:src="@drawable/ic_distance"
+                    android:layout_marginEnd="8dp"
+                    app:itemTextColor="@drawable/bottom_nav_color_selector" />
+
 
                 <!-- Spinner Khoảng Cách -->
                 <Spinner
@@ -61,6 +70,14 @@
                     android:layout_weight="1"
                     android:background="@drawable/spinner_background"
                     android:entries="@array/distance_options"/>
+
+                <ImageView
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:src="@drawable/ic_star"
+                    android:layout_marginStart="12dp"
+                    android:layout_marginEnd="8dp"
+                    app:itemTextColor="@drawable/bottom_nav_color_selector" />
 
                 <!-- Spinner Đánh Giá -->
                 <Spinner
