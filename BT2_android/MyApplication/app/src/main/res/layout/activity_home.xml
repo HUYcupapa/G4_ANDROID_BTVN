@@ -1,22 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/coffee_secondary">
 
     <!-- Toolbar -->
     <androidx.appcompat.widget.Toolbar
+        android:background="@drawable/toolbar_coffee_gradient"
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:background="?attr/colorPrimary">
+        android:layout_height="?attr/actionBarSize">
 
         <TextView
+            android:textColor="@color/white"
+            android:shadowColor="@color/text_primary"
+            android:shadowDx="1"
+            android:shadowDy="1"
+            android:shadowRadius="2"
             android:id="@+id/toolbar_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Chào mừng đến MyCoffee!"
-            android:textColor="@color/white"
             android:textSize="18sp"
             android:layout_gravity="start" />
         <ImageView
@@ -24,7 +30,8 @@
             android:layout_width="24dp"
             android:layout_height="24dp"
             android:src="@drawable/ic_account"
-            android:layout_gravity="end" />
+            android:layout_gravity="end"
+            app:tint="@color/coffee_secondary" />
 
         <ImageView
             android:id="@+id/notification_icon"
@@ -48,6 +55,9 @@
     <!-- Bottom Navigation Bar -->
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottom_navigation"
+        android:background="@color/coffee_primary"
+        app:itemIconTint="@drawable/bottom_nav_color_selector"
+        app:itemTextColor="@drawable/bottom_nav_color_selector"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"

@@ -42,11 +42,11 @@ public class MainActivity extends AppCompatActivity {
                             finish();
                         })
                         .addOnFailureListener(e -> {
-                            startActivity(new Intent(MainActivity.this, ChoiceLoginActivity.class));
+                            startActivity(new Intent(MainActivity.this, LoginActivity.class));
                             finish();
                         });
             } else {
-                startActivity(new Intent(MainActivity.this, ChoiceLoginActivity.class));
+                startActivity(new Intent(MainActivity.this, LoginActivity.class));
                 finish();
             }
         }, 3000);

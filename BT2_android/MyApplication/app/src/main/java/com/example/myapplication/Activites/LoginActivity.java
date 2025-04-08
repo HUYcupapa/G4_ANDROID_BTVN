@@ -31,7 +31,7 @@ public class LoginActivity extends AppCompatActivity {
         edPassword = findViewById(R.id.edpasswordLg);
         btnLogin = findViewById(R.id.btnLogin);
         txtSignup = findViewById(R.id.txtSignup);
-        txtForgerPass = findViewById(R.id.txtForgerPass);
+        txtForgerPass = findViewById(R.id.txtForgetPass);
 
         btnLogin.setOnClickListener(v -> loginUser());
 
@@ -72,7 +72,7 @@ public class LoginActivity extends AppCompatActivity {
                             })
                             .addOnFailureListener(e -> {
                                 Toast.makeText(LoginActivity.this, "Lỗi khi kiểm tra vai trò!", Toast.LENGTH_SHORT).show();
-                                startActivity(new Intent(LoginActivity.this, ChoiceLoginActivity.class));
+
                                 finish();
                             });
                 })

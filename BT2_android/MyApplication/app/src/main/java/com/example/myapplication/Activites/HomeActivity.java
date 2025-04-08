@@ -7,7 +7,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 
-import com.example.myapplication.Activites.ChoiceLoginActivity;
 import com.example.myapplication.Fragment.CheckinFragment;
 import com.example.myapplication.Fragment.HomeFragment;
 import com.example.myapplication.Fragment.RewardsFragment;
@@ -30,7 +29,7 @@ public class HomeActivity extends AppCompatActivity {
         // Kiểm tra đăng nhập
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (user == null) {
-            startActivity(new Intent(this, ChoiceLoginActivity.class));
+            startActivity(new Intent(this, LoginActivity.class));
             finish();
             return;
         }
