@@ -15,6 +15,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.example.myapplication.R;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.auth.FirebaseAuth;
@@ -51,7 +52,7 @@ public class ProfileActivity extends AppCompatActivity {
     private ActivityResultLauncher<Intent> pickImageLauncher;
 
     // Thay YOUR_CLIENT_ID bằng Client ID của bạn từ Imgur
-    private static final String IMGUR_CLIENT_ID = "YOUR_CLIENT_ID";
+    private static final String IMGUR_CLIENT_ID = "44708ec159ebd14";
     private static final String IMGUR_UPLOAD_URL = "https://api.imgur.com/3/image";
 
     @Override
@@ -86,7 +87,13 @@ public class ProfileActivity extends AppCompatActivity {
         pickImageLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
             if (result.getResultCode() == RESULT_OK && result.getData() != null) {
                 avatarUri = result.getData().getData();
-                ivAvatar.setImageURI(avatarUri);
+                // Hiển thị ảnh tạm thời trước khi lưu
+                Glide.with(this)
+                        .load(avatarUri)
+                        .apply(RequestOptions.circleCropTransform()) // Cắt ảnh thành hình tròn
+                        .placeholder(R.drawable.ic_account)
+                        .error(R.drawable.ic_account)
+                        .into(ivAvatar);
             }
         });
 
@@ -122,12 +129,16 @@ public class ProfileActivity extends AppCompatActivity {
                                 Log.d(TAG, "Avatar URL: " + avatar);
                                 Glide.with(this)
                                         .load(avatar)
+                                        .apply(RequestOptions.circleCropTransform()) // Cắt ảnh thành hình tròn
                                         .placeholder(R.drawable.ic_account)
                                         .error(R.drawable.ic_account)
                                         .into(ivAvatar);
                             } else {
                                 Log.d(TAG, "Không có avatar trong Firestore");
-                                ivAvatar.setImageResource(R.drawable.ic_account);
+                                Glide.with(this)
+                                        .load(R.drawable.ic_account)
+                                        .apply(RequestOptions.circleCropTransform()) // Cắt ảnh mặc định thành hình tròn
+                                        .into(ivAvatar);
                             }
                         }
                     })
@@ -228,7 +239,16 @@ public class ProfileActivity extends AppCompatActivity {
                             String imageUrl = json.getJSONObject("data").getString("link");
                             userData.put("avatar", imageUrl);
                             updateFirestore(userId, userData);
-                            runOnUiThread(() -> Toast.makeText(ProfileActivity.this, "Upload ảnh thành công!", Toast.LENGTH_SHORT).show());
+                            runOnUiThread(() -> {
+                                Toast.makeText(ProfileActivity.this, "Upload ảnh thành công!", Toast.LENGTH_SHORT).show();
+                                // Hiển thị ảnh vừa upload dưới dạng hình tròn
+                                Glide.with(ProfileActivity.this)
+                                        .load(imageUrl)
+                                        .apply(RequestOptions.circleCropTransform())
+                                        .placeholder(R.drawable.ic_account)
+                                        .error(R.drawable.ic_account)
+                                        .into(ivAvatar);
+                            });
                         } catch (Exception e) {
                             runOnUiThread(() -> Toast.makeText(ProfileActivity.this, "Lỗi khi phân tích phản hồi từ Imgur!", Toast.LENGTH_SHORT).show());
                             Log.e(TAG, "Lỗi phân tích JSON: " + e.getMessage());

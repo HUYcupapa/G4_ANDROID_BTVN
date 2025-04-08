@@ -20,7 +20,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:text="Hồ Sơ Cá Nhân ☕"
+            android:text="Hồ Sơ Cá Nhân"
             android:textColor="#FFF5E1"
             android:textSize="20sp"
             android:textStyle="bold" />
@@ -43,9 +43,12 @@
                 android:id="@+id/iv_avatar"
                 android:layout_width="120dp"
                 android:layout_height="120dp"
-                android:src="@drawable/ic_account"
                 android:layout_marginBottom="20dp"
                 android:background="@drawable/circle_background"
+                android:clipToOutline="true"
+                android:scaleType="centerCrop"
+                android:src="@drawable/ic_account"
+                android:padding="4dp"
                 android:contentDescription="Avatar" />
 
             <!-- Tên -->
