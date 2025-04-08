@@ -23,13 +23,21 @@ public class RewardsFragment extends Fragment {
 
         // Lấy điểm thưởng từ Firestore
         String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
-        db.collection("users").document(userId).get()
-                .addOnSuccessListener(documentSnapshot -> {
-                    if (documentSnapshot.exists()) {
+        db.collection("users").document(userId)
+                .addSnapshotListener((documentSnapshot, e) -> {
+                    if (e != null) {
+                        tvPoints.setText("Lỗi khi tải điểm thưởng");
+                        return;
+                    }
+
+                    if (documentSnapshot != null && documentSnapshot.exists()) {
                         Long points = documentSnapshot.getLong("points");
-                        tvPoints.setText("Tổng điểm thưởng: " + (points != null ? points : 0));
+                        tvPoints.setText("Tổng điểm thưởng: " + points);
+                    } else {
+                        tvPoints.setText("Không có dữ liệu điểm thưởng");
                     }
                 });
+
 
         // TODO: Thêm logic hiển thị huy hiệu và nhiệm vụ
         return view;

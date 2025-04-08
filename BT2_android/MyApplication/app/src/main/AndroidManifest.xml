@@ -6,21 +6,23 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
-        android:fullBackupContent="@xml/backup_rules"
+        android:fullBackupContent="@xml/backup_rules                                                                                            "
         android:icon="@mipmap/ic_launcher"
         android:label="Cofi Spot"
-        android:roundIcon="@drawable/ic_launcher_background"
         android:supportsRtl="true"
         android:theme="@style/Theme.MyApplication"
         tools:targetApi="31">
         <activity
-            android:name=".Activites.AdminActivity"
+            android:name=".Activites.ProfileActivity"
             android:exported="false" />
-        <!-- API Key của Google Maps -->
+        <activity
+            android:name=".Activites.AdminActivity"
+            android:exported="false" /> <!-- API Key của Google Maps -->
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyD88lQgGXHV5qERgU5cj0Q_F5j01i1dy6s" /> <!-- MainActivity (Màn hình splash) -->
@@ -37,17 +39,8 @@
             android:name=".Activites.MainActivity"
             android:exported="false" /> <!-- LoginActivity: Xử lý đăng nhập -->
         <activity
-            android:name=".Activites.CheckProfileActivity"
-            android:exported="false" /> <!-- ProfileActivity: Nếu chưa có hồ sơ thì vào đây -->
-        <activity
-            android:name=".Activites.ProfileActivity"
-            android:exported="false" /> <!-- HomeActivity: Nếu đã có hồ sơ thì vào đây -->
-        <activity
             android:name=".Activites.HomeActivity"
             android:exported="false" />
-        <activity
-            android:name=".Activites.CheckProfileActivity$ViewProfileActivity"
-            android:exported="false" /> <!-- MapsActivity: Màn hình bản đồ -->
         <activity
             android:name=".Activites.SignupActivity"
             android:exported="false" /> <!-- LoginOtpActivity: Xác thực OTP -->
