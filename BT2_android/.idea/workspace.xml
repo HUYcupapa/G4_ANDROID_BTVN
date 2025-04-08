@@ -40,6 +40,11 @@
           <theme>@style/Theme.MyApplication</theme>
         </config>
       </layout>
+      <layout url="file://$PROJECT_DIR$/MyApplication/app/src/main/res/layout/dialog_review.xml">
+        <config>
+          <theme>@style/Theme.MyApplication</theme>
+        </config>
+      </layout>
       <layout url="file://$PROJECT_DIR$/MyApplication/app/src/main/res/layout/fragment_checkin.xml">
         <config>
           <theme>@style/Theme.MyApplication</theme>
@@ -77,108 +82,14 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="25dc4141-94f9-4db8-9caf-6e884ed3b10e" name="Changes" comment="Refactor Project #2">
-      <change afterPath="$PROJECT_DIR$/.idea/.gitignore" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/.name" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/BT2_android.iml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/appInsightsSettings.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/assetWizardSettings.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/caches/deviceStreaming.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/deploymentTargetSelector.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/gradle.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/migrations.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/runConfigurations.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/MyApplication/app/src/main/java/com/example/myapplication/Activities/AdminActivity.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/MyApplication/app/src/main/java/com/example/myapplication/Activities/CafeDetailActivity.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/MyApplication/app/src/main/java/com/example/myapplication/Activities/HomeActivity.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/MyApplication/app/src/main/java/com/example/myapplication/Activities/MainActivity.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/MyApplication/app/src/main/java/com/example/myapplication/Activities/ProfileActivity.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/MyApplication/app/src/main/java/com/example/myapplication/Activities/SignupActivity.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/MyApplication/app/src/main/java/com/example/myapplication/Adapter/CafeAdapter.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/MyApplication/app/src/main/java/com/example/myapplication/Fragment/CheckinFragment.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/MyApplication/app/src/main/java/com/example/myapplication/Fragment/HomeFragment.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/MyApplication/app/src/main/java/com/example/myapplication/Fragment/RewardsFragment.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/MyApplication/app/src/main/java/com/example/myapplication/Fragment/SearchFragment.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/MyApplication/app/src/main/res/drawable/app_coffee.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/MyApplication/app/src/main/res/drawable/bg_recyclerview.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/MyApplication/app/src/main/res/drawable/bottom_nav_color_selector.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/MyApplication/app/src/main/res/drawable/circle_background.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/MyApplication/app/src/main/res/drawable/ic_account.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/MyApplication/app/src/main/res/drawable/ic_badge.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/MyApplication/app/src/main/res/drawable/ic_checkin.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/MyApplication/app/src/main/res/drawable/ic_coffee_bean.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/MyApplication/app/src/main/res/drawable/ic_coffee_store.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/MyApplication/app/src/main/res/drawable/ic_distance.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/MyApplication/app/src/main/res/drawable/ic_home.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/MyApplication/app/src/main/res/drawable/ic_logout.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/MyApplication/app/src/main/res/drawable/ic_mission.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/MyApplication/app/src/main/res/drawable/ic_notification.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/MyApplication/app/src/main/res/drawable/ic_placeholder.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/MyApplication/app/src/main/res/drawable/ic_profile.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/MyApplication/app/src/main/res/drawable/ic_review.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/MyApplication/app/src/main/res/drawable/ic_reward_points.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/MyApplication/app/src/main/res/drawable/ic_rewards.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/MyApplication/app/src/main/res/drawable/ic_search.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/MyApplication/app/src/main/res/drawable/ic_star.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/MyApplication/app/src/main/res/drawable/ic_suggestion.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/MyApplication/app/src/main/res/drawable/launcher.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/MyApplication/app/src/main/res/drawable/logo.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/MyApplication/app/src/main/res/drawable/progress_coffee.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/MyApplication/app/src/main/res/drawable/spinner_background.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/MyApplication/app/src/main/res/drawable/svg/emoji_events_24dp_E3E3E3.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/MyApplication/app/src/main/res/drawable/svg/fact_check_24dp_E3E3E3.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/MyApplication/app/src/main/res/drawable/svg/map_24dp_E3E3E3.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/MyApplication/app/src/main/res/drawable/svg/star_rate_24dp_E3E3E3.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/MyApplication/app/src/main/res/drawable/svg/stars_24dp_E3E3E3.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/MyApplication/app/src/main/res/drawable/svg/store_24dp_E3E3E3.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/MyApplication/app/src/main/res/drawable/toolbar_coffee_gradient.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/MyApplication/app/src/main/res/layout/activity_admin.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/MyApplication/app/src/main/res/layout/activity_cafe_detail.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/MyApplication/app/src/main/res/layout/dialog_review.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/MyApplication/app/src/main/res/layout/fragment_checkin.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/MyApplication/app/src/main/res/layout/fragment_home.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/MyApplication/app/src/main/res/layout/fragment_rewards.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/MyApplication/app/src/main/res/layout/fragment_search.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/MyApplication/app/src/main/res/layout/item_cafe.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/MyApplication/app/src/main/res/menu/bottom_nav_menu.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/MyApplication/app/src/main/res/values/arrays.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../BT1_android/nbproject/private/private.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../BT1_android/nbproject/private/private.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/MyApplication/app/build.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/MyApplication/app/build.gradle.kts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/MyApplication/app/src/main/AndroidManifest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/MyApplication/app/src/main/AndroidManifest.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/MyApplication/app/src/main/java/com/example/myapplication/CheckProfileActivity.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/MyApplication/app/src/main/java/com/example/myapplication/ChoiceLoginActivity.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/MyApplication/app/src/main/java/com/example/myapplication/City.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/MyApplication/app/src/main/java/com/example/myapplication/CityAdapter.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/MyApplication/app/src/main/java/com/example/myapplication/ForgotPassActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/MyApplication/app/src/main/java/com/example/myapplication/Activities/ForgotPassActivity.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/MyApplication/app/src/main/java/com/example/myapplication/GPS_CAFE/Cafe.java" beforeDir="false" afterPath="$PROJECT_DIR$/MyApplication/app/src/main/java/com/example/myapplication/Model/Cafe.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/MyApplication/app/src/main/java/com/example/myapplication/HomeActivity.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/MyApplication/app/src/main/java/com/example/myapplication/LoginActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/MyApplication/app/src/main/java/com/example/myapplication/Activities/LoginActivity.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/MyApplication/app/src/main/java/com/example/myapplication/LoginOtpActivity.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/MyApplication/app/src/main/java/com/example/myapplication/MainActivity.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/MyApplication/app/src/main/java/com/example/myapplication/MapsActivity.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/MyApplication/app/src/main/java/com/example/myapplication/ProfileActivity.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/MyApplication/app/src/main/java/com/example/myapplication/SignupActivity.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/MyApplication/app/src/main/java/com/example/myapplication/profile/ViewProfileActivity.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/MyApplication/app/src/main/res/drawable/ic_launcher_background.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/MyApplication/app/src/main/res/drawable/ic_launcher_foreground.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/MyApplication/app/src/main/res/drawable/image.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/MyApplication/app/src/main/res/layout/activity_choice_login.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/MyApplication/app/src/main/res/layout/activity_forgot_pass.xml" beforeDir="false" afterPath="$PROJECT_DIR$/MyApplication/app/src/main/res/layout/activity_forgot_pass.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/MyApplication/app/src/main/res/layout/activity_home.xml" beforeDir="false" afterPath="$PROJECT_DIR$/MyApplication/app/src/main/res/layout/activity_home.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/MyApplication/app/src/main/res/layout/activity_login.xml" beforeDir="false" afterPath="$PROJECT_DIR$/MyApplication/app/src/main/res/layout/activity_login.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/MyApplication/app/src/main/res/layout/activity_login_otp.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/MyApplication/app/src/main/res/layout/activity_main.xml" beforeDir="false" afterPath="$PROJECT_DIR$/MyApplication/app/src/main/res/layout/activity_main.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/MyApplication/app/src/main/res/layout/activity_maps.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/MyApplication/app/src/main/res/layout/activity_profile.xml" beforeDir="false" afterPath="$PROJECT_DIR$/MyApplication/app/src/main/res/layout/activity_profile.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/MyApplication/app/src/main/res/layout/activity_signup.xml" beforeDir="false" afterPath="$PROJECT_DIR$/MyApplication/app/src/main/res/layout/activity_signup.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/MyApplication/app/src/main/res/layout/activity_view_profile.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/MyApplication/app/src/main/res/layout/item_city.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/MyApplication/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" beforeDir="false" afterPath="$PROJECT_DIR$/MyApplication/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/MyApplication/app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml" beforeDir="false" afterPath="$PROJECT_DIR$/MyApplication/app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/MyApplication/app/src/main/res/values/colors.xml" beforeDir="false" afterPath="$PROJECT_DIR$/MyApplication/app/src/main/res/values/colors.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/MyApplication/app/src/main/res/values/strings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/MyApplication/app/src/main/res/values/strings.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/MyApplication/build.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/MyApplication/build.gradle.kts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules/app/My_Application.app.main.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules/app/My_Application.app.main.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/MyApplication/app/src/main/res/drawable/svg/emoji_events_24dp_E3E3E3.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/MyApplication/app/src/main/res/drawable/svg/fact_check_24dp_E3E3E3.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/MyApplication/app/src/main/res/drawable/svg/map_24dp_E3E3E3.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/MyApplication/app/src/main/res/drawable/svg/star_rate_24dp_E3E3E3.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/MyApplication/app/src/main/res/drawable/svg/stars_24dp_E3E3E3.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/MyApplication/app/src/main/res/drawable/svg/store_24dp_E3E3E3.svg" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -188,7 +99,7 @@
   <component name="ClangdSettings">
     <option name="formatViaClangd" value="false" />
   </component>
-  <component name="ExecutionTargetManager" SELECTED_TARGET="device_and_snapshot_combo_box_target[DeviceId(pluginId=LocalEmulator, isTemplate=false, identifier=path=C:\Users\ADMIN\.android\avd\Medium_Phone.avd)]" />
+  <component name="ExecutionTargetManager" SELECTED_TARGET="device_and_snapshot_combo_box_target[DeviceId(pluginId=PhysicalDevice, isTemplate=false, identifier=serial=cmytmzvkxcd6daga)]" />
   <component name="ExternalProjectsData">
     <projectState path="$PROJECT_DIR$/MyApplication">
       <ProjectState />
@@ -274,28 +185,28 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;ASKED_SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
-    &quot;Android App.My_Application.app.executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.D:/CODE_TLU/ANDROID/G4_ANDROID_BTVN/BT2_android [signing report].executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.D:/CODE_TLU/ANDROID/G4_ANDROID_BTVN/BT2_android [signingReport].executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.D:/CODE_TLU/ANDROID/G4_ANDROID_BTVN/BT2_android [signing].executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.D:/CODE_TLU/ANDROID/G4_ANDROID_BTVN/BT2_android [signingreport].executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.MyApplication [signingreport].executor&quot;: &quot;Run&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.cidr.known.project.marker&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.readMode.enableVisualFormatting&quot;: &quot;true&quot;,
-    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
-    &quot;cf.first.check.clang-format&quot;: &quot;false&quot;,
-    &quot;cidr.known.project.marker&quot;: &quot;true&quot;,
-    &quot;com.google.services.firebase.aqiPopupShown&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;Merging master&quot;,
-    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;D:/CODE_TLU/ANDROID/G4_ANDROID_BTVN/BT2_android/MyApplication/app/src/main/res/drawable&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;experimental&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "ASKED_SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "Android App.My_Application.app.executor": "Run",
+    "Gradle.D:/CODE_TLU/ANDROID/G4_ANDROID_BTVN/BT2_android [signing report].executor": "Run",
+    "Gradle.D:/CODE_TLU/ANDROID/G4_ANDROID_BTVN/BT2_android [signingReport].executor": "Run",
+    "Gradle.D:/CODE_TLU/ANDROID/G4_ANDROID_BTVN/BT2_android [signing].executor": "Run",
+    "Gradle.D:/CODE_TLU/ANDROID/G4_ANDROID_BTVN/BT2_android [signingreport].executor": "Run",
+    "Gradle.MyApplication [signingreport].executor": "Run",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.cidr.known.project.marker": "true",
+    "RunOnceActivity.readMode.enableVisualFormatting": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "cf.first.check.clang-format": "false",
+    "cidr.known.project.marker": "true",
+    "com.google.services.firebase.aqiPopupShown": "true",
+    "git-widget-placeholder": "master",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "D:/CODE_TLU/ANDROID/G4_ANDROID_BTVN/BT2_android/MyApplication/app/src/main/res/drawable",
+    "settings.editor.selected.configurable": "experimental"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="D:\CODE_TLU\ANDROID\G4_ANDROID_BTVN\BT2_android\MyApplication\app\src\main\res\drawable" />
@@ -313,8 +224,79 @@
       <command value="gradle signingreport" />
     </option>
   </component>
-  <component name="RunManager" selected="Android App.My_Application.app">
+  <component name="RunManager" selected="Android App.app">
     <configuration name="My_Application.app" type="AndroidRunConfigurationType" factoryName="Android App" activateToolWindowBeforeRun="false">
+      <option name="ANDROID_RUN_CONFIGURATION_SCHEMA_VERSION" value="1" />
+      <option name="DEPLOY" value="true" />
+      <option name="DEPLOY_APK_FROM_BUNDLE" value="false" />
+      <option name="DEPLOY_AS_INSTANT" value="false" />
+      <option name="ARTIFACT_NAME" value="" />
+      <option name="PM_INSTALL_OPTIONS" value="" />
+      <option name="ALL_USERS" value="false" />
+      <option name="ALWAYS_INSTALL_WITH_PM" value="false" />
+      <option name="ALLOW_ASSUME_VERIFIED" value="false" />
+      <option name="CLEAR_APP_STORAGE" value="false" />
+      <option name="DYNAMIC_FEATURES_DISABLED_LIST" value="" />
+      <option name="ACTIVITY_EXTRA_FLAGS" value="" />
+      <option name="MODE" value="default_activity" />
+      <option name="RESTORE_ENABLED" value="false" />
+      <option name="RESTORE_FILE" value="" />
+      <option name="RESTORE_FRESH_INSTALL_ONLY" value="false" />
+      <option name="CLEAR_LOGCAT" value="false" />
+      <option name="SHOW_LOGCAT_AUTOMATICALLY" value="false" />
+      <option name="TARGET_SELECTION_MODE" value="DEVICE_AND_SNAPSHOT_COMBO_BOX" />
+      <option name="SELECTED_CLOUD_MATRIX_CONFIGURATION_ID" value="-1" />
+      <option name="SELECTED_CLOUD_MATRIX_PROJECT_ID" value="" />
+      <option name="DEBUGGER_TYPE" value="Auto" />
+      <Auto>
+        <option name="USE_JAVA_AWARE_DEBUGGER" value="false" />
+        <option name="SHOW_STATIC_VARS" value="true" />
+        <option name="WORKING_DIR" value="" />
+        <option name="TARGET_LOGGING_CHANNELS" value="lldb process:gdb-remote packets" />
+        <option name="SHOW_OPTIMIZED_WARNING" value="true" />
+        <option name="ATTACH_ON_WAIT_FOR_DEBUGGER" value="false" />
+        <option name="DEBUG_SANDBOX_SDK" value="false" />
+      </Auto>
+      <Hybrid>
+        <option name="USE_JAVA_AWARE_DEBUGGER" value="false" />
+        <option name="SHOW_STATIC_VARS" value="true" />
+        <option name="WORKING_DIR" value="" />
+        <option name="TARGET_LOGGING_CHANNELS" value="lldb process:gdb-remote packets" />
+        <option name="SHOW_OPTIMIZED_WARNING" value="true" />
+        <option name="ATTACH_ON_WAIT_FOR_DEBUGGER" value="false" />
+        <option name="DEBUG_SANDBOX_SDK" value="false" />
+      </Hybrid>
+      <Java>
+        <option name="ATTACH_ON_WAIT_FOR_DEBUGGER" value="false" />
+        <option name="DEBUG_SANDBOX_SDK" value="false" />
+      </Java>
+      <Native>
+        <option name="USE_JAVA_AWARE_DEBUGGER" value="false" />
+        <option name="SHOW_STATIC_VARS" value="true" />
+        <option name="WORKING_DIR" value="" />
+        <option name="TARGET_LOGGING_CHANNELS" value="lldb process:gdb-remote packets" />
+        <option name="SHOW_OPTIMIZED_WARNING" value="true" />
+        <option name="ATTACH_ON_WAIT_FOR_DEBUGGER" value="false" />
+        <option name="DEBUG_SANDBOX_SDK" value="false" />
+      </Native>
+      <Profilers>
+        <option name="ADVANCED_PROFILING_ENABLED" value="false" />
+        <option name="STARTUP_PROFILING_ENABLED" value="false" />
+        <option name="STARTUP_CPU_PROFILING_ENABLED" value="false" />
+        <option name="STARTUP_CPU_PROFILING_CONFIGURATION_NAME" value="Java/Kotlin Method Sample (legacy)" />
+        <option name="STARTUP_NATIVE_MEMORY_PROFILING_ENABLED" value="false" />
+        <option name="NATIVE_MEMORY_SAMPLE_RATE_BYTES" value="2048" />
+      </Profilers>
+      <option name="DEEP_LINK" value="" />
+      <option name="ACTIVITY" value="" />
+      <option name="ACTIVITY_CLASS" value="" />
+      <option name="SEARCH_ACTIVITY_IN_GLOBAL_SCOPE" value="false" />
+      <option name="SKIP_ACTIVITY_VALIDATION" value="false" />
+      <method v="2">
+        <option name="Android.Gradle.BeforeRunTask" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="app" type="AndroidRunConfigurationType" factoryName="Android App" activateToolWindowBeforeRun="false">
       <module name="My_Application.app" />
       <option name="ANDROID_RUN_CONFIGURATION_SCHEMA_VERSION" value="1" />
       <option name="DEPLOY" value="true" />
