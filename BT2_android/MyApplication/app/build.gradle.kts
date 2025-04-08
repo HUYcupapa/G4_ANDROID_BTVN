@@ -27,8 +27,8 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.VERSION_11
+        targetCompatibility = JavaVersion.VERSION_11
     }
     buildFeatures {
         viewBinding = true
@@ -66,6 +66,4 @@ dependencies {
 
     implementation ("com.squareup.okhttp3:okhttp:4.12.0")
     implementation ("com.github.bumptech.glide:glide:4.16.0")
-
-
 }

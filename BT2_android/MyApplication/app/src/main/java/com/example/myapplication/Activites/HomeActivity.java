@@ -20,14 +20,18 @@ import com.google.firebase.firestore.FirebaseFirestore;
 public class HomeActivity extends AppCompatActivity {
 
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private FirebaseAuth mAuth;  // Thêm biến FirebaseAuth
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
+        // Khởi tạo FirebaseAuth
+        mAuth = FirebaseAuth.getInstance();
+
         // Kiểm tra đăng nhập
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        FirebaseUser user = mAuth.getCurrentUser();
         if (user == null) {
             startActivity(new Intent(this, LoginActivity.class));
             finish();
@@ -51,10 +55,17 @@ public class HomeActivity extends AppCompatActivity {
                     }
                 });
 
-        // Xử lý sự kiện cho icon thông báo và tài khoản
-        findViewById(R.id.notification_icon).setOnClickListener(v -> {
-            // TODO: Mở activity hoặc dialog thông báo
+        // Xử lý sự kiện cho nút đăng xuất và tài khoản
+        findViewById(R.id.logout_icon).setOnClickListener(v -> {
+            // Đăng xuất người dùng
+            mAuth.signOut();
+            // Chuyển hướng về LoginActivity
+            Intent intent = new Intent(HomeActivity.this, LoginActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK); // Xóa toàn bộ stack activity
+            startActivity(intent);
+            finish(); // Đóng HomeActivity
         });
+
         findViewById(R.id.account_icon).setOnClickListener(v -> {
             startActivity(new Intent(this, ProfileActivity.class));
         });
