@@ -1,13 +1,13 @@
 {
   "project_info": {
-    "project_number": "389007427051",
-    "project_id": "ad01-33ac1",
-    "storage_bucket": "ad01-33ac1.firebasestorage.app"
+    "project_number": "67690516949",
+    "project_id": "btlandroidg4",
+    "storage_bucket": "btlandroidg4.firebasestorage.app"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:389007427051:android:f3cbb8bbfc81a73bbd05ae",
+        "mobilesdk_app_id": "1:67690516949:android:e138076336824da022ed5c",
         "android_client_info": {
           "package_name": "com.example.myapplication"
         }
@@ -15,7 +15,7 @@
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyB9BNvVg4sc8HGe9kFJ7Z8mYa0RB4Xpccc"
+          "current_key": "AIzaSyBo6Arv-v9TwM7W38xqflKLop6oTK1RvEM"
         }
       ],
       "services": {
