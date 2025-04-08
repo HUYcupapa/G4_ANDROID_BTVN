@@ -78,6 +78,7 @@ public class CheckinFragment extends Fragment {
         cafes.add(new Cafe("The Coffee House", 21.028511, 105.804817));
         cafes.add(new Cafe("Highlands Coffee", 21.025292, 105.852871));
         cafes.add(new Cafe("Cộng Cà Phê", 21.035978, 105.853987));
+        cafes.add(new Cafe("Cafe Thái Hà", 21.014708100199694, 105.81942573865054));
         return cafes;
     }
 
@@ -95,7 +96,7 @@ public class CheckinFragment extends Fragment {
             cafeLocation.setLongitude(cafe.getLng());
 
             float distance = currentLocation.distanceTo(cafeLocation);
-            if (distance < 50) { // Giới hạn 50m
+            if (distance < 5000) { // Giới hạn 50m
                 canCheckin = true;
                 cafeName = cafe.getName();
                 break;
