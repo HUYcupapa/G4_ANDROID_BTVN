@@ -26,7 +26,7 @@ public class CheckProfileActivity extends AppCompatActivity {
 
         FirebaseUser user = mAuth.getCurrentUser();
         if (user == null) {
-            startActivity(new Intent(CheckProfileActivity.this, ChoiceLoginActivity.class));
+            startActivity(new Intent(CheckProfileActivity.this, LoginActivity.class));
             finish();
             return;
         }
@@ -47,7 +47,7 @@ public class CheckProfileActivity extends AppCompatActivity {
                     finish();
                 })
                 .addOnFailureListener(e -> {
-                    startActivity(new Intent(CheckProfileActivity.this, ChoiceLoginActivity.class));
+                    startActivity(new Intent(CheckProfileActivity.this, LoginActivity.class));
                     finish();
                 });
     }
