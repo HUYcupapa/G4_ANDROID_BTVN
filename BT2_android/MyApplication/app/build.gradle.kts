@@ -9,7 +9,7 @@ android {
 
     defaultConfig {
         applicationId = "com.example.myapplication"
-        minSdk = 23
+        minSdk = 24
         targetSdk = 34
         versionCode = 1
         versionName = "1.0"
@@ -62,9 +62,6 @@ dependencies {
     implementation ("com.google.android.gms:play-services-location:21.0.1")
     implementation ("androidx.fragment:fragment:1.5.7")
     implementation ("com.google.android.libraries.places:places:2.7.0")
-
-
-
 
 
 
