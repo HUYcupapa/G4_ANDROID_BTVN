@@ -66,7 +66,7 @@ public class HomeActivity extends AppCompatActivity {
             Fragment selectedFragment = null;
             int itemId = item.getItemId();
 
-            // Sử dụng if-else thay vì switch-case để tránh lỗi "constant expression required"
+            // Lựa chọn option trên navigationBar
             if (itemId == R.id.nav_home) {
                 selectedFragment = new HomeFragment();
             } else if (itemId == R.id.nav_checkin) {
