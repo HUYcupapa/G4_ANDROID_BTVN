@@ -75,6 +75,11 @@
           <theme>@style/Theme.MyApplication</theme>
         </config>
       </layout>
+      <layout url="file://$PROJECT_DIR$/MyApplication/app/src/main/res/layout/item_media.xml">
+        <config>
+          <theme>@style/Theme.MyApplication</theme>
+        </config>
+      </layout>
       <layout url="file://$PROJECT_DIR$/MyApplication/app/src/main/res/menu/bottom_nav_menu.xml">
         <config>
           <theme>@style/Theme.MyApplication</theme>
@@ -87,7 +92,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="25dc4141-94f9-4db8-9caf-6e884ed3b10e" name="Changes" comment="Refactor Project #2">
+      <change beforePath="$PROJECT_DIR$/.idea/modules/app/My_Application.app.iml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/MyApplication/app/build.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/MyApplication/app/build.gradle.kts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/MyApplication/app/src/main/java/com/example/myapplication/Activities/ReviewActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/MyApplication/app/src/main/java/com/example/myapplication/Activities/ReviewActivity.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/MyApplication/app/src/main/res/layout/dialog_review.xml" beforeDir="false" afterPath="$PROJECT_DIR$/MyApplication/app/src/main/res/layout/dialog_review.xml" afterDir="false" />
     </list>
@@ -112,6 +119,9 @@
           <activation />
         </task>
         <task path="$PROJECT_DIR$/MyApplication">
+          <activation />
+        </task>
+        <task path="$PROJECT_DIR$">
           <activation />
         </task>
         <projects_view>
@@ -149,10 +159,10 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
-        <option value="valueResourceFile" />
         <option value="Class" />
         <option value="resourceFile" />
         <option value="layoutResourceFile" />
+        <option value="valueResourceFile" />
       </list>
     </option>
   </component>
@@ -549,12 +559,12 @@
       <map>
         <entry key="com.example.myapplication">
           <value>
-            <CheckInfo lastCheckTimestamp="1744100113339" />
+            <CheckInfo lastCheckTimestamp="1744189257012" />
           </value>
         </entry>
         <entry key="com.example.myapplication.test">
           <value>
-            <CheckInfo lastCheckTimestamp="1744100113339" />
+            <CheckInfo lastCheckTimestamp="1744189257012" />
           </value>
         </entry>
       </map>

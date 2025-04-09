@@ -11,6 +11,8 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.GridLayout;
+import android.widget.HorizontalScrollView;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -24,6 +26,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import com.bumptech.glide.Glide;
 import com.example.myapplication.R;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
@@ -67,7 +70,7 @@ public class ReviewActivity extends AppCompatActivity {
     private static final String IMGUR_CLIENT_ID = "44708ec159ebd14"; // Sử dụng Client-ID của bạn
     private static final String IMGUR_UPLOAD_URL = "https://api.imgur.com/3/upload";
     private static final int PERMISSION_REQUEST_CODE = 100;
-    private LinearLayout mediaContainer; // Biến để lưu mediaContainer từ dialog
+    private HorizontalScrollView mediaContainer; // Biến để lưu mediaContainer từ dialog
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,7 +90,7 @@ public class ReviewActivity extends AppCompatActivity {
             userId = mAuth.getCurrentUser().getUid();
         } else {
             Toast.makeText(this, "Vui lòng đăng nhập để tiếp tục!", Toast.LENGTH_SHORT).show();
-            finish();
+            // Không gọi finish() ngay, để người dùng tự quay lại
             return;
         }
 
@@ -142,6 +145,10 @@ public class ReviewActivity extends AppCompatActivity {
         btnReview.setOnClickListener(v -> {
             if (mAuth.getCurrentUser() == null) {
                 Toast.makeText(this, "Vui lòng đăng nhập để đánh giá!", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            if (cafeId == null) {
+                Toast.makeText(this, "Không tìm thấy ID quán!", Toast.LENGTH_SHORT).show();
                 return;
             }
             showReviewDialog();
@@ -203,16 +210,16 @@ public class ReviewActivity extends AppCompatActivity {
                             }
                         } else {
                             Toast.makeText(this, "Không tìm thấy thông tin quán!", Toast.LENGTH_SHORT).show();
-                            finish();
+                            // Không gọi finish() ngay, để người dùng tự quay lại
                         }
                     })
                     .addOnFailureListener(e -> {
                         Toast.makeText(this, "Lỗi khi tải thông tin quán: " + e.getMessage(), Toast.LENGTH_SHORT).show();
-                        finish();
+                        // Không gọi finish() ngay, để người dùng tự quay lại
                     });
         } else {
             Toast.makeText(this, "Không tìm thấy ID quán!", Toast.LENGTH_SHORT).show();
-            finish();
+            // Không gọi finish() ngay, để người dùng tự quay lại
         }
     }
 
@@ -222,41 +229,69 @@ public class ReviewActivity extends AppCompatActivity {
         // Xóa các view cũ trong mediaContainer
         mediaContainer.removeAllViews();
 
-        // Thêm các hình ảnh đã chọn
-        for (Uri uri : selectedImageUris) {
-            ImageView imageView = new ImageView(this);
-            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(100, 100);
-            params.setMargins(8, 0, 8, 0);
-            imageView.setLayoutParams(params);
-            imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-            imageView.setImageURI(uri);
-            mediaContainer.addView(imageView);
+        // Tạo LinearLayout để chứa các ảnh/video
+        LinearLayout linearLayout = new LinearLayout(this);
+        linearLayout.setOrientation(LinearLayout.HORIZONTAL);
+        linearLayout.setLayoutParams(new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.WRAP_CONTENT,
+                450 // Đảm bảo chiều cao khớp với XML
+        ));
+        linearLayout.setPadding(8, 8, 8, 8);
 
-            // Thêm nút xóa ảnh
-            imageView.setOnClickListener(v -> {
+        // Thêm các hình ảnh đã chọn
+        for (int i = 0; i < selectedImageUris.size(); i++) {
+            Uri uri = selectedImageUris.get(i);
+            View mediaView = LayoutInflater.from(this).inflate(R.layout.item_media, linearLayout, false);
+
+            ImageView ivMedia = mediaView.findViewById(R.id.ivMedia);
+            ImageButton btnRemove = mediaView.findViewById(R.id.btnRemove);
+            TextView tvMediaCount = mediaView.findViewById(R.id.tvMediaCount);
+
+            // Hiển thị ảnh
+            ivMedia.setImageURI(uri);
+
+            // Hiển thị số lượng ảnh
+            tvMediaCount.setText((i + 1) + "/3");
+
+            // Xử lý nút xóa
+            btnRemove.setOnClickListener(v -> {
                 selectedImageUris.remove(uri);
                 updateMediaContainer();
                 Toast.makeText(this, "Đã xóa ảnh", Toast.LENGTH_SHORT).show();
             });
+
+            linearLayout.addView(mediaView);
         }
 
         // Thêm video đã chọn (nếu có)
         if (selectedVideoUri != null) {
-            ImageView videoView = new ImageView(this);
-            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(100, 100);
-            params.setMargins(8, 0, 8, 0);
-            videoView.setLayoutParams(params);
-            videoView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-            videoView.setImageURI(selectedVideoUri);
-            mediaContainer.addView(videoView);
+            View mediaView = LayoutInflater.from(this).inflate(R.layout.item_media, linearLayout, false);
 
-            // Thêm nút xóa video
-            videoView.setOnClickListener(v -> {
+            ImageView ivMedia = mediaView.findViewById(R.id.ivMedia);
+            ImageButton btnRemove = mediaView.findViewById(R.id.btnRemove);
+            TextView tvMediaCount = mediaView.findViewById(R.id.tvMediaCount);
+
+            // Hiển thị thumbnail của video bằng Glide
+            Glide.with(this)
+                    .load(selectedVideoUri)
+                    .thumbnail(0.25f)
+                    .into(ivMedia);
+
+            // Hiển thị số lượng (video chỉ có 1)
+            tvMediaCount.setText("1/1");
+
+            // Xử lý nút xóa
+            btnRemove.setOnClickListener(v -> {
                 selectedVideoUri = null;
                 updateMediaContainer();
                 Toast.makeText(this, "Đã xóa video", Toast.LENGTH_SHORT).show();
             });
+
+            linearLayout.addView(mediaView);
         }
+
+        // Thêm LinearLayout vào mediaContainer
+        mediaContainer.addView(linearLayout);
     }
 
     private void showReviewDialog() {
@@ -269,8 +304,8 @@ public class ReviewActivity extends AppCompatActivity {
         EditText editTextComment = dialogView.findViewById(R.id.editTextComment);
         Spinner spinnerActivity = dialogView.findViewById(R.id.spinnerActivity);
         EditText editTextOtherActivity = dialogView.findViewById(R.id.editTextOtherActivity);
-        ImageButton btnAddImages = dialogView.findViewById(R.id.btnAddImages);
-        ImageButton btnAddVideo = dialogView.findViewById(R.id.btnAddVideo);
+        View btnAddImages = dialogView.findViewById(R.id.btnAddImages);
+        View btnAddVideo = dialogView.findViewById(R.id.btnAddVideo);
         Button btnSubmitReview = dialogView.findViewById(R.id.btnSubmitReview);
         mediaContainer = dialogView.findViewById(R.id.mediaContainer);
 
@@ -560,9 +595,7 @@ public class ReviewActivity extends AppCompatActivity {
                         // Làm mới giao diện
                         loadCafeInfo();
 
-                        // Trả về kết quả và đóng activity
-                        setResult(RESULT_OK);
-                        finish();
+                        // Không gọi setResult và finish, để giữ người dùng ở lại ReviewActivity
                     });
                 })
                 .addOnFailureListener(e -> runOnUiThread(() -> {
@@ -570,7 +603,7 @@ public class ReviewActivity extends AppCompatActivity {
                     dialog.dismiss();
                 }));
     }
-
+    
     private void updateCafeRating(float rating) {
         DocumentReference cafeRef = db.collection("cafes").document(cafeId);
         cafeRef.get().addOnSuccessListener(documentSnapshot -> {
