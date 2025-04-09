@@ -31,7 +31,9 @@
             android:exported="false" /> <!-- API Key của Google Maps -->
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyD88lQgGXHV5qERgU5cj0Q_F5j01i1dy6s" /> <!-- MainActivity (Màn hình splash) -->
+            android:value="AIzaSyD88lQgGXHV5qERgU5cj0Q_F5j01i1dy6s" />
+
+        <!-- MainActivity (Màn hình splash) -->
         <activity
             android:name=".Activities.LoginActivity"
             android:exported="true">

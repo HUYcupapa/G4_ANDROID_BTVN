@@ -17,8 +17,6 @@
     <TextView
         android:textColor="@color/text_primary"
         android:textSize="20sp"
-        android:drawableStart="@drawable/ic_coffee_bean"
-        android:drawableTint="@color/coffee_accent"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="🔥 Quán Coffee Hot 🔥"
@@ -36,9 +34,9 @@
         android:id="@+id/btn_support"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Hỗ trợ"
+        android:layout_margin="16dp"
         android:backgroundTint="#FF5722"
-        android:textColor="#FFFFFF"
+        android:text="Hỗ trợ"
 
-        android:layout_margin="16dp" />
+        android:textColor="#FFFFFF" />
 </LinearLayout>

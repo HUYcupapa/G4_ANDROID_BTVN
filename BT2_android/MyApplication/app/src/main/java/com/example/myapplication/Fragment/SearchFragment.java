@@ -4,15 +4,19 @@ import android.Manifest;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Spinner;
 import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
+
+import com.example.myapplication.Adapter.SearchCafeAdapter;
 import com.example.myapplication.Model.Cafe;
 import com.example.myapplication.R;
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -21,52 +25,100 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+
 import java.util.ArrayList;
 import java.util.List;
 
 public class SearchFragment extends Fragment {
 
+    private static final String TAG = "SearchFragment";
     private GoogleMap mMap;
     private FusedLocationProviderClient fusedLocationProviderClient;
     private Location currentLocation;
     private List<Cafe> cafeList;
     private float maxDistance = 5000; // Mặc định 5km
     private float minRating = 0; // Mặc định tất cả
+    private String selectedActivity = "Tất cả"; // Mặc định tất cả hoạt động
+    private FirebaseFirestore db;
+    private SearchCafeAdapter searchCafeAdapter;
+    private boolean hasShownLocationNotReady = false;
+    private Marker currentLocationMarker;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_search, container, false);
 
+        // Khởi tạo Firestore
+        db = FirebaseFirestore.getInstance();
+
         // Khởi tạo FusedLocationProviderClient
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(requireActivity());
 
+        // Khởi tạo danh sách quán cà phê
+        cafeList = new ArrayList<>();
+
+        // Khởi tạo adapter cho InfoWindow
+        searchCafeAdapter = new SearchCafeAdapter(requireContext(), null);
+
         // Thiết lập bản đồ lớn
-        SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager()
-                .findFragmentById(R.id.map_large);
+        SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map_large);
         if (mapFragment != null) {
             mapFragment.getMapAsync(googleMap -> {
                 mMap = googleMap;
+
+                // Kích hoạt nút "Vị trí" (My Location)
+                if (ActivityCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+                    mMap.setMyLocationEnabled(true);
+                }
+
+                // Thiết lập InfoWindow
+                mMap.setInfoWindowAdapter(searchCafeAdapter);
+
+                // Xử lý sự kiện nhấn vào marker
+                mMap.setOnMarkerClickListener(marker -> {
+                    if (marker.equals(currentLocationMarker)) {
+                        marker.setTitle("Vị trí hiện tại");
+                        marker.showInfoWindow();
+                    } else {
+                        Cafe cafe = (Cafe) marker.getTag();
+                        if (cafe != null) {
+                            searchCafeAdapter.setCafe(cafe);
+                            marker.showInfoWindow();
+                        }
+                    }
+                    return false; // Cho phép Google Maps hiển thị nút "Chỉ đường"
+                });
+
                 getCurrentLocation();
             });
+        } else {
+            Log.e(TAG, "SupportMapFragment is null");
+            Toast.makeText(requireContext(), "Không thể khởi tạo bản đồ!", Toast.LENGTH_SHORT).show();
         }
-
-        // Lấy danh sách quán cà phê
-        cafeList = getCafeList();
 
         // Thiết lập bộ lọc
         Spinner spinnerDistance = view.findViewById(R.id.spinner_distance);
         Spinner spinnerRating = view.findViewById(R.id.spinner_rating);
+        Spinner spinnerActivity = view.findViewById(R.id.spinner_activity);
+
+        if (spinnerDistance == null || spinnerRating == null || spinnerActivity == null) {
+            Log.e(TAG, "One or more spinners are null");
+            Toast.makeText(requireContext(), "Lỗi giao diện: Không tìm thấy bộ lọc!", Toast.LENGTH_SHORT).show();
+            return view;
+        }
 
         spinnerDistance.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 switch (position) {
-                    case 0: maxDistance = 1000; break;
-                    case 1: maxDistance = 5000; break;
-                    case 2: maxDistance = 10000; break;
-                    case 3: maxDistance = 20000; break;
+                    case 0: maxDistance = 1000; break;  // Dưới 1 km
+                    case 1: maxDistance = 5000; break;  // 1 - 5 km
+                    case 2: maxDistance = 10000; break; // 5 - 10 km
+                    case 3: maxDistance = 20000; break; // 10 - 20 km
                 }
                 showNearbyCafes();
             }
@@ -79,10 +131,10 @@ public class SearchFragment extends Fragment {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 switch (position) {
-                    case 0: minRating = 0; break;
-                    case 1: minRating = 3; break;
-                    case 2: minRating = 4; break;
-                    case 3: minRating = 5; break;
+                    case 0: minRating = 0; break;   // Tất cả
+                    case 1: minRating = 3; break;   // 3 sao trở lên
+                    case 2: minRating = 4; break;   // 4 sao trở lên
+                    case 3: minRating = 5; break;   // 5 sao
                 }
                 showNearbyCafes();
             }
@@ -90,6 +142,20 @@ public class SearchFragment extends Fragment {
             @Override
             public void onNothingSelected(AdapterView<?> parent) {}
         });
+
+        spinnerActivity.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                selectedActivity = parent.getItemAtPosition(position).toString();
+                showNearbyCafes();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {}
+        });
+
+        // Tải danh sách quán cà phê từ Firestore
+        loadCafesFromFirestore();
 
         return view;
     }
@@ -101,18 +167,25 @@ public class SearchFragment extends Fragment {
             return;
         }
 
-        fusedLocationProviderClient.getLastLocation().addOnSuccessListener(requireActivity(), new OnSuccessListener<Location>() {
-            @Override
-            public void onSuccess(Location location) {
-                if (location != null) {
-                    currentLocation = location;
-                    LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
+        fusedLocationProviderClient.getLastLocation().addOnSuccessListener(requireActivity(), location -> {
+            if (location != null) {
+                currentLocation = location;
+                searchCafeAdapter.setCurrentLocation(currentLocation);
+                LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
+                if (mMap != null) {
                     mMap.clear();
                     mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15));
-                    mMap.addMarker(new MarkerOptions().position(latLng).title("Vị trí của bạn"));
+                    currentLocationMarker = mMap.addMarker(new MarkerOptions().position(latLng).title("Vị trí hiện tại"));
                     showNearbyCafes();
+                } else {
+                    Log.e(TAG, "GoogleMap is null in getCurrentLocation");
                 }
+            } else {
+                Toast.makeText(requireContext(), "Không thể lấy vị trí hiện tại!", Toast.LENGTH_SHORT).show();
             }
+        }).addOnFailureListener(e -> {
+            Log.e(TAG, "Failed to get location: " + e.getMessage());
+            Toast.makeText(requireContext(), "Lỗi khi lấy vị trí: " + e.getMessage(), Toast.LENGTH_SHORT).show();
         });
     }
 
@@ -121,40 +194,90 @@ public class SearchFragment extends Fragment {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (requestCode == 100 && grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
             getCurrentLocation();
+            if (mMap != null) {
+                try {
+                    mMap.setMyLocationEnabled(true);
+                } catch (SecurityException e) {
+                    Log.e(TAG, "SecurityException: " + e.getMessage());
+                }
+            }
         } else {
             Toast.makeText(requireContext(), "Bạn cần cấp quyền để sử dụng tính năng này!", Toast.LENGTH_SHORT).show();
         }
     }
 
-    private List<Cafe> getCafeList() {
-        List<Cafe> cafes = new ArrayList<>();
-        cafes.add(new Cafe("The Coffee House", 21.028511, 105.804817));
-        cafes.add(new Cafe("Highlands Coffee", 21.025292, 105.852871));
-        cafes.add(new Cafe("Cộng Cà Phê", 21.035978, 105.853987));
-        return cafes;
+    private void loadCafesFromFirestore() {
+        db.collection("cafes")
+                .get()
+                .addOnSuccessListener(queryDocumentSnapshots -> {
+                    cafeList.clear();
+                    for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
+                        try {
+                            Cafe cafe = document.toObject(Cafe.class);
+                            cafe.setId(document.getId());
+                            cafeList.add(cafe); // Không cần tải bình luận nữa
+                            showNearbyCafes();
+                        } catch (Exception e) {
+                            Log.e(TAG, "Error parsing cafe: " + e.getMessage());
+                        }
+                    }
+                })
+                .addOnFailureListener(e -> {
+                    Log.e(TAG, "Error loading cafes: " + e.getMessage());
+                    Toast.makeText(requireContext(), "Lỗi khi tải danh sách quán: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                });
     }
 
     private void showNearbyCafes() {
         if (currentLocation == null || mMap == null) {
-            Toast.makeText(requireContext(), "Vị trí hiện tại chưa sẵn sàng!", Toast.LENGTH_SHORT).show();
+            if (!hasShownLocationNotReady) {
+                Log.e(TAG, "Current location or GoogleMap is null");
+                Toast.makeText(requireContext(), "Vị trí hiện tại chưa sẵn sàng!", Toast.LENGTH_SHORT).show();
+                hasShownLocationNotReady = true;
+            }
             return;
         }
 
+        hasShownLocationNotReady = false;
+
         mMap.clear();
         LatLng userLocation = new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude());
-        mMap.addMarker(new MarkerOptions().position(userLocation).title("Vị trí của bạn"));
+        currentLocationMarker = mMap.addMarker(new MarkerOptions().position(userLocation).title("Vị trí hiện tại"));
 
         for (Cafe cafe : cafeList) {
+            if (cafe == null || cafe.getLat() == 0 || cafe.getLng() == 0) {
+                Log.e(TAG, "Invalid cafe data: " + (cafe != null ? cafe.getName() : "null"));
+                continue;
+            }
+
             Location cafeLocation = new Location("");
             cafeLocation.setLatitude(cafe.getLat());
             cafeLocation.setLongitude(cafe.getLng());
 
             float distance = currentLocation.distanceTo(cafeLocation);
-            // Giả sử rating của quán cà phê (cần thêm vào model Cafe nếu muốn thực tế)
-            float rating = 4.5f; // Giả định
-            if (distance <= maxDistance && rating >= minRating) {
+            double rating = cafe.getRatingStar() != null ? cafe.getRatingStar() : 0.0;
+            String activity = cafe.getActivity() != null ? cafe.getActivity() : "Không có";
+
+            boolean activityMatch;
+            if (selectedActivity.equals("Tất cả")) {
+                activityMatch = true;
+            } else if (selectedActivity.equals("Không có")) {
+                activityMatch = cafe.getActivity() == null;
+            } else if (selectedActivity.equals("Others")) {
+                activityMatch = cafe.getActivity() != null &&
+                        !cafe.getActivity().equals("Boardgame") &&
+                        !cafe.getActivity().equals("Book") &&
+                        !cafe.getActivity().equals("Workshop");
+            } else {
+                activityMatch = selectedActivity.equals(activity);
+            }
+
+            if (distance <= maxDistance && rating >= minRating && activityMatch) {
                 LatLng cafeLatLng = new LatLng(cafe.getLat(), cafe.getLng());
-                mMap.addMarker(new MarkerOptions().position(cafeLatLng).title(cafe.getName()));
+                Marker marker = mMap.addMarker(new MarkerOptions().position(cafeLatLng).title(cafe.getName()));
+                if (marker != null) {
+                    marker.setTag(cafe);
+                }
             }
         }
     }
