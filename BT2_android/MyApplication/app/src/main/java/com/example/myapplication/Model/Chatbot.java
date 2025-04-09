@@ -26,6 +26,18 @@ public class Chatbot {
         responses.put("đăng nhập", "Để đăng nhập, bạn nhập email và mật khẩu trong màn hình đăng nhập. Nếu quên mật khẩu, nhấn vào 'Quên mật khẩu' để đặt lại!");
         responses.put("tạo tài khoản", "Để tạo tài khoản, bạn vào màn hình đăng ký, nhập email, mật khẩu và thông tin cá nhân. Sau đó xác nhận qua email để hoàn tất!");
         responses.put("liên hệ hỗ trợ", "Bạn có thể liên hệ hỗ trợ qua email support@cofispot.com hoặc gọi hotline 0123-456-789. Chúng tôi luôn sẵn sàng giúp bạn!");
+
+        // Thêm 10 cặp key-value mới liên quan đến dự án cà phê
+        responses.put("xem hồ sơ", "Bạn có thể xem hồ sơ của mình bằng cách nhấn vào biểu tượng tài khoản trên toolbar. Tại đó, bạn có thể chỉnh sửa thông tin cá nhân!");
+        responses.put("checkin không được", "Nếu không check-in được, hãy kiểm tra GPS và đảm bảo bạn ở trong bán kính 50m của quán. Nếu vẫn không được, liên hệ hỗ trợ nhé!");
+        responses.put("điểm hết hạn", "Điểm thưởng có thể hết hạn sau 6 tháng nếu không sử dụng. Hãy kiểm tra trong tab Rewards để đổi điểm trước khi hết hạn!");
+        responses.put("quán yêu thích", "Bạn có thể thêm quán vào danh sách yêu thích bằng cách nhấn vào biểu tượng trái tim trong trang chi tiết của quán!");
+        responses.put("xóa bình luận", "Để xóa bình luận, bạn vào trang chi tiết của quán, tìm bình luận của mình và nhấn vào biểu tượng thùng rác. Lưu ý, bạn chỉ có thể xóa bình luận của mình!");
+        responses.put("báo cáo quán", "Nếu bạn muốn báo cáo một quán, hãy vào trang chi tiết của quán và chọn 'Báo cáo'. Điền lý do và gửi, chúng tôi sẽ xem xét ngay!");
+        responses.put("thanh toán", "Hiện tại, ứng dụng chưa hỗ trợ thanh toán trực tuyến. Bạn có thể thanh toán tại quán và sử dụng voucher để được giảm giá!");
+        responses.put("wifi quán", "Để biết thông tin wifi của quán, bạn vào trang chi tiết của quán. Một số quán có hiển thị thông tin wifi trong phần mô tả!");
+        responses.put("đổi mật khẩu", "Để đổi mật khẩu, bạn vào phần hồ sơ, chọn 'Đổi mật khẩu', nhập mật khẩu cũ và mật khẩu mới, sau đó xác nhận!");
+        responses.put("khuyến mãi hôm nay", "Để xem khuyến mãi hôm nay, bạn kiểm tra trong tab Rewards hoặc mục Thông báo. Các ưu đãi mới sẽ được cập nhật thường xuyên!");
     }
 
     public String getResponse(String message) {
