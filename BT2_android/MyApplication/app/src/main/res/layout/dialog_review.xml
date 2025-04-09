@@ -83,22 +83,38 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:layout_marginBottom="16dp">
+        android:layout_marginBottom="8dp"
+        android:gravity="center">
 
-        <Button
+        <ImageButton
             android:id="@+id/btnAddImages"
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="wrap_content"
-            android:text="Thêm hình ảnh (tối đa 3)"
-            android:layout_marginEnd="8dp"/>
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:src="@android:drawable/ic_menu_camera"
+            android:background="@android:drawable/btn_default"
+            android:layout_marginEnd="16dp"
+            android:contentDescription="Thêm hình ảnh" />
 
-        <Button
+        <ImageButton
             android:id="@+id/btnAddVideo"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:text="Thêm video (tối đa 1)" />
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:src="@android:drawable/ic_menu_slideshow"
+            android:background="@android:drawable/btn_default"
+            android:contentDescription="Thêm video" />
+
+    </LinearLayout>
+
+    <!-- Khu vực hiển thị ảnh và video đã chọn -->
+    <LinearLayout
+        android:id="@+id/mediaContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginBottom="16dp"
+        android:gravity="center">
+
+        <!-- Các ImageView sẽ được thêm động để hiển thị ảnh/video -->
     </LinearLayout>
 
     <!-- Nút gửi đánh giá -->
