@@ -20,10 +20,18 @@ public class HomeCafeAdapter extends RecyclerView.Adapter<HomeCafeAdapter.CafeVi
 
     private Context context;
     private List<Cafe> cafeList;
+    private OnCafeClickListener onCafeClickListener; // Listener cho sự kiện nhấn
 
-    public HomeCafeAdapter(Context context, List<Cafe> cafeList) {
+    // Cập nhật constructor để nhận listener
+    public HomeCafeAdapter(Context context, List<Cafe> cafeList, OnCafeClickListener listener) {
         this.context = context;
         this.cafeList = cafeList;
+        this.onCafeClickListener = listener;
+    }
+
+    // Constructor cũ (giữ lại để tương thích nếu cần)
+    public HomeCafeAdapter(Context context, List<Cafe> cafeList) {
+        this(context, cafeList, null);
     }
 
     @NonNull
@@ -50,6 +58,13 @@ public class HomeCafeAdapter extends RecyclerView.Adapter<HomeCafeAdapter.CafeVi
         } else {
             holder.ivCafeImage.setImageResource(R.drawable.ic_placeholder);
         }
+
+        // Xử lý sự kiện nhấn vào item
+        holder.itemView.setOnClickListener(v -> {
+            if (onCafeClickListener != null) {
+                onCafeClickListener.onCafeClick(cafe);
+            }
+        });
     }
 
     @Override
@@ -70,5 +85,10 @@ public class HomeCafeAdapter extends RecyclerView.Adapter<HomeCafeAdapter.CafeVi
             tvRating = itemView.findViewById(R.id.tvRating);
             tvActivity = itemView.findViewById(R.id.tvActivity);
         }
+    }
+
+    // Interface cho sự kiện nhấn vào item
+    public interface OnCafeClickListener {
+        void onCafeClick(Cafe cafe);
     }
 }

@@ -154,7 +154,7 @@
         android:layout_width="wrap_content"
         android:layout_height="180dp"
         android:orientation="horizontal" android:padding="8dp">
-        <!-- Chiều cao cố định là 150dp để tránh đẩy nút xuống -->
+        <!-- Chiều cao cố định là 180dp để tránh đẩy nút xuống -->
         <!-- Các ImageView sẽ được thêm động để hiển thị ảnh/video -->
     </LinearLayout>
     </HorizontalScrollView>

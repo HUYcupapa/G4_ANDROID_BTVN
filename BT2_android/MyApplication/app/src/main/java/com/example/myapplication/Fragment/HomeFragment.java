@@ -17,6 +17,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.myapplication.Activities.ChatbotActivity;
+import com.example.myapplication.Activities.ReviewActivity;
 import com.example.myapplication.Adapter.HomeCafeAdapter;
 import com.example.myapplication.Model.Cafe;
 import com.example.myapplication.R;
@@ -76,7 +77,12 @@ public class HomeFragment extends Fragment {
         recyclerView = view.findViewById(R.id.recycler_view_hot_cafes);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         cafeList = new ArrayList<>();
-        cafeAdapter = new HomeCafeAdapter(requireContext(), cafeList);
+        cafeAdapter = new HomeCafeAdapter(requireContext(), cafeList, cafe -> {
+            // Xử lý sự kiện nhấn vào item
+            Intent intent = new Intent(requireContext(), ReviewActivity.class);
+            intent.putExtra("cafeId", cafe.getId());
+            startActivity(intent);
+        });
         recyclerView.setAdapter(cafeAdapter);
 
         // Tải danh sách quán cà phê từ Firestore
