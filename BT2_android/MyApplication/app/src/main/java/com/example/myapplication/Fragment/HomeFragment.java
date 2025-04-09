@@ -1,6 +1,7 @@
 package com.example.myapplication.Fragment;
 
 import android.Manifest;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
@@ -13,6 +14,8 @@ import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.example.myapplication.Activities.ChatbotActivity;
 import com.example.myapplication.Adapter.CafeAdapter;
 import com.example.myapplication.Model.Cafe;
 import com.example.myapplication.R;
@@ -59,6 +62,11 @@ public class HomeFragment extends Fragment implements CafeAdapter.OnItemClickLis
         cafeList = getCafeList();
         cafeAdapter = new CafeAdapter(cafeList, this);
         recyclerView.setAdapter(cafeAdapter);
+
+        // Xử lý nút Hỗ trợ
+        view.findViewById(R.id.btn_support).setOnClickListener(v -> {
+            startActivity(new Intent(requireContext(), ChatbotActivity.class));
+        });
 
         return view;
     }
@@ -124,7 +132,6 @@ public class HomeFragment extends Fragment implements CafeAdapter.OnItemClickLis
 
     @Override
     public void onItemClick(Cafe cafe) {
-        // TODO: Xử lý khi người dùng nhấn vào một quán cà phê (ví dụ: hiển thị chi tiết quán)
         Toast.makeText(requireContext(), "Bạn đã chọn: " + cafe.getName(), Toast.LENGTH_SHORT).show();
     }
 }
