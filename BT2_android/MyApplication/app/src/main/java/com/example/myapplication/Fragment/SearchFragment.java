@@ -1,14 +1,20 @@
 package com.example.myapplication.Fragment;
 
 import android.Manifest;
+import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.location.Location;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -16,6 +22,7 @@ import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 
+import com.example.myapplication.Activities.ReviewActivity;
 import com.example.myapplication.Adapter.SearchCafeAdapter;
 import com.example.myapplication.Model.Cafe;
 import com.example.myapplication.R;
@@ -24,6 +31,8 @@ import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptor;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -43,10 +52,12 @@ public class SearchFragment extends Fragment {
     private float maxDistance = 5000; // Mặc định 5km
     private float minRating = 0; // Mặc định tất cả
     private String selectedActivity = "Tất cả"; // Mặc định tất cả hoạt động
+    private String searchQuery = ""; // Chuỗi tìm kiếm
     private FirebaseFirestore db;
-    private SearchCafeAdapter searchCafeAdapter;
+    private SearchCafeAdapter cafeAdapter;
     private boolean hasShownLocationNotReady = false;
     private Marker currentLocationMarker;
+    private BitmapDescriptor cafeMarkerIcon; // Lưu trữ icon marker đã được resize
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -62,7 +73,26 @@ public class SearchFragment extends Fragment {
         cafeList = new ArrayList<>();
 
         // Khởi tạo adapter cho InfoWindow
-        searchCafeAdapter = new SearchCafeAdapter(requireContext(), null);
+        cafeAdapter = new SearchCafeAdapter(requireContext(), null);
+
+        // Resize icon marker và lưu vào biến cafeMarkerIcon
+        cafeMarkerIcon = resizeMarkerIcon(R.drawable.ic_cafe_marker1, 75, 75); // Thay đổi kích thước Marker ở đây
+
+        // Thiết lập ô tìm kiếm
+        EditText etSearchCafe = view.findViewById(R.id.et_search_cafe);
+        etSearchCafe.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {}
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                searchQuery = s.toString().trim().toLowerCase();
+                showNearbyCafes(); // Cập nhật bản đồ khi chuỗi tìm kiếm thay đổi
+            }
+        });
 
         // Thiết lập bản đồ lớn
         SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map_large);
@@ -76,7 +106,7 @@ public class SearchFragment extends Fragment {
                 }
 
                 // Thiết lập InfoWindow
-                mMap.setInfoWindowAdapter(searchCafeAdapter);
+                mMap.setInfoWindowAdapter(cafeAdapter);
 
                 // Xử lý sự kiện nhấn vào marker
                 mMap.setOnMarkerClickListener(marker -> {
@@ -86,11 +116,23 @@ public class SearchFragment extends Fragment {
                     } else {
                         Cafe cafe = (Cafe) marker.getTag();
                         if (cafe != null) {
-                            searchCafeAdapter.setCafe(cafe);
+                            cafeAdapter.setCafe(cafe);
                             marker.showInfoWindow();
                         }
                     }
                     return false; // Cho phép Google Maps hiển thị nút "Chỉ đường"
+                });
+
+                // Xử lý sự kiện nhấn vào InfoWindow
+                mMap.setOnInfoWindowClickListener(marker -> {
+                    if (!marker.equals(currentLocationMarker)) {
+                        Cafe cafe = (Cafe) marker.getTag();
+                        if (cafe != null) {
+                            Intent intent = new Intent(requireContext(), ReviewActivity.class);
+                            intent.putExtra("cafeId", cafe.getId());
+                            startActivity(intent);
+                        }
+                    }
                 });
 
                 getCurrentLocation();
@@ -170,7 +212,7 @@ public class SearchFragment extends Fragment {
         fusedLocationProviderClient.getLastLocation().addOnSuccessListener(requireActivity(), location -> {
             if (location != null) {
                 currentLocation = location;
-                searchCafeAdapter.setCurrentLocation(currentLocation);
+                cafeAdapter.setCurrentLocation(currentLocation);
                 LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
                 if (mMap != null) {
                     mMap.clear();
@@ -215,7 +257,7 @@ public class SearchFragment extends Fragment {
                         try {
                             Cafe cafe = document.toObject(Cafe.class);
                             cafe.setId(document.getId());
-                            cafeList.add(cafe); // Không cần tải bình luận nữa
+                            cafeList.add(cafe);
                             showNearbyCafes();
                         } catch (Exception e) {
                             Log.e(TAG, "Error parsing cafe: " + e.getMessage());
@@ -250,6 +292,14 @@ public class SearchFragment extends Fragment {
                 continue;
             }
 
+            // Lọc theo tên quán
+            if (!searchQuery.isEmpty()) {
+                String cafeName = cafe.getName() != null ? cafe.getName().toLowerCase() : "";
+                if (!cafeName.contains(searchQuery)) {
+                    continue; // Bỏ qua quán không khớp với chuỗi tìm kiếm
+                }
+            }
+
             Location cafeLocation = new Location("");
             cafeLocation.setLatitude(cafe.getLat());
             cafeLocation.setLongitude(cafe.getLng());
@@ -274,11 +324,31 @@ public class SearchFragment extends Fragment {
 
             if (distance <= maxDistance && rating >= minRating && activityMatch) {
                 LatLng cafeLatLng = new LatLng(cafe.getLat(), cafe.getLng());
-                Marker marker = mMap.addMarker(new MarkerOptions().position(cafeLatLng).title(cafe.getName()));
+                // Sử dụng icon marker đã được resize
+                Marker marker = mMap.addMarker(new MarkerOptions()
+                        .position(cafeLatLng)
+                        .title(cafe.getName())
+                        .icon(cafeMarkerIcon)); // Sử dụng icon đã resize
                 if (marker != null) {
                     marker.setTag(cafe);
                 }
             }
         }
+    }
+
+    // Phương thức resize icon marker
+    private BitmapDescriptor resizeMarkerIcon(int resourceId, int width, int height) {
+        // Tải bitmap gốc từ tài nguyên
+        Bitmap originalBitmap = BitmapFactory.decodeResource(getResources(), resourceId);
+        if (originalBitmap == null) {
+            Log.e(TAG, "Failed to load marker icon from resource ID: " + resourceId);
+            return BitmapDescriptorFactory.defaultMarker(); // Trả về marker mặc định nếu không tải được
+        }
+
+        // Resize bitmap theo kích thước mong muốn
+        Bitmap scaledBitmap = Bitmap.createScaledBitmap(originalBitmap, width, height, false);
+
+        // Chuyển Bitmap thành BitmapDescriptor
+        return BitmapDescriptorFactory.fromBitmap(scaledBitmap);
     }
 }

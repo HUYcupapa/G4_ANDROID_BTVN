@@ -183,6 +183,7 @@ public class ReviewActivity extends AppCompatActivity {
         }
     }
 
+    //# HIỂN THỊ THÔNG TIN QUÁN
     private void loadCafeInfo() {
         if (cafeId != null) {
             db.collection("cafes").document(cafeId).get()
@@ -190,7 +191,7 @@ public class ReviewActivity extends AppCompatActivity {
                         if (documentSnapshot.exists()) {
                             String cafeName = documentSnapshot.getString("name");
                             Double ratingStar = documentSnapshot.getDouble("ratingStar");
-                            String address = documentSnapshot.getString("address");
+                            String locationText = documentSnapshot.getString("locationText");
                             String description = documentSnapshot.getString("description");
                             String image1 = documentSnapshot.getString("image1");
                             String activity = documentSnapshot.getString("activity");
@@ -198,7 +199,7 @@ public class ReviewActivity extends AppCompatActivity {
                             // Hiển thị dữ liệu
                             tvCafeName.setText(cafeName != null ? cafeName : "Tên quán");
                             tvRating.setText("Đánh giá: " + (ratingStar != null ? String.format("%.1f", ratingStar) : "0.0") + "/5");
-                            tvAddress.setText("Địa chỉ: " + (address != null ? address : "Không có địa chỉ"));
+                            tvAddress.setText("Địa chỉ: " + (locationText != null ? locationText : "Không có địa chỉ")); // Sửa từ "address" thành "locationText"
                             tvDescription.setText("Mô tả: " + (description != null ? description : "Không có mô tả"));
                             tvActivity.setText("Hoạt động: " + (activity != null ? activity : "Không có hoạt động"));
 
@@ -223,6 +224,8 @@ public class ReviewActivity extends AppCompatActivity {
         }
     }
 
+
+    // #LOAD ẢNH VÀ VIDEO LÊN MÀN HÌNH HIỂN THỊ
     private void updateMediaContainer() {
         if (mediaContainer == null) return;
 
