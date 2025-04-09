@@ -29,4 +29,16 @@
         android:background="@drawable/bg_recyclerview"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
+
+
+    <!-- Thêm nút Hỗ trợ -->
+    <Button
+        android:id="@+id/btn_support"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Hỗ trợ"
+        android:backgroundTint="#FF5722"
+        android:textColor="#FFFFFF"
+
+        android:layout_margin="16dp" />
 </LinearLayout>
