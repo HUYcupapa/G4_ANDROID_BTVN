@@ -39,10 +39,8 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity> <!-- ChoiceLoginActivity: Màn hình lựa chọn đăng nhập -->
-        <activity
-            android:name=".Activities.MainActivity"
-            android:exported="false" /> <!-- LoginActivity: Xử lý đăng nhập -->
+        </activity> <!-- Login: Màn hình chính -->
+
         <activity
             android:name=".Activities.HomeActivity"
             android:exported="false" />
