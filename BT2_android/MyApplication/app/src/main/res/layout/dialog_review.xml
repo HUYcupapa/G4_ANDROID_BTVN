@@ -30,6 +30,7 @@
         android:numStars="5"
         android:stepSize="1.0"
         android:rating="5"
+        style="@style/CustomRatingBar"
         android:layout_gravity="center"
         android:layout_marginBottom="16dp"/>
 
@@ -83,39 +84,80 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:layout_marginBottom="8dp"
+        android:layout_marginBottom="16dp"
         android:gravity="center">
 
-        <ImageButton
+        <!-- Nút Thêm hình ảnh -->
+        <LinearLayout
             android:id="@+id/btnAddImages"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:src="@android:drawable/ic_menu_camera"
-            android:background="@android:drawable/btn_default"
-            android:layout_marginEnd="16dp"
-            android:contentDescription="Thêm hình ảnh" />
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:background="@drawable/rectangle_border_orange"
+            android:padding="8dp"
+            android:layout_marginEnd="16dp">
 
-        <ImageButton
+            <ImageView
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:src="@android:drawable/ic_menu_camera"
+                android:contentDescription="Thêm hình ảnh" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Thêm hình ảnh"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                android:textColor="#D2691E"/>
+
+        </LinearLayout>
+
+        <!-- Nút Thêm video -->
+        <LinearLayout
             android:id="@+id/btnAddVideo"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:src="@android:drawable/ic_menu_slideshow"
-            android:background="@android:drawable/btn_default"
-            android:contentDescription="Thêm video" />
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:background="@drawable/rectangle_border_orange"
+            android:padding="8dp">
+
+            <ImageView
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:src="@android:drawable/ic_menu_slideshow"
+                android:contentDescription="Thêm video" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Thêm video"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                android:textColor="#D2691E"/>
+
+        </LinearLayout>
 
     </LinearLayout>
 
     <!-- Khu vực hiển thị ảnh và video đã chọn -->
-    <LinearLayout
+    <HorizontalScrollView
         android:id="@+id/mediaContainer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
         android:layout_marginBottom="16dp"
-        android:gravity="center">
+        android:scrollbars="horizontal">
 
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="180dp"
+        android:orientation="horizontal" android:padding="8dp">
+        <!-- Chiều cao cố định là 150dp để tránh đẩy nút xuống -->
         <!-- Các ImageView sẽ được thêm động để hiển thị ảnh/video -->
     </LinearLayout>
+    </HorizontalScrollView>
 
     <!-- Nút gửi đánh giá -->
     <Button
