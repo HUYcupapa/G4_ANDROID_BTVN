@@ -35,6 +35,11 @@
           <theme>@style/Theme.MyApplication</theme>
         </config>
       </layout>
+      <layout url="file://$PROJECT_DIR$/MyApplication/app/src/main/res/layout/activity_review.xml">
+        <config>
+          <theme>@style/Theme.MyApplication</theme>
+        </config>
+      </layout>
       <layout url="file://$PROJECT_DIR$/MyApplication/app/src/main/res/layout/activity_signup.xml">
         <config>
           <theme>@style/Theme.MyApplication</theme>
@@ -82,14 +87,15 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="25dc4141-94f9-4db8-9caf-6e884ed3b10e" name="Changes" comment="Refactor Project #2">
-      <change beforePath="$PROJECT_DIR$/.idea/modules/app/My_Application.app.main.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules/app/My_Application.app.main.iml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/MyApplication/app/src/main/java/com/example/myapplication/Activities/ReviewActivity.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__com_google_firebase_firebase_appcheck_interop_17_0_0_aar.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__org_jetbrains_kotlin_kotlin_stdlib_jdk7_1_8_22.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__org_jetbrains_kotlin_kotlin_stdlib_jdk8_1_8_22.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules/app/My_Application.app.androidTest.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules/app/My_Application.app.androidTest.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules/app/My_Application.app.unitTest.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules/app/My_Application.app.unitTest.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/MyApplication/app/src/main/res/drawable/svg/emoji_events_24dp_E3E3E3.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/MyApplication/app/src/main/res/drawable/svg/fact_check_24dp_E3E3E3.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/MyApplication/app/src/main/res/drawable/svg/map_24dp_E3E3E3.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/MyApplication/app/src/main/res/drawable/svg/star_rate_24dp_E3E3E3.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/MyApplication/app/src/main/res/drawable/svg/stars_24dp_E3E3E3.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/MyApplication/app/src/main/res/drawable/svg/store_24dp_E3E3E3.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/MyApplication/app/src/main/AndroidManifest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/MyApplication/app/src/main/AndroidManifest.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/MyApplication/app/src/main/java/com/example/myapplication/Fragment/CheckinFragment.java" beforeDir="false" afterPath="$PROJECT_DIR$/MyApplication/app/src/main/java/com/example/myapplication/Fragment/CheckinFragment.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -150,9 +156,9 @@
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="valueResourceFile" />
-        <option value="layoutResourceFile" />
         <option value="Class" />
         <option value="resourceFile" />
+        <option value="layoutResourceFile" />
       </list>
     </option>
   </component>
@@ -185,32 +191,37 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "ASKED_SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "Android App.My_Application.app.executor": "Run",
-    "Gradle.D:/CODE_TLU/ANDROID/G4_ANDROID_BTVN/BT2_android [signing report].executor": "Run",
-    "Gradle.D:/CODE_TLU/ANDROID/G4_ANDROID_BTVN/BT2_android [signingReport].executor": "Run",
-    "Gradle.D:/CODE_TLU/ANDROID/G4_ANDROID_BTVN/BT2_android [signing].executor": "Run",
-    "Gradle.D:/CODE_TLU/ANDROID/G4_ANDROID_BTVN/BT2_android [signingreport].executor": "Run",
-    "Gradle.MyApplication [signingreport].executor": "Run",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.cidr.known.project.marker": "true",
-    "RunOnceActivity.readMode.enableVisualFormatting": "true",
-    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "cf.first.check.clang-format": "false",
-    "cidr.known.project.marker": "true",
-    "com.google.services.firebase.aqiPopupShown": "true",
-    "git-widget-placeholder": "master",
-    "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "D:/CODE_TLU/ANDROID/G4_ANDROID_BTVN/BT2_android/MyApplication/app/src/main/res/drawable",
-    "settings.editor.selected.configurable": "experimental"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;ASKED_SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;Android App.My_Application.app.executor&quot;: &quot;Run&quot;,
+    &quot;Android App.app.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.D:/CODE_TLU/ANDROID/G4_ANDROID_BTVN/BT2_android [signing report].executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.D:/CODE_TLU/ANDROID/G4_ANDROID_BTVN/BT2_android [signingReport].executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.D:/CODE_TLU/ANDROID/G4_ANDROID_BTVN/BT2_android [signing].executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.D:/CODE_TLU/ANDROID/G4_ANDROID_BTVN/BT2_android [signingreport].executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.MyApplication [signingreport].executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.cidr.known.project.marker&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.readMode.enableVisualFormatting&quot;: &quot;true&quot;,
+    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;cf.first.check.clang-format&quot;: &quot;false&quot;,
+    &quot;cidr.known.project.marker&quot;: &quot;true&quot;,
+    &quot;com.google.services.firebase.aqiPopupShown&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;Cuong&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;D:/CODE_TLU/ANDROID/G4_ANDROID_BTVN/BT2_android/MyApplication/app/src/main/res/drawable&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;experimental&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="D:\CODE_TLU\ANDROID\G4_ANDROID_BTVN\BT2_android\MyApplication\app\src\main\res\drawable" />
       <recent name="D:\CODE_TLU\ANDROID\G4_ANDROID_BTVN\BT2_android\MyApplication\app" />
+    </key>
+    <key name="android.template.-1294739976">
+      <recent name="com.example.myapplication.Activities" />
     </key>
     <key name="android.template.-860465206">
       <recent name="com.example.myapplication" />
