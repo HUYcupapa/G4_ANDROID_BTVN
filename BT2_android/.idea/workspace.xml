@@ -25,11 +25,6 @@
           <theme>@style/Theme.MyApplication</theme>
         </config>
       </layout>
-      <layout url="file://$PROJECT_DIR$/MyApplication/app/src/main/res/layout/activity_main.xml">
-        <config>
-          <theme>@style/Theme.MyApplication</theme>
-        </config>
-      </layout>
       <layout url="file://$PROJECT_DIR$/MyApplication/app/src/main/res/layout/activity_profile.xml">
         <config>
           <theme>@style/Theme.MyApplication</theme>
@@ -75,6 +70,11 @@
           <theme>@style/Theme.MyApplication</theme>
         </config>
       </layout>
+      <layout url="file://$PROJECT_DIR$/MyApplication/app/src/main/res/layout/item_cafe_home.xml">
+        <config>
+          <theme>@style/Theme.MyApplication</theme>
+        </config>
+      </layout>
       <layout url="file://$PROJECT_DIR$/MyApplication/app/src/main/res/layout/item_media.xml">
         <config>
           <theme>@style/Theme.MyApplication</theme>
@@ -92,11 +92,21 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="25dc4141-94f9-4db8-9caf-6e884ed3b10e" name="Changes" comment="Refactor Project #2">
-      <change beforePath="$PROJECT_DIR$/.idea/modules/app/My_Application.app.iml" beforeDir="false" />
+      <change afterPath="$PROJECT_DIR$/MyApplication/app/src/main/java/com/example/myapplication/Adapter/SearchCafeAdapter.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules/app/My_Application.app.androidTest.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules/app/My_Application.app.androidTest.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules/app/My_Application.app.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules/app/My_Application.app.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules/app/My_Application.app.main.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules/app/My_Application.app.main.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules/app/My_Application.app.unitTest.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules/app/My_Application.app.unitTest.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/MyApplication/app/build.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/MyApplication/app/build.gradle.kts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/MyApplication/app/src/main/java/com/example/myapplication/Activities/ReviewActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/MyApplication/app/src/main/java/com/example/myapplication/Activities/ReviewActivity.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/MyApplication/app/src/main/res/layout/dialog_review.xml" beforeDir="false" afterPath="$PROJECT_DIR$/MyApplication/app/src/main/res/layout/dialog_review.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/MyApplication/app/src/main/AndroidManifest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/MyApplication/app/src/main/AndroidManifest.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/MyApplication/app/src/main/java/com/example/myapplication/Adapter/CafeAdapter.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/MyApplication/app/src/main/java/com/example/myapplication/Fragment/HomeFragment.java" beforeDir="false" afterPath="$PROJECT_DIR$/MyApplication/app/src/main/java/com/example/myapplication/Fragment/HomeFragment.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/MyApplication/app/src/main/java/com/example/myapplication/Fragment/SearchFragment.java" beforeDir="false" afterPath="$PROJECT_DIR$/MyApplication/app/src/main/java/com/example/myapplication/Fragment/SearchFragment.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/MyApplication/app/src/main/java/com/example/myapplication/Model/Cafe.java" beforeDir="false" afterPath="$PROJECT_DIR$/MyApplication/app/src/main/java/com/example/myapplication/Model/Cafe.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/MyApplication/app/src/main/res/layout/fragment_home.xml" beforeDir="false" afterPath="$PROJECT_DIR$/MyApplication/app/src/main/res/layout/fragment_home.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/MyApplication/app/src/main/res/layout/fragment_search.xml" beforeDir="false" afterPath="$PROJECT_DIR$/MyApplication/app/src/main/res/layout/fragment_search.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/MyApplication/app/src/main/res/layout/item_cafe.xml" beforeDir="false" afterPath="$PROJECT_DIR$/MyApplication/app/src/main/res/layout/item_cafe.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/MyApplication/app/src/main/res/values/arrays.xml" beforeDir="false" afterPath="$PROJECT_DIR$/MyApplication/app/src/main/res/values/arrays.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -159,10 +169,10 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
-        <option value="Class" />
         <option value="resourceFile" />
-        <option value="layoutResourceFile" />
         <option value="valueResourceFile" />
+        <option value="Class" />
+        <option value="layoutResourceFile" />
       </list>
     </option>
   </component>

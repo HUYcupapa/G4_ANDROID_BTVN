@@ -44,23 +44,23 @@
                 android:text="☕ Lọc Quán Cà Phê"
                 android:textSize="18sp"
                 android:textStyle="bold"
-                android:textColor="@color/text_primary"
+                android:textColor="@color/white"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginBottom="8dp"/>
 
+            <!-- Bộ lọc khoảng cách và đánh giá -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:gravity="center_vertical">
 
-            <ImageView
+                <ImageView
                     android:layout_width="24dp"
                     android:layout_height="24dp"
                     android:src="@drawable/ic_distance"
                     android:layout_marginEnd="8dp"
                     app:itemTextColor="@drawable/bottom_nav_color_selector" />
-
 
                 <!-- Spinner Khoảng Cách -->
                 <Spinner
@@ -88,6 +88,31 @@
                     android:layout_marginStart="8dp"
                     android:background="@drawable/spinner_background"
                     android:entries="@array/rating_options"/>
+            </LinearLayout>
+
+            <!-- Bộ lọc hoạt động -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:layout_marginTop="8dp">
+
+                <ImageView
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:src="@drawable/ic_star"
+                    android:layout_marginEnd="8dp"
+                    app:itemTextColor="@drawable/bottom_nav_color_selector" />
+
+                <!-- Spinner Hoạt động -->
+                <Spinner
+                    android:id="@+id/spinner_activity"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@drawable/spinner_background"
+                    android:entries="@array/activity_options"/>
             </LinearLayout>
         </LinearLayout>
     </androidx.cardview.widget.CardView>
