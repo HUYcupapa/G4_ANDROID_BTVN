@@ -51,11 +51,21 @@
                     android:contentDescription="Đăng xuất" />
 
                 <ImageView
+                    android:id="@+id/notification_icon"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:src="@drawable/ic_notification"
+                    android:layout_marginEnd="16dp"
+                    app:tint="@color/coffee_secondary"
+                    android:contentDescription="Thông báo" />
+
+                <ImageView
                     android:id="@+id/account_icon"
                     android:layout_width="24dp"
                     android:layout_height="24dp"
                     android:src="@drawable/ic_account"
-                    app:tint="@color/coffee_secondary" />
+                    app:tint="@color/coffee_secondary"
+                    android:contentDescription="Tài khoản" />
             </LinearLayout>
         </RelativeLayout>
     </androidx.appcompat.widget.Toolbar>
