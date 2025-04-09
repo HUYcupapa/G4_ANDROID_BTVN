@@ -12,10 +12,10 @@ import android.widget.Button;
 import android.widget.Toast;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
-import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
-import com.example.myapplication.Activities.CafeDetailActivity;
+
+import com.example.myapplication.Activities.ReviewActivity;
 import com.example.myapplication.R;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
@@ -162,8 +162,8 @@ public class CheckinFragment extends Fragment {
                                 Toast.makeText(requireContext(), "Check-in thành công tại " + cafeName[0], Toast.LENGTH_SHORT).show();
                                 updateUserPoints(userId); // Thêm 1 điểm
 
-                                // Chuyển hướng sang CafeDetailActivity
-                                Intent intent = new Intent(requireContext(), CafeDetailActivity.class);
+                                // Chuyển hướng sang ReviewActivity
+                                Intent intent = new Intent(requireContext(), ReviewActivity.class);
                                 intent.putExtra("cafeId", cafeId[0]);
                                 intent.putExtra("cafeName", cafeName[0]);
                                 intent.putExtra("ratingStar", ratingStar[0]);
