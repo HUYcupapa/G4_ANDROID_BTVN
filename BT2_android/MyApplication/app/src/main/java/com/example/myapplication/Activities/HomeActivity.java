@@ -40,6 +40,39 @@ public class HomeActivity extends AppCompatActivity {
             return;
         }
 
+        // Yêu cầu quyền thông báo (Android 13+)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.POST_NOTIFICATIONS}, 100);
+            }
+        }
+
+        // Lấy và lưu FCM token
+        FirebaseMessaging.getInstance().getToken()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        String token = task.getResult();
+                        Log.d("FCM Token", token);
+                        // Lưu token vào Firestore
+                        db.collection("users").document(user.getUid())
+                                .update("fcmToken", token)
+                                .addOnSuccessListener(aVoid -> Log.d("FCM Token", "Token saved successfully"))
+                                .addOnFailureListener(e -> Log.e("FCM Token", "Error saving token", e));
+                    } else {
+                        Log.e("FCM Token", "Failed to get token", task.getException());
+                    }
+                });
+
+        // Đăng ký topic để nhận thông báo
+        FirebaseMessaging.getInstance().subscribeToTopic("promo_notifications")
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        Log.d("FCM Topic", "Subscribed to promo_notifications");
+                    } else {
+                        Log.e("FCM Topic", "Failed to subscribe to topic", task.getException());
+                    }
+                });
+
 
 
 
