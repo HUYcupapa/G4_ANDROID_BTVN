@@ -22,14 +22,14 @@ public class HomeCafeAdapter extends RecyclerView.Adapter<HomeCafeAdapter.CafeVi
     private List<Cafe> cafeList;
     private OnCafeClickListener onCafeClickListener; // Listener cho sự kiện nhấn
 
-    // Cập nhật constructor để nhận listener
+    // Constructor đầy đủ với listener
     public HomeCafeAdapter(Context context, List<Cafe> cafeList, OnCafeClickListener listener) {
         this.context = context;
         this.cafeList = cafeList;
         this.onCafeClickListener = listener;
     }
 
-    // Constructor cũ (giữ lại để tương thích nếu cần)
+    // Constructor không có listener (tương thích với code cũ)
     public HomeCafeAdapter(Context context, List<Cafe> cafeList) {
         this(context, cafeList, null);
     }
@@ -48,9 +48,7 @@ public class HomeCafeAdapter extends RecyclerView.Adapter<HomeCafeAdapter.CafeVi
         // Hiển thị thông tin quán
         holder.tvCafeName.setText(cafe.getName() != null ? cafe.getName() : "Tên quán");
         holder.tvAddress.setText("Địa chỉ: " + (cafe.getLocationText() != null ? cafe.getLocationText() : "Không có địa chỉ"));
-        holder.tvDescription.setText("Mô tả: " + (cafe.getDescription() != null ? cafe.getDescription() : "Không có mô tả"));
         holder.tvRating.setText("Đánh giá: " + (cafe.getRatingStar() != null ? String.format("%.1f", cafe.getRatingStar()) : "0.0") + "/5");
-        holder.tvActivity.setText("Hoạt động: " + (cafe.getActivity() != null ? cafe.getActivity() : "Không có"));
 
         // Hiển thị hình ảnh
         if (cafe.getImage1() != null && !cafe.getImage1().isEmpty()) {
@@ -72,18 +70,17 @@ public class HomeCafeAdapter extends RecyclerView.Adapter<HomeCafeAdapter.CafeVi
         return cafeList.size();
     }
 
+    // Class ViewHolder ánh xạ với layout mới
     public static class CafeViewHolder extends RecyclerView.ViewHolder {
         ImageView ivCafeImage;
-        TextView tvCafeName, tvAddress, tvDescription, tvRating, tvActivity;
+        TextView tvCafeName, tvAddress, tvRating;
 
         public CafeViewHolder(@NonNull View itemView) {
             super(itemView);
             ivCafeImage = itemView.findViewById(R.id.ivCafeImage);
             tvCafeName = itemView.findViewById(R.id.tvCafeName);
             tvAddress = itemView.findViewById(R.id.tvAddress);
-            tvDescription = itemView.findViewById(R.id.tvDescription);
             tvRating = itemView.findViewById(R.id.tvRating);
-            tvActivity = itemView.findViewById(R.id.tvActivity);
         }
     }
 

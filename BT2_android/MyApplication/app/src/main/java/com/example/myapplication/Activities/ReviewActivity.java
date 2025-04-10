@@ -587,6 +587,10 @@ public class ReviewActivity extends AppCompatActivity {
                         Toast.makeText(this, "Đánh giá thành công!", Toast.LENGTH_SHORT).show();
                         updateCafeRating(rating); // Cập nhật rating của quán
                         updateUserPoints(); // Thêm 1 điểm cho đánh giá
+
+                        // Cập nhật trạng thái nhiệm vụ đánh giá
+                        updateDailyTaskStatus(userId, "write_review", 1); // 1 điểm cho đánh giá
+
                         dialog.dismiss();
 
                         // Reset danh sách sau khi gửi đánh giá thành công
@@ -597,8 +601,6 @@ public class ReviewActivity extends AppCompatActivity {
 
                         // Làm mới giao diện
                         loadCafeInfo();
-
-                        // Không gọi setResult và finish, để giữ người dùng ở lại ReviewActivity
                     });
                 })
                 .addOnFailureListener(e -> runOnUiThread(() -> {
@@ -606,7 +608,28 @@ public class ReviewActivity extends AppCompatActivity {
                     dialog.dismiss();
                 }));
     }
-    
+
+    // Thêm phương thức cập nhật trạng thái nhiệm vụ
+    private void updateDailyTaskStatus(String userId, String taskId, int points) {
+        DocumentReference userRef = db.collection("users").document(userId);
+
+        Map<String, Object> taskData = new HashMap<>();
+        taskData.put("completed", true);
+        taskData.put("points_earned", points);
+        taskData.put("last_updated", com.google.firebase.firestore.FieldValue.serverTimestamp());
+
+        Map<String, Object> updates = new HashMap<>();
+        updates.put("daily_tasks." + taskId, taskData);
+
+        userRef.update(updates)
+                .addOnSuccessListener(aVoid -> {
+                    // Có thể thông báo nếu cần
+                })
+                .addOnFailureListener(e -> {
+                    Toast.makeText(this, "Lỗi khi cập nhật nhiệm vụ!", Toast.LENGTH_SHORT).show();
+                });
+    }
+
     private void updateCafeRating(float rating) {
         DocumentReference cafeRef = db.collection("cafes").document(cafeId);
         cafeRef.get().addOnSuccessListener(documentSnapshot -> {
