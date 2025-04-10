@@ -57,7 +57,7 @@ public class SearchFragment extends Fragment {
     private SearchCafeAdapter cafeAdapter;
     private boolean hasShownLocationNotReady = false;
     private Marker currentLocationMarker;
-    private BitmapDescriptor cafeMarkerIcon; // Lưu trữ icon marker đã được resize
+    private BitmapDescriptor cafeMarkerIcon;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -75,8 +75,22 @@ public class SearchFragment extends Fragment {
         // Khởi tạo adapter cho InfoWindow
         cafeAdapter = new SearchCafeAdapter(requireContext(), null);
 
-        // Resize icon marker và lưu vào biến cafeMarkerIcon
-        cafeMarkerIcon = resizeMarkerIcon(R.drawable.ic_cafe_marker1, 75, 75); // Thay đổi kích thước Marker ở đây
+        // Resize icon marker
+        cafeMarkerIcon = resizeMarkerIcon(R.drawable.ic_cafe_marker1, 75, 75);
+
+        // Kiểm tra Bundle từ HomeFragment
+        Bundle args = getArguments();
+        if (args != null) {
+            maxDistance = args.getFloat("maxDistance", 5000); // Lấy maxDistance, mặc định 5km
+            boolean fromExplore = args.getBoolean("fromExplore", false);
+            if (fromExplore) {
+                // Đặt Spinner khoảng cách thành "1 - 5 km" sau khi giao diện được tải
+                Spinner spinnerDistance = view.findViewById(R.id.spinner_distance);
+                if (spinnerDistance != null) {
+                    spinnerDistance.post(() -> spinnerDistance.setSelection(1)); // "1 - 5 km" ở vị trí 1
+                }
+            }
+        }
 
         // Thiết lập ô tìm kiếm
         EditText etSearchCafe = view.findViewById(R.id.et_search_cafe);
@@ -90,7 +104,7 @@ public class SearchFragment extends Fragment {
             @Override
             public void afterTextChanged(Editable s) {
                 searchQuery = s.toString().trim().toLowerCase();
-                showNearbyCafes(); // Cập nhật bản đồ khi chuỗi tìm kiếm thay đổi
+                showNearbyCafes();
             }
         });
 
@@ -100,15 +114,12 @@ public class SearchFragment extends Fragment {
             mapFragment.getMapAsync(googleMap -> {
                 mMap = googleMap;
 
-                // Kích hoạt nút "Vị trí" (My Location)
                 if (ActivityCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
                     mMap.setMyLocationEnabled(true);
                 }
 
-                // Thiết lập InfoWindow
                 mMap.setInfoWindowAdapter(cafeAdapter);
 
-                // Xử lý sự kiện nhấn vào marker
                 mMap.setOnMarkerClickListener(marker -> {
                     if (marker.equals(currentLocationMarker)) {
                         marker.setTitle("Vị trí hiện tại");
@@ -120,10 +131,9 @@ public class SearchFragment extends Fragment {
                             marker.showInfoWindow();
                         }
                     }
-                    return false; // Cho phép Google Maps hiển thị nút "Chỉ đường"
+                    return false;
                 });
 
-                // Xử lý sự kiện nhấn vào InfoWindow
                 mMap.setOnInfoWindowClickListener(marker -> {
                     if (!marker.equals(currentLocationMarker)) {
                         Cafe cafe = (Cafe) marker.getTag();
@@ -292,11 +302,10 @@ public class SearchFragment extends Fragment {
                 continue;
             }
 
-            // Lọc theo tên quán
             if (!searchQuery.isEmpty()) {
                 String cafeName = cafe.getName() != null ? cafe.getName().toLowerCase() : "";
                 if (!cafeName.contains(searchQuery)) {
-                    continue; // Bỏ qua quán không khớp với chuỗi tìm kiếm
+                    continue;
                 }
             }
 
@@ -324,11 +333,10 @@ public class SearchFragment extends Fragment {
 
             if (distance <= maxDistance && rating >= minRating && activityMatch) {
                 LatLng cafeLatLng = new LatLng(cafe.getLat(), cafe.getLng());
-                // Sử dụng icon marker đã được resize
                 Marker marker = mMap.addMarker(new MarkerOptions()
                         .position(cafeLatLng)
                         .title(cafe.getName())
-                        .icon(cafeMarkerIcon)); // Sử dụng icon đã resize
+                        .icon(cafeMarkerIcon));
                 if (marker != null) {
                     marker.setTag(cafe);
                 }
@@ -336,19 +344,13 @@ public class SearchFragment extends Fragment {
         }
     }
 
-    // Phương thức resize icon marker
     private BitmapDescriptor resizeMarkerIcon(int resourceId, int width, int height) {
-        // Tải bitmap gốc từ tài nguyên
         Bitmap originalBitmap = BitmapFactory.decodeResource(getResources(), resourceId);
         if (originalBitmap == null) {
             Log.e(TAG, "Failed to load marker icon from resource ID: " + resourceId);
-            return BitmapDescriptorFactory.defaultMarker(); // Trả về marker mặc định nếu không tải được
+            return BitmapDescriptorFactory.defaultMarker();
         }
-
-        // Resize bitmap theo kích thước mong muốn
         Bitmap scaledBitmap = Bitmap.createScaledBitmap(originalBitmap, width, height, false);
-
-        // Chuyển Bitmap thành BitmapDescriptor
         return BitmapDescriptorFactory.fromBitmap(scaledBitmap);
     }
 }
