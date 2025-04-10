@@ -589,7 +589,7 @@ public class ReviewActivity extends AppCompatActivity {
                         updateUserPoints(); // Thêm 1 điểm cho đánh giá
 
                         // Cập nhật trạng thái nhiệm vụ đánh giá
-                        updateDailyTaskStatus(userId, "write_review", 1); // 1 điểm cho đánh giá
+                        updateDailyTaskStatus(userId, "write_review", 10); // 1 điểm cho đánh giá
 
                         dialog.dismiss();
 
@@ -656,7 +656,7 @@ public class ReviewActivity extends AppCompatActivity {
         DocumentReference userRef = db.collection("users").document(userId);
         userRef.get().addOnSuccessListener(documentSnapshot -> {
             Long currentPoints = documentSnapshot.getLong("points");
-            int newPoints = (currentPoints != null ? currentPoints.intValue() : 0) + 1;
+            int newPoints = (currentPoints != null ? currentPoints.intValue() : 0) + 10;
 
             userRef.update("points", newPoints)
                     .addOnSuccessListener(aVoid -> {

@@ -163,7 +163,7 @@ public class CheckinFragment extends Fragment {
                                 updateUserPoints(userId); // Thêm 1 điểm
 
                                 // Cập nhật trạng thái nhiệm vụ check-in
-                                updateDailyTaskStatus(userId, "checkin_cafe", 1); // 1 điểm cho check-in
+                                updateDailyTaskStatus(userId, "checkin_cafe", 5); // điểm cho check-in
 
                                 // Chuyển hướng sang ReviewActivity
                                 Intent intent = new Intent(requireContext(), ReviewActivity.class);
@@ -211,7 +211,7 @@ public class CheckinFragment extends Fragment {
         DocumentReference userRef = db.collection("users").document(userId);
         userRef.get().addOnSuccessListener(documentSnapshot -> {
             Long currentPoints = documentSnapshot.getLong("points");
-            int newPoints = (currentPoints != null ? currentPoints.intValue() : 0) + 1;
+            int newPoints = (currentPoints != null ? currentPoints.intValue() : 0) + 5;
 
             userRef.update("points", newPoints)
                     .addOnSuccessListener(aVoid -> {
