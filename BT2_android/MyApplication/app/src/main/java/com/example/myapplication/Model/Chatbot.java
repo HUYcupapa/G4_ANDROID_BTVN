@@ -18,7 +18,7 @@ public class Chatbot {
         // Thêm 10 cặp key-value mới liên quan đến dự án cà phê
         responses.put("đăng xuất", "Để đăng xuất, bạn nhấn vào biểu tượng đăng xuất trên thanh toolbar ở màn hình chính. Bạn có chắc muốn đăng xuất không?");
         responses.put("thông báo", "Thông báo sẽ hiển thị khi có ưu đãi mới hoặc bạn nhận được điểm thưởng. Bạn có thể xem lịch sử thông báo bằng cách nhấn vào biểu tượng chuông trên toolbar!");
-        responses.put("đổi voucher", "Bạn có thể đổi voucher trong tab Rewards. Kiểm tra số điểm của bạn và chọn voucher phù hợp nhé!");
+        responses.put("voucher", "Bạn có thể đổi voucher trong tab Rewards. Kiểm tra số điểm của bạn và chọn voucher phù hợp nhé!");
         responses.put("bình luận", "Để bình luận về quán, bạn vào trang chi tiết của quán và nhập nhận xét. Đừng quên đánh giá để nhận thêm điểm thưởng!");
         responses.put("tìm quán", "Bạn có thể tìm quán cà phê trong tab Search. Nhập tên quán hoặc khu vực, tôi sẽ giúp bạn tìm quán phù hợp!");
         responses.put("ưu đãi", "Ưu đãi mới sẽ được thông báo qua mục Thông báo. Bạn cũng có thể kiểm tra trong tab Rewards để xem các voucher đang có!");
