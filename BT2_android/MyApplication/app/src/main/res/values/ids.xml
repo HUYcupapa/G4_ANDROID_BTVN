@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item name="ivCafeImage" type="id" />
+    <item name="tvCafeName" type="id" />
+    <item name="tvAddress" type="id" />
+    <item name="tvDescription" type="id" />
+    <item name="tvRating" type="id" />
+    <item name="tvActivity" type="id" />
+    <item name="tvComments" type="id" />
+    <item name="btnDirections" type="id" />
+</resources>
