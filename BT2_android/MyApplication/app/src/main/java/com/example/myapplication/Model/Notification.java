@@ -4,6 +4,9 @@ public class Notification {
     private String message;
     private long timestamp;
 
+    // Constructor mặc định (cần cho Firestore)
+    public Notification() {}
+
 
     public Notification(String message, long timestamp) {
         this.message = message;
