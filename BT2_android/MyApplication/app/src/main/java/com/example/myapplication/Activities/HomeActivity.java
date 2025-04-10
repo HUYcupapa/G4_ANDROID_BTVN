@@ -2,16 +2,17 @@ package com.example.myapplication.Activities;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
+import android.view.View;
+import android.widget.ImageButton;
 import android.widget.TextView;
-import android.widget.Toast;
-
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
-
 import com.example.myapplication.Fragment.CheckinFragment;
 import com.example.myapplication.Fragment.HomeFragment;
 import com.example.myapplication.Fragment.RewardsFragment;
@@ -30,8 +31,11 @@ public class HomeActivity extends AppCompatActivity {
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private DrawerLayout drawerLayout;
     private BottomNavigationView bottomNavigationView;
-    private boolean isManualNavigation = false; // Cờ để kiểm soát xung đột
-    private String currentFragmentTag = "HomeFragment"; // Theo dõi fragment hiện tại
+    private boolean isManualNavigation = false;
+    private String currentFragmentTag = "HomeFragment";
+    private View notificationContainer; // View để hiển thị thông báo
+    private TextView notificationText; // TextView để hiển thị nội dung thông báo
+    private ImageButton notificationClose; // Nút đóng thông báo
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,6 +52,14 @@ public class HomeActivity extends AppCompatActivity {
             finish();
             return;
         }
+
+        // Khởi tạo notification container
+        notificationContainer = findViewById(R.id.notification_container);
+        notificationText = findViewById(R.id.notification_text);
+        notificationClose = findViewById(R.id.notification_close);
+
+        // Xử lý sự kiện đóng thông báo
+        notificationClose.setOnClickListener(v -> hideNotification());
 
         // Thiết lập Toolbar
         Toolbar toolbar = findViewById(R.id.toolbar);
@@ -106,8 +118,8 @@ public class HomeActivity extends AppCompatActivity {
         bottomNavigationView = findViewById(R.id.bottom_navigation);
         bottomNavigationView.setOnNavigationItemSelectedListener(item -> {
             if (isManualNavigation) {
-                isManualNavigation = false; // Reset cờ sau khi xử lý
-                return true; // Không thực hiện thay đổi fragment nếu là điều hướng thủ công
+                isManualNavigation = false;
+                return true;
             }
 
             Fragment selectedFragment = null;
@@ -126,7 +138,6 @@ public class HomeActivity extends AppCompatActivity {
                 selectedFragment = new RewardsFragment();
                 currentFragmentTag = "RewardsFragment";
                 showAndSaveNotification("Hãy giành điểm thưởng với nhiều ưu đãi!");
-
             }
 
             if (selectedFragment != null) {
@@ -153,8 +164,12 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     private void showAndSaveNotification(String message) {
-        // Hiển thị thông báo bằng Toast
-        Toast.makeText(this, message, Toast.LENGTH_LONG).show();
+        // Hiển thị thông báo tùy chỉnh
+        notificationText.setText(message);
+        notificationContainer.setVisibility(View.VISIBLE);
+
+        // Tự động ẩn sau 3 giây
+        new Handler(Looper.getMainLooper()).postDelayed(this::hideNotification, 3000);
 
         // Lưu thông báo vào Firestore
         String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
@@ -168,11 +183,17 @@ public class HomeActivity extends AppCompatActivity {
                     // Lưu thành công
                 })
                 .addOnFailureListener(e -> {
-                    Toast.makeText(this, "Lỗi khi lưu thông báo!", Toast.LENGTH_SHORT).show();
+                    // Hiển thị thông báo lỗi bằng cách tùy chỉnh
+                    notificationText.setText("Lỗi khi lưu thông báo!");
+                    notificationContainer.setVisibility(View.VISIBLE);
+                    new Handler(Looper.getMainLooper()).postDelayed(this::hideNotification, 3000);
                 });
     }
 
-    // Phương thức công khai để fragment gọi
+    private void hideNotification() {
+        notificationContainer.setVisibility(View.GONE);
+    }
+
     public void setManualNavigation(boolean value) {
         isManualNavigation = value;
     }
