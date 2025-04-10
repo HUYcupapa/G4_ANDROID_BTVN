@@ -1,137 +1,125 @@
 package com.example.myapplication.Fragment;
 
-import android.Manifest;
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.location.Location;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
+
 import androidx.annotation.NonNull;
-import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.PagerSnapHelper;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.SnapHelper;
 
-import com.example.myapplication.Activities.ChatbotActivity;
-import com.example.myapplication.Adapter.CafeAdapter;
+import com.example.myapplication.Activities.HomeActivity;
+import com.example.myapplication.Activities.ReviewActivity;
+import com.example.myapplication.Adapter.HomeCafeAdapter;
 import com.example.myapplication.Model.Cafe;
 import com.example.myapplication.R;
-import com.google.android.gms.location.FusedLocationProviderClient;
-import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.maps.CameraUpdateFactory;
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+
 import java.util.ArrayList;
 import java.util.List;
 
-public class HomeFragment extends Fragment implements CafeAdapter.OnItemClickListener {
+public class HomeFragment extends Fragment {
 
-    private GoogleMap mMap;
-    private FusedLocationProviderClient fusedLocationProviderClient;
-    private Location currentLocation;
     private RecyclerView recyclerView;
-    private CafeAdapter cafeAdapter;
+    private HomeCafeAdapter cafeAdapter;
     private List<Cafe> cafeList;
+    private FirebaseFirestore db;
+    private TextView tvGreeting;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_home, container, false);
 
-        // Khởi tạo FusedLocationProviderClient
-        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(requireActivity());
+        // Khởi tạo Firestore
+        db = FirebaseFirestore.getInstance();
 
-        // Thiết lập bản đồ mini
-        SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager()
-                .findFragmentById(R.id.map_mini);
-        if (mapFragment != null) {
-            mapFragment.getMapAsync(googleMap -> {
-                mMap = googleMap;
-                getCurrentLocation();
-            });
-        }
+        // Thiết lập lời chào
+        tvGreeting = view.findViewById(R.id.tv_greeting);
+        String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        db.collection("users").document(userId).get()
+                .addOnSuccessListener(documentSnapshot -> {
+                    if (documentSnapshot.exists()) {
+                        String name = documentSnapshot.getString("name");
+                        tvGreeting.setText("Xin chào, " + (name != null ? name : "Khách") + " ☕");
+                    }
+                });
 
-        // Thiết lập RecyclerView cho danh sách quán café hot
+        // Thiết lập nút "Bắt đầu khám phá"
+        Button btnExplore = view.findViewById(R.id.btn_explore);
+        btnExplore.setOnClickListener(v -> {
+            // Chuyển sang SearchFragment
+            SearchFragment searchFragment = new SearchFragment();
+            Bundle bundle = new Bundle();
+            bundle.putFloat("maxDistance", 5000); // 5km
+            bundle.putBoolean("fromExplore", true); // Đánh dấu là từ nút "Khám phá"
+            searchFragment.setArguments(bundle);
+            getParentFragmentManager().beginTransaction()
+                    .replace(R.id.fragment_container, searchFragment)
+                    .addToBackStack(null)
+                    .commit();
+
+            // Cập nhật BottomNavigationView mà không kích hoạt listener
+            BottomNavigationView bottomNavigationView = requireActivity().findViewById(R.id.bottom_navigation);
+            if (bottomNavigationView != null) {
+                ((HomeActivity) requireActivity()).setManualNavigation(true); // Đặt cờ trước khi thay đổi
+                bottomNavigationView.setSelectedItemId(R.id.nav_search);
+            }
+        });
+
+        // Thiết lập RecyclerView cuộn ngang
         recyclerView = view.findViewById(R.id.recycler_view_hot_cafes);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        cafeList = getCafeList();
-        cafeAdapter = new CafeAdapter(cafeList, this);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
+        recyclerView.setLayoutManager(layoutManager);
+
+        // Giới hạn hiển thị tối đa 3 quán
+        recyclerView.setItemViewCacheSize(3);
+        recyclerView.setHasFixedSize(true);
+
+        // Thêm hiệu ứng snap (dừng đúng item)
+        SnapHelper snapHelper = new PagerSnapHelper();
+        snapHelper.attachToRecyclerView(recyclerView);
+
+        cafeList = new ArrayList<>();
+        cafeAdapter = new HomeCafeAdapter(requireContext(), cafeList, cafe -> {
+            // Xử lý khi nhấn vào quán cafe
+            Intent intent = new Intent(requireContext(), ReviewActivity.class);
+            intent.putExtra("cafeId", cafe.getId());
+            startActivity(intent);
+        });
         recyclerView.setAdapter(cafeAdapter);
 
-        // Xử lý nút Hỗ trợ
-        view.findViewById(R.id.btn_support).setOnClickListener(v -> {
-            startActivity(new Intent(requireContext(), ChatbotActivity.class));
-        });
+        // Tải danh sách quán cà phê từ Firestore
+        loadCafesFromFirestore();
 
         return view;
     }
 
-    private void getCurrentLocation() {
-        if (ActivityCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
-                ActivityCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}, 100);
-            return;
-        }
-
-        fusedLocationProviderClient.getLastLocation().addOnSuccessListener(requireActivity(), new OnSuccessListener<Location>() {
-            @Override
-            public void onSuccess(Location location) {
-                if (location != null) {
-                    currentLocation = location;
-                    LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
-                    mMap.clear();
-                    mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15));
-                    mMap.addMarker(new MarkerOptions().position(latLng).title("Vị trí của bạn"));
-                    showNearbyCafes();
-                }
-            }
-        });
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (requestCode == 100 && grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-            getCurrentLocation();
-        } else {
-            Toast.makeText(requireContext(), "Bạn cần cấp quyền để sử dụng tính năng này!", Toast.LENGTH_SHORT).show();
-        }
-    }
-
-    private List<Cafe> getCafeList() {
-        List<Cafe> cafes = new ArrayList<>();
-        cafes.add(new Cafe("The Coffee House", 21.028511, 105.804817));
-        cafes.add(new Cafe("Highlands Coffee", 21.025292, 105.852871));
-        cafes.add(new Cafe("Cộng Cà Phê", 21.035978, 105.853987));
-        return cafes;
-    }
-
-    private void showNearbyCafes() {
-        if (currentLocation == null) {
-            Toast.makeText(requireContext(), "Vị trí hiện tại chưa sẵn sàng!", Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        for (Cafe cafe : cafeList) {
-            Location cafeLocation = new Location("");
-            cafeLocation.setLatitude(cafe.getLat());
-            cafeLocation.setLongitude(cafe.getLng());
-
-            float distance = currentLocation.distanceTo(cafeLocation);
-            if (distance < 5000) { // Giới hạn 5km
-                LatLng cafeLatLng = new LatLng(cafe.getLat(), cafe.getLng());
-                mMap.addMarker(new MarkerOptions().position(cafeLatLng).title(cafe.getName()));
-            }
-        }
-    }
-
-    @Override
-    public void onItemClick(Cafe cafe) {
-        Toast.makeText(requireContext(), "Bạn đã chọn: " + cafe.getName(), Toast.LENGTH_SHORT).show();
+    private void loadCafesFromFirestore() {
+        db.collection("cafes")
+                .limit(10) // Giới hạn chỉ lấy 10 quán đầu tiên
+                .get()
+                .addOnSuccessListener(queryDocumentSnapshots -> {
+                    cafeList.clear();
+                    for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
+                        Cafe cafe = document.toObject(Cafe.class);
+                        cafe.setId(document.getId());
+                        cafeList.add(cafe);
+                    }
+                    cafeAdapter.notifyDataSetChanged();
+                })
+                .addOnFailureListener(e -> {
+                    Toast.makeText(requireContext(), "Lỗi khi tải danh sách quán: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                });
     }
 }

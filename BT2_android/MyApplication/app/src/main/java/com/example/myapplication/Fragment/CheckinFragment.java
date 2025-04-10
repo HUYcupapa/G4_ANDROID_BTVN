@@ -162,6 +162,9 @@ public class CheckinFragment extends Fragment {
                                 Toast.makeText(requireContext(), "Check-in thành công tại " + cafeName[0], Toast.LENGTH_SHORT).show();
                                 updateUserPoints(userId); // Thêm 1 điểm
 
+                                // Cập nhật trạng thái nhiệm vụ check-in
+                                updateDailyTaskStatus(userId, "checkin_cafe", 5); // điểm cho check-in
+
                                 // Chuyển hướng sang ReviewActivity
                                 Intent intent = new Intent(requireContext(), ReviewActivity.class);
                                 intent.putExtra("cafeId", cafeId[0]);
@@ -183,11 +186,32 @@ public class CheckinFragment extends Fragment {
         });
     }
 
+    // Thêm phương thức cập nhật trạng thái nhiệm vụ
+    private void updateDailyTaskStatus(String userId, String taskId, int points) {
+        DocumentReference userRef = db.collection("users").document(userId);
+
+        Map<String, Object> taskData = new HashMap<>();
+        taskData.put("completed", true);
+        taskData.put("points_earned", points);
+        taskData.put("last_updated", com.google.firebase.firestore.FieldValue.serverTimestamp());
+
+        Map<String, Object> updates = new HashMap<>();
+        updates.put("daily_tasks." + taskId, taskData);
+
+        userRef.update(updates)
+                .addOnSuccessListener(aVoid -> {
+                    // Có thể thông báo nếu cần
+                })
+                .addOnFailureListener(e -> {
+                    Toast.makeText(requireContext(), "Lỗi khi cập nhật nhiệm vụ!", Toast.LENGTH_SHORT).show();
+                });
+    }
+
     private void updateUserPoints(String userId) {
         DocumentReference userRef = db.collection("users").document(userId);
         userRef.get().addOnSuccessListener(documentSnapshot -> {
             Long currentPoints = documentSnapshot.getLong("points");
-            int newPoints = (currentPoints != null ? currentPoints.intValue() : 0) + 1;
+            int newPoints = (currentPoints != null ? currentPoints.intValue() : 0) + 5;
 
             userRef.update("points", newPoints)
                     .addOnSuccessListener(aVoid -> {

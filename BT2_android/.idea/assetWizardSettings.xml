@@ -19,8 +19,8 @@
                         <option name="values">
                           <map>
                             <entry key="assetSourceType" value="FILE" />
-                            <entry key="outputName" value="ic_distance" />
-                            <entry key="sourceFile" value="E:\BTL_android\main\G4_ANDROID_BTVN\BT2_android\MyApplication\app\src\main\res\drawable\svg\map_24dp_E3E3E3.svg" />
+                            <entry key="outputName" value="ic_cafe_marker" />
+                            <entry key="sourceFile" value="D:\CODE_TLU\ANDROID\G4_ANDROID_BTVN\BT2_android\MyApplication\app\src\main\res\drawable\coffee-cup-coffee-svgrepo-com.svg" />
                           </map>
                         </option>
                       </PersistentState>

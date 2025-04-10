@@ -1,44 +1,56 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:background="@color/coffee_secondary"
-    android:padding="16dp">
+    android:fillViewport="true">
 
-    <!-- Bản đồ mini -->
-    <fragment
-        android:id="@+id/map_mini"
-        android:name="com.google.android.gms.maps.SupportMapFragment"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="200dp" />
-
-    <!-- Danh sách quán café hot -->
-    <TextView
-        android:textColor="@color/text_primary"
-        android:textSize="20sp"
-        android:drawableStart="@drawable/ic_coffee_bean"
-        android:drawableTint="@color/coffee_accent"
-        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="🔥 Quán Coffee Hot 🔥"
-        android:layout_marginTop="16dp" />
+        android:orientation="vertical"
+        android:background="@color/coffee_secondary"
+        android:padding="16dp">
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recycler_view_hot_cafes"
-        android:background="@drawable/bg_recyclerview"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        <!-- Lời chào -->
+        <TextView
+            android:id="@+id/tv_greeting"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Xin chào, Khách ☕"
+            android:textColor="@color/text_primary"
+            android:textSize="24sp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginBottom="16dp" />
 
+        <!-- Nút Bắt đầu khám phá -->
+        <Button
+            android:id="@+id/btn_explore"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Bắt đầu khám phá"
+            android:layout_gravity="center_horizontal"
+            android:backgroundTint="@color/coffee_accent"
+            android:textColor="@color/white"
+            android:padding="12dp"
+            android:layout_marginBottom="16dp" />
 
-    <!-- Thêm nút Hỗ trợ -->
-    <Button
-        android:id="@+id/btn_support"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Hỗ trợ"
-        android:backgroundTint="#FF5722"
-        android:textColor="#FFFFFF"
+        <!-- Tiêu đề danh sách quán café hot -->
+        <TextView
+            android:textColor="@color/text_primary"
+            android:textSize="20sp"
+            android:drawableTint="@color/coffee_accent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="🔥 Quán Coffee Hot 🔥"
+            android:layout_marginBottom="12dp" />
 
-        android:layout_margin="16dp" />
-</LinearLayout>
+        <!-- RecyclerView cuộn ngang -->
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recycler_view_hot_cafes"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:scrollbars="horizontal"
+            android:nestedScrollingEnabled="false" />
+    </LinearLayout>
+</androidx.core.widget.NestedScrollView>
