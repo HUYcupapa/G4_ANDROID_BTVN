@@ -562,7 +562,7 @@ public class AdminActivity extends AppCompatActivity implements AdminCafeAdapter
         ));
         linearLayout.setPadding(8, 8, 8, 8);
 
-        for (int i = 0; i < selectedImage.ConcurrentModificationExceptionUris.size(); i++) {
+        for (int i = 0; i < selectedImageUris.size(); i++) {
             Uri uri = selectedImageUris.get(i);
             View mediaView = LayoutInflater.from(this).inflate(R.layout.item_media, linearLayout, false);
 
