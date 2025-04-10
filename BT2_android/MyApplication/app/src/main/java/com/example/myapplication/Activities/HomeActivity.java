@@ -89,7 +89,7 @@ public class HomeActivity extends AppCompatActivity {
                         toolbarTitle.setText("Xin chào, " + (name != null ? name : "Khách") + " ☕");
 
                         // Hiển thị thông báo khi đăng nhập thành công
-                        showAndSaveNotification("Đừng bỏ lỡ những ưu đãi hot........");
+                        showAndSaveNotification("Đừng bỏ lỡ những ưu đãi hot!");
                     }
                 });
 
@@ -118,14 +118,15 @@ public class HomeActivity extends AppCompatActivity {
             } else if (itemId == R.id.nav_checkin) {
                 selectedFragment = new CheckinFragment();
                 currentFragmentTag = "CheckinFragment";
-                // Hiển thị thông báo khi chuyển sang CheckinFragment
-                showAndSaveNotification("Hãy khám phá thêm nhiều quán cafe hot gần đây");
+                showAndSaveNotification("Hãy khám phá thêm nhiều quán cafe hot gần đây!");
             } else if (itemId == R.id.nav_search) {
                 selectedFragment = new SearchFragment();
                 currentFragmentTag = "SearchFragment";
             } else if (itemId == R.id.nav_rewards) {
                 selectedFragment = new RewardsFragment();
                 currentFragmentTag = "RewardsFragment";
+                showAndSaveNotification("Hãy giành điểm thưởng với nhiều ưu đãi!");
+
             }
 
             if (selectedFragment != null) {
