@@ -1,13 +1,13 @@
 <component name="libraryTable">
   <library name="Gradle: androidx.privacysandbox.ads:ads-adservices-java:1.1.0-beta11@aar" external-system-id="GRADLE">
     <CLASSES>
-      <root url="file://$PROJECT_DIR$/../../DEMO_CODE/LoginScreenDemo/.gradle/caches/transforms-4/fbbdd209145767c911b3308f1b8821c0/transformed/ads-adservices-java-1.1.0-beta11/res" />
-      <root url="jar://$PROJECT_DIR$/../../DEMO_CODE/LoginScreenDemo/.gradle/caches/transforms-4/fbbdd209145767c911b3308f1b8821c0/transformed/ads-adservices-java-1.1.0-beta11/jars/classes.jar!/" />
-      <root url="file://$PROJECT_DIR$/../../DEMO_CODE/LoginScreenDemo/.gradle/caches/transforms-4/fbbdd209145767c911b3308f1b8821c0/transformed/ads-adservices-java-1.1.0-beta11/AndroidManifest.xml" />
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-4/fbbdd209145767c911b3308f1b8821c0/transformed/ads-adservices-java-1.1.0-beta11/jars/classes.jar!/" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-4/fbbdd209145767c911b3308f1b8821c0/transformed/ads-adservices-java-1.1.0-beta11/res" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-4/fbbdd209145767c911b3308f1b8821c0/transformed/ads-adservices-java-1.1.0-beta11/AndroidManifest.xml" />
     </CLASSES>
     <JAVADOC />
     <SOURCES>
-      <root url="jar://$PROJECT_DIR$/../../DEMO_CODE/LoginScreenDemo/.gradle/caches/modules-2/files-2.1/androidx.privacysandbox.ads/ads-adservices-java/1.1.0-beta11/a8b4b4e83aec1a938401f49f98bb3631ea37499a/ads-adservices-java-1.1.0-beta11-sources.jar!/" />
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/androidx.privacysandbox.ads/ads-adservices-java/1.1.0-beta11/a8b4b4e83aec1a938401f49f98bb3631ea37499a/ads-adservices-java-1.1.0-beta11-sources.jar!/" />
     </SOURCES>
   </library>
 </component>
