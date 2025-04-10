@@ -1,16 +1,16 @@
 <component name="libraryTable">
   <library name="Gradle: com.google.firebase:firebase-messaging:24.1.0@aar" external-system-id="GRADLE">
     <ANNOTATIONS>
-      <root url="jar://$PROJECT_DIR$/../../DEMO_CODE/LoginScreenDemo/.gradle/caches/transforms-4/f45bbe3dd8a4bd0c562b1ae5c8128c9b/transformed/firebase-messaging-24.1.0/annotations.zip!/" />
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-4/f45bbe3dd8a4bd0c562b1ae5c8128c9b/transformed/firebase-messaging-24.1.0/annotations.zip!/" />
     </ANNOTATIONS>
     <CLASSES>
-      <root url="jar://$PROJECT_DIR$/../../DEMO_CODE/LoginScreenDemo/.gradle/caches/transforms-4/f45bbe3dd8a4bd0c562b1ae5c8128c9b/transformed/firebase-messaging-24.1.0/jars/classes.jar!/" />
-      <root url="file://$PROJECT_DIR$/../../DEMO_CODE/LoginScreenDemo/.gradle/caches/transforms-4/f45bbe3dd8a4bd0c562b1ae5c8128c9b/transformed/firebase-messaging-24.1.0/res" />
-      <root url="file://$PROJECT_DIR$/../../DEMO_CODE/LoginScreenDemo/.gradle/caches/transforms-4/f45bbe3dd8a4bd0c562b1ae5c8128c9b/transformed/firebase-messaging-24.1.0/AndroidManifest.xml" />
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-4/f45bbe3dd8a4bd0c562b1ae5c8128c9b/transformed/firebase-messaging-24.1.0/jars/classes.jar!/" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-4/f45bbe3dd8a4bd0c562b1ae5c8128c9b/transformed/firebase-messaging-24.1.0/res" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-4/f45bbe3dd8a4bd0c562b1ae5c8128c9b/transformed/firebase-messaging-24.1.0/AndroidManifest.xml" />
     </CLASSES>
     <JAVADOC />
     <SOURCES>
-      <root url="jar://$PROJECT_DIR$/../../DEMO_CODE/LoginScreenDemo/.gradle/caches/modules-2/files-2.1/com.google.firebase/firebase-messaging/24.1.0/f0f03cb1c3cea7492d4084499a5b3fd0123f41b6/firebase-messaging-24.1.0-sources.jar!/" />
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.google.firebase/firebase-messaging/24.1.0/f0f03cb1c3cea7492d4084499a5b3fd0123f41b6/firebase-messaging-24.1.0-sources.jar!/" />
     </SOURCES>
   </library>
 </component>
