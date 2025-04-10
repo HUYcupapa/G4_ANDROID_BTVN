@@ -1,17 +1,19 @@
 package com.example.myapplication.Activities;
 
 import android.Manifest;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.GridLayout;
 import android.widget.HorizontalScrollView;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -24,13 +26,19 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
-import com.bumptech.glide.Glide;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import com.example.myapplication.Adapter.ReviewAdapter;
+import com.example.myapplication.Model.Review;
 import com.example.myapplication.R;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONObject;
@@ -57,44 +65,49 @@ public class ReviewActivity extends AppCompatActivity {
     private TextView tvCafeName, tvRating, tvAddress, tvDescription, tvActivity;
     private ImageView ivCafeImage;
     private Button btnReview;
+    private RecyclerView rvReviews;
+    private ReviewAdapter reviewAdapter;
     private FirebaseFirestore db;
     private FirebaseAuth mAuth;
     private String cafeId, userId;
     private ActivityResultLauncher<String> imagePickerLauncher;
-    private ActivityResultLauncher<String> videoPickerLauncher;
-    private final List<Uri> selectedImageUris = new ArrayList<>(); // Lưu danh sách URI hình ảnh
-    private Uri selectedVideoUri = null; // Lưu URI video
-    private final List<String> uploadedImageUrls = new ArrayList<>(); // Lưu danh sách URL hình ảnh sau khi upload
-    private String uploadedVideoUrl = null; // Lưu URL video sau khi upload
+    private final List<Uri> selectedImageUris = new ArrayList<>();
+    private final List<String> uploadedImageUrls = new ArrayList<>();
     private OkHttpClient client;
-    private static final String IMGUR_CLIENT_ID = "44708ec159ebd14"; // Sử dụng Client-ID của bạn
+    private static final String IMGUR_CLIENT_ID = "44708ec159ebd14";
     private static final String IMGUR_UPLOAD_URL = "https://api.imgur.com/3/upload";
     private static final int PERMISSION_REQUEST_CODE = 100;
-    private HorizontalScrollView mediaContainer; // Biến để lưu mediaContainer từ dialog
+    private HorizontalScrollView mediaContainer;
+    private String sourceFragment;
+
+    private static final int ITEM_HEIGHT_DP = 266;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_review);
 
-        // Khởi tạo Firestore và Auth
         db = FirebaseFirestore.getInstance();
         mAuth = FirebaseAuth.getInstance();
         client = new OkHttpClient();
 
-        // Yêu cầu quyền runtime
         requestStoragePermissions();
 
-        // Lấy userId
         if (mAuth.getCurrentUser() != null) {
             userId = mAuth.getCurrentUser().getUid();
         } else {
             Toast.makeText(this, "Vui lòng đăng nhập để tiếp tục!", Toast.LENGTH_SHORT).show();
-            // Không gọi finish() ngay, để người dùng tự quay lại
             return;
         }
 
-        // Khởi tạo các view
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayShowTitleEnabled(false);
+        }
+
+        findViewById(R.id.back_icon).setOnClickListener(v -> onBackPressed());
+
         tvCafeName = findViewById(R.id.tv_cafe_name);
         tvRating = findViewById(R.id.tv_rating);
         tvAddress = findViewById(R.id.tv_address);
@@ -102,14 +115,31 @@ public class ReviewActivity extends AppCompatActivity {
         tvActivity = findViewById(R.id.tv_activity);
         ivCafeImage = findViewById(R.id.iv_cafe_image);
         btnReview = findViewById(R.id.btn_review);
+        rvReviews = findViewById(R.id.rv_reviews);
 
-        // Lấy cafeId từ Intent
+        reviewAdapter = new ReviewAdapter();
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this) {
+            @Override
+            public boolean canScrollVertically() {
+                return false;
+            }
+
+            @Override
+            public boolean supportsPredictiveItemAnimations() {
+                return false;
+            }
+        };
+        rvReviews.setLayoutManager(layoutManager);
+        rvReviews.setAdapter(reviewAdapter);
+
         cafeId = getIntent().getStringExtra("cafeId");
+        sourceFragment = getIntent().getStringExtra("sourceFragment");
 
-        // Tải thông tin quán cà phê
+        Log.d("ReviewActivity", "Cafe ID: " + cafeId);
+
         loadCafeInfo();
+        loadReviews();
 
-        // Khởi tạo ActivityResultLauncher để chọn hình ảnh
         imagePickerLauncher = registerForActivityResult(
                 new ActivityResultContracts.GetContent(),
                 uri -> {
@@ -117,7 +147,7 @@ public class ReviewActivity extends AppCompatActivity {
                         if (selectedImageUris.size() < 3) {
                             selectedImageUris.add(uri);
                             Toast.makeText(this, "Đã chọn " + selectedImageUris.size() + "/3 hình ảnh", Toast.LENGTH_SHORT).show();
-                            updateMediaContainer(); // Cập nhật mediaContainer
+                            updateMediaContainer();
                         } else {
                             Toast.makeText(this, "Đã đạt tối đa 3 hình ảnh!", Toast.LENGTH_SHORT).show();
                         }
@@ -125,23 +155,6 @@ public class ReviewActivity extends AppCompatActivity {
                 }
         );
 
-        // Khởi tạo ActivityResultLauncher để chọn video
-        videoPickerLauncher = registerForActivityResult(
-                new ActivityResultContracts.GetContent(),
-                uri -> {
-                    if (uri != null) {
-                        if (selectedVideoUri == null) {
-                            selectedVideoUri = uri;
-                            Toast.makeText(this, "Đã chọn video", Toast.LENGTH_SHORT).show();
-                            updateMediaContainer(); // Cập nhật mediaContainer
-                        } else {
-                            Toast.makeText(this, "Chỉ được chọn 1 video!", Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                }
-        );
-
-        // Xử lý nút Đánh giá
         btnReview.setOnClickListener(v -> {
             if (mAuth.getCurrentUser() == null) {
                 Toast.makeText(this, "Vui lòng đăng nhập để đánh giá!", Toast.LENGTH_SHORT).show();
@@ -157,11 +170,9 @@ public class ReviewActivity extends AppCompatActivity {
 
     private void requestStoragePermissions() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_MEDIA_IMAGES) != PackageManager.PERMISSION_GRANTED ||
-                    ContextCompat.checkSelfPermission(this, Manifest.permission.READ_MEDIA_VIDEO) != PackageManager.PERMISSION_GRANTED) {
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_MEDIA_IMAGES) != PackageManager.PERMISSION_GRANTED) {
                 ActivityCompat.requestPermissions(this, new String[]{
-                        Manifest.permission.READ_MEDIA_IMAGES,
-                        Manifest.permission.READ_MEDIA_VIDEO
+                        Manifest.permission.READ_MEDIA_IMAGES
                 }, PERMISSION_REQUEST_CODE);
             }
         } else {
@@ -178,12 +189,11 @@ public class ReviewActivity extends AppCompatActivity {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 Toast.makeText(this, "Quyền truy cập đã được cấp!", Toast.LENGTH_SHORT).show();
             } else {
-                Toast.makeText(this, "Quyền truy cập bị từ chối, không thể chọn ảnh/video!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Quyền truy cập bị từ chối, không thể chọn ảnh!", Toast.LENGTH_SHORT).show();
             }
         }
     }
 
-    //# HIỂN THỊ THÔNG TIN QUÁN
     private void loadCafeInfo() {
         if (cafeId != null) {
             db.collection("cafes").document(cafeId).get()
@@ -196,14 +206,12 @@ public class ReviewActivity extends AppCompatActivity {
                             String image1 = documentSnapshot.getString("image1");
                             String activity = documentSnapshot.getString("activity");
 
-                            // Hiển thị dữ liệu
                             tvCafeName.setText(cafeName != null ? cafeName : "Tên quán");
                             tvRating.setText("Đánh giá: " + (ratingStar != null ? String.format("%.1f", ratingStar) : "0.0") + "/5");
-                            tvAddress.setText("Địa chỉ: " + (locationText != null ? locationText : "Không có địa chỉ")); // Sửa từ "address" thành "locationText"
+                            tvAddress.setText("Địa chỉ: " + (locationText != null ? locationText : "Không có địa chỉ"));
                             tvDescription.setText("Mô tả: " + (description != null ? description : "Không có mô tả"));
                             tvActivity.setText("Hoạt động: " + (activity != null ? activity : "Không có hoạt động"));
 
-                            // Hiển thị hình ảnh bằng Picasso
                             if (image1 != null && !image1.isEmpty()) {
                                 Picasso.get().load(image1).into(ivCafeImage);
                             } else {
@@ -211,37 +219,78 @@ public class ReviewActivity extends AppCompatActivity {
                             }
                         } else {
                             Toast.makeText(this, "Không tìm thấy thông tin quán!", Toast.LENGTH_SHORT).show();
-                            // Không gọi finish() ngay, để người dùng tự quay lại
                         }
                     })
                     .addOnFailureListener(e -> {
                         Toast.makeText(this, "Lỗi khi tải thông tin quán: " + e.getMessage(), Toast.LENGTH_SHORT).show();
-                        // Không gọi finish() ngay, để người dùng tự quay lại
                     });
         } else {
             Toast.makeText(this, "Không tìm thấy ID quán!", Toast.LENGTH_SHORT).show();
-            // Không gọi finish() ngay, để người dùng tự quay lại
         }
     }
 
+    private void loadReviews() {
+        if (cafeId == null) {
+            Toast.makeText(this, "Không tìm thấy ID quán để tải đánh giá!", Toast.LENGTH_SHORT).show();
+            Log.e("ReviewActivity", "cafeId is null");
+            return;
+        }
 
-    // #LOAD ẢNH VÀ VIDEO LÊN MÀN HÌNH HIỂN THỊ
+        Log.d("ReviewActivity", "Loading reviews for cafeId: " + cafeId);
+        db.collection("reviews")
+                .whereEqualTo("cafeId", cafeId)
+                .orderBy("timestamp", Query.Direction.DESCENDING)
+                .get()
+                .addOnSuccessListener(queryDocumentSnapshots -> {
+                    Log.d("ReviewActivity", "Number of reviews retrieved: " + queryDocumentSnapshots.size());
+                    if (queryDocumentSnapshots.isEmpty()) {
+                        Log.d("ReviewActivity", "No reviews found for cafeId: " + cafeId);
+                        reviewAdapter.setReviewList(new ArrayList<>());
+                        Toast.makeText(this, "Không có bình luận nào cho quán này!", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+
+                    List<Review> reviews = queryDocumentSnapshots.toObjects(Review.class);
+                    Log.d("ReviewActivity", "Successfully converted to Review objects: " + reviews.size());
+                    for (Review review : reviews) {
+                        Log.d("ReviewActivity", "Review: " + review.getComment() + ", Username: " + review.getUsername());
+                    }
+                    reviewAdapter.setReviewList(reviews);
+                    reviewAdapter.notifyDataSetChanged();
+
+                    setRecyclerViewHeight(reviews.size());
+                })
+                .addOnFailureListener(e -> {
+                    Log.e("ReviewActivity", "Error loading reviews: " + e.getMessage(), e);
+                    Toast.makeText(this, "Lỗi khi tải đánh giá: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                });
+    }
+
+    private void setRecyclerViewHeight(int itemCount) {
+        float density = getResources().getDisplayMetrics().density;
+        int itemHeightPx = (int) (ITEM_HEIGHT_DP * density);
+        int totalHeightPx = itemCount * itemHeightPx;
+
+        ViewGroup.LayoutParams params = rvReviews.getLayoutParams();
+        params.height = totalHeightPx;
+        rvReviews.setLayoutParams(params);
+
+        Log.d("ReviewActivity", "Set RecyclerView height: " + totalHeightPx + "px for " + itemCount + " items");
+    }
+
     private void updateMediaContainer() {
         if (mediaContainer == null) return;
 
-        // Xóa các view cũ trong mediaContainer
         mediaContainer.removeAllViews();
 
-        // Tạo LinearLayout để chứa các ảnh/video
         LinearLayout linearLayout = new LinearLayout(this);
         linearLayout.setOrientation(LinearLayout.HORIZONTAL);
         linearLayout.setLayoutParams(new LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.WRAP_CONTENT,
-                450 // Đảm bảo chiều cao khớp với XML
+                450
         ));
         linearLayout.setPadding(8, 8, 8, 8);
 
-        // Thêm các hình ảnh đã chọn
         for (int i = 0; i < selectedImageUris.size(); i++) {
             Uri uri = selectedImageUris.get(i);
             View mediaView = LayoutInflater.from(this).inflate(R.layout.item_media, linearLayout, false);
@@ -250,13 +299,9 @@ public class ReviewActivity extends AppCompatActivity {
             ImageButton btnRemove = mediaView.findViewById(R.id.btnRemove);
             TextView tvMediaCount = mediaView.findViewById(R.id.tvMediaCount);
 
-            // Hiển thị ảnh
             ivMedia.setImageURI(uri);
-
-            // Hiển thị số lượng ảnh
             tvMediaCount.setText((i + 1) + "/3");
 
-            // Xử lý nút xóa
             btnRemove.setOnClickListener(v -> {
                 selectedImageUris.remove(uri);
                 updateMediaContainer();
@@ -266,34 +311,6 @@ public class ReviewActivity extends AppCompatActivity {
             linearLayout.addView(mediaView);
         }
 
-        // Thêm video đã chọn (nếu có)
-        if (selectedVideoUri != null) {
-            View mediaView = LayoutInflater.from(this).inflate(R.layout.item_media, linearLayout, false);
-
-            ImageView ivMedia = mediaView.findViewById(R.id.ivMedia);
-            ImageButton btnRemove = mediaView.findViewById(R.id.btnRemove);
-            TextView tvMediaCount = mediaView.findViewById(R.id.tvMediaCount);
-
-            // Hiển thị thumbnail của video bằng Glide
-            Glide.with(this)
-                    .load(selectedVideoUri)
-                    .thumbnail(0.25f)
-                    .into(ivMedia);
-
-            // Hiển thị số lượng (video chỉ có 1)
-            tvMediaCount.setText("1/1");
-
-            // Xử lý nút xóa
-            btnRemove.setOnClickListener(v -> {
-                selectedVideoUri = null;
-                updateMediaContainer();
-                Toast.makeText(this, "Đã xóa video", Toast.LENGTH_SHORT).show();
-            });
-
-            linearLayout.addView(mediaView);
-        }
-
-        // Thêm LinearLayout vào mediaContainer
         mediaContainer.addView(linearLayout);
     }
 
@@ -302,52 +319,47 @@ public class ReviewActivity extends AppCompatActivity {
         View dialogView = LayoutInflater.from(this).inflate(R.layout.dialog_review, null);
         builder.setView(dialogView);
 
-        // Khởi tạo các thành phần trong dialog
         RatingBar ratingBar = dialogView.findViewById(R.id.ratingBar);
         EditText editTextComment = dialogView.findViewById(R.id.editTextComment);
         Spinner spinnerActivity = dialogView.findViewById(R.id.spinnerActivity);
         EditText editTextOtherActivity = dialogView.findViewById(R.id.editTextOtherActivity);
         View btnAddImages = dialogView.findViewById(R.id.btnAddImages);
-        View btnAddVideo = dialogView.findViewById(R.id.btnAddVideo);
         Button btnSubmitReview = dialogView.findViewById(R.id.btnSubmitReview);
         mediaContainer = dialogView.findViewById(R.id.mediaContainer);
 
-        // Cập nhật mediaContainer với các hình ảnh và video đã chọn
         updateMediaContainer();
 
-        // Kiểm tra quyền trước khi cho phép chọn ảnh/video
         boolean hasStoragePermission = Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU ?
-                (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_MEDIA_IMAGES) == PackageManager.PERMISSION_GRANTED &&
-                        ContextCompat.checkSelfPermission(this, Manifest.permission.READ_MEDIA_VIDEO) == PackageManager.PERMISSION_GRANTED) :
+                ContextCompat.checkSelfPermission(this, Manifest.permission.READ_MEDIA_IMAGES) == PackageManager.PERMISSION_GRANTED :
                 ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
 
-        // Thiết lập Spinner
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(
                 this,
-                R.array.activity_options,
+                R.array.activity_review_options,
                 android.R.layout.simple_spinner_item
         );
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerActivity.setAdapter(adapter);
 
-        // Xử lý khi chọn "others" trong Spinner
         spinnerActivity.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                if (parent.getItemAtPosition(position).toString().equals("others")) {
+                String selectedActivity = parent.getItemAtPosition(position).toString();
+                if (selectedActivity.equalsIgnoreCase("others")) {
                     editTextOtherActivity.setVisibility(View.VISIBLE);
                 } else {
                     editTextOtherActivity.setVisibility(View.GONE);
+                    editTextOtherActivity.setText("");
                 }
             }
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
                 editTextOtherActivity.setVisibility(View.GONE);
+                editTextOtherActivity.setText("");
             }
         });
 
-        // Xử lý nút thêm hình ảnh
         btnAddImages.setOnClickListener(v -> {
             if (mAuth.getCurrentUser() == null) {
                 Toast.makeText(this, "Vui lòng đăng nhập để thêm hình ảnh!", Toast.LENGTH_SHORT).show();
@@ -361,21 +373,6 @@ public class ReviewActivity extends AppCompatActivity {
             imagePickerLauncher.launch("image/*");
         });
 
-        // Xử lý nút thêm video
-        btnAddVideo.setOnClickListener(v -> {
-            if (mAuth.getCurrentUser() == null) {
-                Toast.makeText(this, "Vui lòng đăng nhập để thêm video!", Toast.LENGTH_SHORT).show();
-                return;
-            }
-            if (!hasStoragePermission) {
-                Toast.makeText(this, "Vui lòng cấp quyền truy cập để chọn video!", Toast.LENGTH_SHORT).show();
-                requestStoragePermissions();
-                return;
-            }
-            videoPickerLauncher.launch("video/*");
-        });
-
-        // Xử lý nút gửi đánh giá
         AlertDialog dialog = builder.create();
         btnSubmitReview.setOnClickListener(v -> {
             if (mAuth.getCurrentUser() == null) {
@@ -388,16 +385,14 @@ public class ReviewActivity extends AppCompatActivity {
             String activity = spinnerActivity.getSelectedItem().toString();
             String otherActivityDescription = editTextOtherActivity.getText().toString().trim();
 
-            // Kiểm tra dữ liệu
             if (activity.equals("Chọn hoạt động")) {
-                activity = null; // Để trống nếu không chọn
+                activity = null;
             }
-            if (activity != null && activity.equals("others") && otherActivityDescription.isEmpty()) {
+            if (activity != null && activity.equalsIgnoreCase("others") && otherActivityDescription.isEmpty()) {
                 Toast.makeText(this, "Vui lòng nhập mô tả hoạt động!", Toast.LENGTH_SHORT).show();
                 return;
             }
 
-            // Upload hình ảnh và video trước khi lưu đánh giá
             uploadMediaAndSubmitReview(rating, comment, activity, otherActivityDescription, dialog);
         });
 
@@ -405,18 +400,11 @@ public class ReviewActivity extends AppCompatActivity {
     }
 
     private void uploadMediaAndSubmitReview(float rating, String comment, String activity, String otherActivityDescription, AlertDialog dialog) {
-        // Reset danh sách URL
         uploadedImageUrls.clear();
-        uploadedVideoUrl = null;
 
-        // Upload hình ảnh nếu có
         if (!selectedImageUris.isEmpty()) {
             uploadImages(rating, comment, activity, otherActivityDescription, dialog);
-        } else if (selectedVideoUri != null) {
-            // Nếu không có hình ảnh nhưng có video, upload video
-            uploadVideo(rating, comment, activity, otherActivityDescription, dialog);
         } else {
-            // Nếu không có hình ảnh và video, lưu đánh giá ngay
             submitReview(rating, comment, activity, otherActivityDescription, dialog);
         }
     }
@@ -427,7 +415,6 @@ public class ReviewActivity extends AppCompatActivity {
 
         for (Uri imageUri : selectedImageUris) {
             try {
-                // Đọc dữ liệu từ URI
                 byte[] imageBytes = readBytesFromUri(imageUri);
                 if (imageBytes == null) {
                     Toast.makeText(this, "Không thể đọc dữ liệu hình ảnh!", Toast.LENGTH_SHORT).show();
@@ -435,14 +422,12 @@ public class ReviewActivity extends AppCompatActivity {
                     return;
                 }
 
-                // Tạo request body
                 RequestBody requestBody = new MultipartBody.Builder()
                         .setType(MultipartBody.FORM)
                         .addFormDataPart("image", "image.jpg", RequestBody.create(MediaType.parse("image/*"), imageBytes))
                         .addFormDataPart("type", "file")
                         .build();
 
-                // Tạo request
                 Request request = new Request.Builder()
                         .url(IMGUR_UPLOAD_URL)
                         .header("Authorization", "Client-ID " + IMGUR_CLIENT_ID)
@@ -468,15 +453,8 @@ public class ReviewActivity extends AppCompatActivity {
                                 uploadedImageUrls.add(imageUrl);
                                 uploadedCount[0]++;
 
-                                // Khi tất cả hình ảnh đã được upload
                                 if (uploadedCount[0] == totalImages) {
-                                    if (selectedVideoUri != null) {
-                                        // Nếu có video, tiếp tục upload video
-                                        uploadVideo(rating, comment, activity, otherActivityDescription, dialog);
-                                    } else {
-                                        // Nếu không có video, lưu đánh giá
-                                        submitReview(rating, comment, activity, otherActivityDescription, dialog);
-                                    }
+                                    submitReview(rating, comment, activity, otherActivityDescription, dialog);
                                 }
                             } catch (Exception e) {
                                 runOnUiThread(() -> {
@@ -502,114 +480,61 @@ public class ReviewActivity extends AppCompatActivity {
         }
     }
 
-    private void uploadVideo(float rating, String comment, String activity, String otherActivityDescription, AlertDialog dialog) {
-        try {
-            // Đọc dữ liệu từ URI
-            byte[] videoBytes = readBytesFromUri(selectedVideoUri);
-            if (videoBytes == null) {
-                Toast.makeText(this, "Không thể đọc dữ liệu video!", Toast.LENGTH_SHORT).show();
+    private void submitReview(float rating, String comment, String activity, String otherActivityDescription, AlertDialog dialog) {
+        DocumentReference userRef = db.collection("users").document(userId);
+        userRef.get().addOnSuccessListener(documentSnapshot -> {
+            if (!documentSnapshot.exists()) {
+                Toast.makeText(this, "Không tìm thấy thông tin người dùng!", Toast.LENGTH_SHORT).show();
                 dialog.dismiss();
                 return;
             }
 
-            // Tạo request body
-            RequestBody requestBody = new MultipartBody.Builder()
-                    .setType(MultipartBody.FORM)
-                    .addFormDataPart("video", "video.mp4", RequestBody.create(MediaType.parse("video/*"), videoBytes))
-                    .addFormDataPart("type", "file")
-                    .addFormDataPart("disable_audio", "0")
-                    .build();
+            String username = documentSnapshot.getString("name");
+            if (username == null || username.isEmpty()) {
+                username = "Ẩn danh";
+            }
+            Log.d("ReviewActivity", "Username retrieved: " + username);
 
-            // Tạo request
-            Request request = new Request.Builder()
-                    .url(IMGUR_UPLOAD_URL)
-                    .header("Authorization", "Client-ID " + IMGUR_CLIENT_ID)
-                    .post(requestBody)
-                    .build();
+            Map<String, Object> reviewData = new HashMap<>();
+            reviewData.put("userId", userId);
+            reviewData.put("cafeId", cafeId);
+            reviewData.put("rating", rating);
+            reviewData.put("comment", comment.isEmpty() ? null : comment);
+            reviewData.put("activity", activity);
+            reviewData.put("otherActivityDescription", activity != null && activity.equalsIgnoreCase("others") ? otherActivityDescription : null);
+            reviewData.put("images", uploadedImageUrls);
+            reviewData.put("timestamp", com.google.firebase.firestore.FieldValue.serverTimestamp());
+            reviewData.put("username", username);
 
-            client.newCall(request).enqueue(new Callback() {
-                @Override
-                public void onFailure(Call call, IOException e) {
-                    runOnUiThread(() -> {
-                        Toast.makeText(ReviewActivity.this, "Lỗi khi upload video: " + e.getMessage(), Toast.LENGTH_SHORT).show();
-                        dialog.dismiss();
-                    });
-                }
+            // Thêm log để kiểm tra giá trị trước khi lưu
+            Log.d("ReviewActivity", "Saving review - activity: " + activity + ", otherActivityDescription: " + otherActivityDescription);
 
-                @Override
-                public void onResponse(Call call, Response response) throws IOException {
-                    if (response.isSuccessful()) {
-                        String responseBody = response.body().string();
-                        try {
-                            JSONObject json = new JSONObject(responseBody);
-                            uploadedVideoUrl = json.getJSONObject("data").getString("link");
-                            // Sau khi upload video xong, lưu đánh giá
-                            submitReview(rating, comment, activity, otherActivityDescription, dialog);
-                        } catch (Exception e) {
-                            runOnUiThread(() -> {
-                                Toast.makeText(ReviewActivity.this, "Lỗi khi phân tích phản hồi: " + e.getMessage(), Toast.LENGTH_SHORT).show();
-                                dialog.dismiss();
-                            });
-                        }
-                    } else {
+            db.collection("reviews").add(reviewData)
+                    .addOnSuccessListener(documentReference -> {
                         runOnUiThread(() -> {
-                            Toast.makeText(ReviewActivity.this, "Lỗi khi upload video: " + response.message(), Toast.LENGTH_SHORT).show();
+                            Toast.makeText(this, "Đánh giá thành công!", Toast.LENGTH_SHORT).show();
+                            updateCafeRating(rating);
+                            updateUserPoints();
+                            updateDailyTaskStatus(userId, "write_review", 10);
                             dialog.dismiss();
+                            selectedImageUris.clear();
+                            uploadedImageUrls.clear();
+                            loadCafeInfo();
+                            loadReviews();
                         });
-                    }
-                    response.close();
-                }
-            });
-        } catch (Exception e) {
+                    })
+                    .addOnFailureListener(e -> runOnUiThread(() -> {
+                        Toast.makeText(this, "Lỗi khi gửi đánh giá: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                        dialog.dismiss();
+                    }));
+        }).addOnFailureListener(e -> {
             runOnUiThread(() -> {
-                Toast.makeText(ReviewActivity.this, "Lỗi khi xử lý video: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Lỗi khi lấy thông tin người dùng: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                 dialog.dismiss();
             });
-        }
+        });
     }
 
-    private void submitReview(float rating, String comment, String activity, String otherActivityDescription, AlertDialog dialog) {
-        // Lưu đánh giá vào Firestore
-        Map<String, Object> reviewData = new HashMap<>();
-        reviewData.put("userId", userId);
-        reviewData.put("cafeId", cafeId);
-        reviewData.put("rating", rating);
-        reviewData.put("comment", comment.isEmpty() ? null : comment);
-        reviewData.put("activity", activity);
-        reviewData.put("otherActivityDescription", activity != null && activity.equals("others") ? otherActivityDescription : null);
-        reviewData.put("images", uploadedImageUrls); // Lưu danh sách URL hình ảnh
-        reviewData.put("video", uploadedVideoUrl); // Lưu URL video
-        reviewData.put("timestamp", com.google.firebase.firestore.FieldValue.serverTimestamp());
-
-        db.collection("reviews").add(reviewData)
-                .addOnSuccessListener(documentReference -> {
-                    runOnUiThread(() -> {
-                        Toast.makeText(this, "Đánh giá thành công!", Toast.LENGTH_SHORT).show();
-                        updateCafeRating(rating); // Cập nhật rating của quán
-                        updateUserPoints(); // Thêm 1 điểm cho đánh giá
-
-                        // Cập nhật trạng thái nhiệm vụ đánh giá
-                        updateDailyTaskStatus(userId, "write_review", 10); // 1 điểm cho đánh giá
-
-                        dialog.dismiss();
-
-                        // Reset danh sách sau khi gửi đánh giá thành công
-                        selectedImageUris.clear();
-                        selectedVideoUri = null;
-                        uploadedImageUrls.clear();
-                        uploadedVideoUrl = null;
-
-                        // Làm mới giao diện
-                        loadCafeInfo();
-                    });
-                })
-                .addOnFailureListener(e -> runOnUiThread(() -> {
-                    Toast.makeText(this, "Lỗi khi gửi đánh giá: " + e.getMessage(), Toast.LENGTH_SHORT).show();
-                    dialog.dismiss();
-                }));
-    }
-
-    // Thêm phương thức cập nhật trạng thái nhiệm vụ
     private void updateDailyTaskStatus(String userId, String taskId, int points) {
         DocumentReference userRef = db.collection("users").document(userId);
 
@@ -622,9 +547,7 @@ public class ReviewActivity extends AppCompatActivity {
         updates.put("daily_tasks." + taskId, taskData);
 
         userRef.update(updates)
-                .addOnSuccessListener(aVoid -> {
-                    // Có thể thông báo nếu cần
-                })
+                .addOnSuccessListener(aVoid -> {})
                 .addOnFailureListener(e -> {
                     Toast.makeText(this, "Lỗi khi cập nhật nhiệm vụ!", Toast.LENGTH_SHORT).show();
                 });
@@ -659,14 +582,11 @@ public class ReviewActivity extends AppCompatActivity {
             int newPoints = (currentPoints != null ? currentPoints.intValue() : 0) + 10;
 
             userRef.update("points", newPoints)
-                    .addOnSuccessListener(aVoid -> {
-                        // Có thể thêm thông báo nếu muốn
-                    })
+                    .addOnSuccessListener(aVoid -> {})
                     .addOnFailureListener(e -> Toast.makeText(this, "Lỗi khi cập nhật điểm!", Toast.LENGTH_SHORT).show());
         });
     }
 
-    // Phương thức đọc dữ liệu từ URI
     private byte[] readBytesFromUri(Uri uri) {
         try {
             InputStream inputStream = getContentResolver().openInputStream(uri);
@@ -685,5 +605,17 @@ public class ReviewActivity extends AppCompatActivity {
             e.printStackTrace();
             return null;
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        if (sourceFragment != null) {
+            Intent intent = new Intent(this, HomeActivity.class);
+            intent.putExtra("fragmentToLoad", sourceFragment);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+            startActivity(intent);
+        }
+        finish();
     }
 }

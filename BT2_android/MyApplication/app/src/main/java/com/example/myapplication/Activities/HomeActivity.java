@@ -30,18 +30,16 @@ public class HomeActivity extends AppCompatActivity {
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private DrawerLayout drawerLayout;
     private BottomNavigationView bottomNavigationView;
-    private boolean isManualNavigation = false; // Cờ để kiểm soát xung đột
-    private String currentFragmentTag = "HomeFragment"; // Theo dõi fragment hiện tại
+    private boolean isManualNavigation = false;
+    private String currentFragmentTag = "HomeFragment";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
-        // Khởi tạo FirebaseAuth
         mAuth = FirebaseAuth.getInstance();
 
-        // Kiểm tra đăng nhập
         FirebaseUser user = mAuth.getCurrentUser();
         if (user == null) {
             startActivity(new Intent(this, LoginActivity.class));
@@ -49,14 +47,12 @@ public class HomeActivity extends AppCompatActivity {
             return;
         }
 
-        // Thiết lập Toolbar
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayShowTitleEnabled(false);
         }
 
-        // Thiết lập Navigation Drawer
         drawerLayout = findViewById(R.id.drawer_layout);
         NavigationView navigationView = findViewById(R.id.nav_view);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -64,7 +60,6 @@ public class HomeActivity extends AppCompatActivity {
         drawerLayout.addDrawerListener(toggle);
         toggle.syncState();
 
-        // Xử lý sự kiện Navigation Drawer
         navigationView.setNavigationItemSelectedListener(item -> {
             int itemId = item.getItemId();
             if (itemId == R.id.nav_chatbot) {
@@ -80,7 +75,6 @@ public class HomeActivity extends AppCompatActivity {
             return true;
         });
 
-        // Lấy tên người dùng từ Firestore và hiển thị trên Toolbar
         db.collection("users").document(user.getUid()).get()
                 .addOnSuccessListener(documentSnapshot -> {
                     if (documentSnapshot.exists()) {
@@ -88,12 +82,10 @@ public class HomeActivity extends AppCompatActivity {
                         TextView toolbarTitle = findViewById(R.id.toolbar_title);
                         toolbarTitle.setText("Xin chào, " + (name != null ? name : "Khách") + " ☕");
 
-                        // Hiển thị thông báo khi đăng nhập thành công
                         showAndSaveNotification("Đừng bỏ lỡ những ưu đãi hot........");
                     }
                 });
 
-        // Xử lý sự kiện cho các icon trên Toolbar
         findViewById(R.id.notification_icon).setOnClickListener(v -> {
             startActivity(new Intent(this, NotificationActivity.class));
         });
@@ -102,12 +94,11 @@ public class HomeActivity extends AppCompatActivity {
             startActivity(new Intent(this, ProfileActivity.class));
         });
 
-        // Thiết lập Bottom Navigation
         bottomNavigationView = findViewById(R.id.bottom_navigation);
         bottomNavigationView.setOnNavigationItemSelectedListener(item -> {
             if (isManualNavigation) {
-                isManualNavigation = false; // Reset cờ sau khi xử lý
-                return true; // Không thực hiện thay đổi fragment nếu là điều hướng thủ công
+                isManualNavigation = false;
+                return true;
             }
 
             Fragment selectedFragment = null;
@@ -118,7 +109,6 @@ public class HomeActivity extends AppCompatActivity {
             } else if (itemId == R.id.nav_checkin) {
                 selectedFragment = new CheckinFragment();
                 currentFragmentTag = "CheckinFragment";
-                // Hiển thị thông báo khi chuyển sang CheckinFragment
                 showAndSaveNotification("Hãy khám phá thêm nhiều quán cafe hot gần đây");
             } else if (itemId == R.id.nav_search) {
                 selectedFragment = new SearchFragment();
@@ -136,9 +126,44 @@ public class HomeActivity extends AppCompatActivity {
             return true;
         });
 
-        // Mặc định hiển thị HomeFragment
+        // Kiểm tra fragment cần hiển thị từ Intent
+        String fragmentToLoad = getIntent().getStringExtra("fragmentToLoad");
+        Fragment initialFragment;
+        if (fragmentToLoad != null) {
+            switch (fragmentToLoad) {
+                case "HomeFragment":
+                    initialFragment = new HomeFragment();
+                    currentFragmentTag = "HomeFragment";
+                    bottomNavigationView.setSelectedItemId(R.id.nav_home);
+                    break;
+                case "SearchFragment":
+                    initialFragment = new SearchFragment();
+                    currentFragmentTag = "SearchFragment";
+                    bottomNavigationView.setSelectedItemId(R.id.nav_search);
+                    break;
+                case "CheckinFragment":
+                    initialFragment = new CheckinFragment();
+                    currentFragmentTag = "CheckinFragment";
+                    bottomNavigationView.setSelectedItemId(R.id.nav_checkin);
+                    break;
+                case "RewardsFragment":
+                    initialFragment = new RewardsFragment();
+                    currentFragmentTag = "RewardsFragment";
+                    bottomNavigationView.setSelectedItemId(R.id.nav_rewards);
+                    break;
+                default:
+                    initialFragment = new HomeFragment();
+                    currentFragmentTag = "HomeFragment";
+                    bottomNavigationView.setSelectedItemId(R.id.nav_home);
+            }
+        } else {
+            initialFragment = new HomeFragment();
+            currentFragmentTag = "HomeFragment";
+            bottomNavigationView.setSelectedItemId(R.id.nav_home);
+        }
+
         getSupportFragmentManager().beginTransaction()
-                .replace(R.id.fragment_container, new HomeFragment())
+                .replace(R.id.fragment_container, initialFragment)
                 .commit();
     }
 
@@ -152,10 +177,8 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     private void showAndSaveNotification(String message) {
-        // Hiển thị thông báo bằng Toast
         Toast.makeText(this, message, Toast.LENGTH_LONG).show();
 
-        // Lưu thông báo vào Firestore
         String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
         Notification notification = new Notification(message, System.currentTimeMillis());
 
@@ -163,15 +186,12 @@ public class HomeActivity extends AppCompatActivity {
                 .document(userId)
                 .collection("user_notifications")
                 .add(notification)
-                .addOnSuccessListener(documentReference -> {
-                    // Lưu thành công
-                })
+                .addOnSuccessListener(documentReference -> {})
                 .addOnFailureListener(e -> {
                     Toast.makeText(this, "Lỗi khi lưu thông báo!", Toast.LENGTH_SHORT).show();
                 });
     }
 
-    // Phương thức công khai để fragment gọi
     public void setManualNavigation(boolean value) {
         isManualNavigation = value;
     }
