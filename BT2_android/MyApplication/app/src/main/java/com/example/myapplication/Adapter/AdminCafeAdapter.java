@@ -41,7 +41,6 @@ public class AdminCafeAdapter extends RecyclerView.Adapter<AdminCafeAdapter.Cafe
         holder.tvCafeName.setText(cafe.getName() != null ? cafe.getName() : "Tên quán");
         holder.tvAddress.setText("Địa chỉ: " + (cafe.getLocationText() != null ? cafe.getLocationText() : "Không có địa chỉ"));
         holder.tvDescription.setText("Mô tả: " + (cafe.getDescription() != null ? cafe.getDescription() : "Không có mô tả"));
-        holder.tvRating.setText("Đánh giá: " + (cafe.getRatingStar() != null ? String.format("%.1f", cafe.getRatingStar()) : "0.0") + "/5");
         holder.tvActivity.setText("Hoạt động: " + (cafe.getActivity() != null ? cafe.getActivity() : "Không có"));
 
         // Hiển thị hình ảnh
@@ -73,7 +72,7 @@ public class AdminCafeAdapter extends RecyclerView.Adapter<AdminCafeAdapter.Cafe
 
     public static class CafeViewHolder extends RecyclerView.ViewHolder {
         ImageView ivCafeImage;
-        TextView tvCafeName, tvAddress, tvDescription, tvRating, tvActivity;
+        TextView tvCafeName, tvAddress, tvDescription, tvActivity;
         Button btnEdit, btnDelete;
 
         public CafeViewHolder(@NonNull View itemView) {
@@ -82,7 +81,6 @@ public class AdminCafeAdapter extends RecyclerView.Adapter<AdminCafeAdapter.Cafe
             tvCafeName = itemView.findViewById(R.id.tvCafeName);
             tvAddress = itemView.findViewById(R.id.tvAddress);
             tvDescription = itemView.findViewById(R.id.tvDescription);
-            tvRating = itemView.findViewById(R.id.tvRating);
             tvActivity = itemView.findViewById(R.id.tvActivity);
             btnEdit = itemView.findViewById(R.id.btn_edit);
             btnDelete = itemView.findViewById(R.id.btn_delete);
