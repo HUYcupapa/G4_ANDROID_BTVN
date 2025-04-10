@@ -107,16 +107,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="25dc4141-94f9-4db8-9caf-6e884ed3b10e" name="Changes" comment="Refactor Project #2">
-      <change afterPath="$PROJECT_DIR$/MyApplication/app/src/main/java/com/example/myapplication/Activities/NotificationActivity.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/MyApplication/app/src/main/java/com/example/myapplication/Adapter/NotificationAdapter.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/MyApplication/app/src/main/java/com/example/myapplication/Model/Notification.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/MyApplication/app/src/main/res/layout/activity_notification.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/MyApplication/app/src/main/res/layout/item_notification.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/MyApplication/app/src/main/AndroidManifest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/MyApplication/app/src/main/AndroidManifest.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/MyApplication/app/src/main/java/com/example/myapplication/Activities/HomeActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/MyApplication/app/src/main/java/com/example/myapplication/Activities/HomeActivity.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/MyApplication/app/src/main/java/com/example/myapplication/Model/MyFirebaseMessagingService.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/MyApplication/app/src/main/res/layout/activity_home.xml" beforeDir="false" afterPath="$PROJECT_DIR$/MyApplication/app/src/main/res/layout/activity_home.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -233,7 +224,7 @@
     "cf.first.check.clang-format": "false",
     "cidr.known.project.marker": "true",
     "com.google.services.firebase.aqiPopupShown": "true",
-    "git-widget-placeholder": "Merging Cuong",
+    "git-widget-placeholder": "Cuong",
     "kotlin-language-version-configured": "true",
     "last_opened_file_path": "D:/CODE_TLU/ANDROID/G4_ANDROID_BTVN/BT2_android/MyApplication/app/src/main/res/drawable",
     "project.structure.last.edited": "Modules",
