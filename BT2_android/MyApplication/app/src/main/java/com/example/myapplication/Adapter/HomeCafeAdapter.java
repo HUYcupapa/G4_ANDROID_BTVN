@@ -20,16 +20,14 @@ public class HomeCafeAdapter extends RecyclerView.Adapter<HomeCafeAdapter.CafeVi
 
     private Context context;
     private List<Cafe> cafeList;
-    private OnCafeClickListener onCafeClickListener; // Listener cho sự kiện nhấn
+    private OnCafeClickListener onCafeClickListener;
 
-    // Cập nhật constructor để nhận listener
     public HomeCafeAdapter(Context context, List<Cafe> cafeList, OnCafeClickListener listener) {
         this.context = context;
         this.cafeList = cafeList;
         this.onCafeClickListener = listener;
     }
 
-    // Constructor cũ (giữ lại để tương thích nếu cần)
     public HomeCafeAdapter(Context context, List<Cafe> cafeList) {
         this(context, cafeList, null);
     }
@@ -87,7 +85,6 @@ public class HomeCafeAdapter extends RecyclerView.Adapter<HomeCafeAdapter.CafeVi
         }
     }
 
-    // Interface cho sự kiện nhấn vào item
     public interface OnCafeClickListener {
         void onCafeClick(Cafe cafe);
     }
