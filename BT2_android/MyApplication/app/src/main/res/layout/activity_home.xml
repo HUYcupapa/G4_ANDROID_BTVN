@@ -75,7 +75,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/toolbar"
-            android:background="@color/coffee_primary"
+            android:background="@color/coffee_accent"
             android:padding="10dp"
             android:visibility="gone"
             android:orientation="horizontal">
