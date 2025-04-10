@@ -195,6 +195,9 @@ public class LoginActivity extends AppCompatActivity {
         dailyTasks.put("write_review", createTaskMap(false, 0));
         userData.put("daily_tasks", dailyTasks);
 
+        Map<String, Object> vouchers = new HashMap<>(); // Khởi tạo kho voucher rỗng
+        userData.put("vouchers", vouchers);
+
         userRef.set(userData)
                 .addOnSuccessListener(aVoid -> {
                     Toast.makeText(this, "Khởi tạo dữ liệu người dùng thành công!", Toast.LENGTH_SHORT).show();

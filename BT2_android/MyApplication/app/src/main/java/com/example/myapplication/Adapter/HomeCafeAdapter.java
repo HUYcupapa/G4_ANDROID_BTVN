@@ -20,16 +20,14 @@ public class HomeCafeAdapter extends RecyclerView.Adapter<HomeCafeAdapter.CafeVi
 
     private Context context;
     private List<Cafe> cafeList;
-    private OnCafeClickListener onCafeClickListener; // Listener cho sự kiện nhấn
+    private OnCafeClickListener onCafeClickListener;
 
-    // Constructor đầy đủ với listener
     public HomeCafeAdapter(Context context, List<Cafe> cafeList, OnCafeClickListener listener) {
         this.context = context;
         this.cafeList = cafeList;
         this.onCafeClickListener = listener;
     }
 
-    // Constructor không có listener (tương thích với code cũ)
     public HomeCafeAdapter(Context context, List<Cafe> cafeList) {
         this(context, cafeList, null);
     }
@@ -50,7 +48,7 @@ public class HomeCafeAdapter extends RecyclerView.Adapter<HomeCafeAdapter.CafeVi
         holder.tvAddress.setText("Địa chỉ: " + (cafe.getLocationText() != null ? cafe.getLocationText() : "Không có địa chỉ"));
         holder.tvDescription.setText("Mô tả: " + (cafe.getDescription() != null ? cafe.getDescription() : "Không có mô tả"));
         holder.tvRating.setText("Đánh giá: " + (cafe.getRatingStar() != null ? String.format("%.1f", cafe.getRatingStar()) : "0.0") + "/5");
-        holder.tvActivity.setText("Hoạt động: " + (cafe.getActivity() != null ? cafe.getActivity() : "Không có")); // Thêm dòng này
+        holder.tvActivity.setText("Hoạt động: " + (cafe.getActivity() != null ? cafe.getActivity() : "Không có"));
 
         // Hiển thị hình ảnh
         if (cafe.getImage1() != null && !cafe.getImage1().isEmpty()) {
@@ -72,10 +70,9 @@ public class HomeCafeAdapter extends RecyclerView.Adapter<HomeCafeAdapter.CafeVi
         return cafeList.size();
     }
 
-    // Class ViewHolder ánh xạ với layout
     public static class CafeViewHolder extends RecyclerView.ViewHolder {
         ImageView ivCafeImage;
-        TextView tvCafeName, tvAddress, tvDescription, tvRating, tvActivity; // Thêm tvActivity
+        TextView tvCafeName, tvAddress, tvDescription, tvRating, tvActivity;
 
         public CafeViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -84,11 +81,10 @@ public class HomeCafeAdapter extends RecyclerView.Adapter<HomeCafeAdapter.CafeVi
             tvAddress = itemView.findViewById(R.id.tvAddress);
             tvDescription = itemView.findViewById(R.id.tvDescription);
             tvRating = itemView.findViewById(R.id.tvRating);
-            tvActivity = itemView.findViewById(R.id.tvActivity); // Thêm ánh xạ tvActivity
+            tvActivity = itemView.findViewById(R.id.tvActivity);
         }
     }
 
-    // Interface cho sự kiện nhấn vào item
     public interface OnCafeClickListener {
         void onCafeClick(Cafe cafe);
     }
