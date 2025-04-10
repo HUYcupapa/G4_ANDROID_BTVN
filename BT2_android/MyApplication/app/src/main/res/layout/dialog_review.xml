@@ -102,7 +102,7 @@
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:src="@android:drawable/ic_menu_camera"
-                android:contentDescription="Thêm hình ảnh" />
+                android:contentDescription="Thêm hình ảnh (tối đa 3)" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -115,30 +115,30 @@
         </LinearLayout>
 
         <!-- Nút Thêm video -->
-        <LinearLayout
-            android:id="@+id/btnAddVideo"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:gravity="center"
-            android:background="@drawable/rectangle_border_orange"
-            android:padding="8dp">
+<!--        <LinearLayout-->
+<!--            android:id="@+id/btnAddVideo"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:orientation="vertical"-->
+<!--            android:gravity="center"-->
+<!--            android:background="@drawable/rectangle_border_orange"-->
+<!--            android:padding="8dp">-->
 
-            <ImageView
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:src="@android:drawable/ic_menu_slideshow"
-                android:contentDescription="Thêm video" />
+<!--            <ImageView-->
+<!--                android:layout_width="40dp"-->
+<!--                android:layout_height="40dp"-->
+<!--                android:src="@android:drawable/ic_menu_slideshow"-->
+<!--                android:contentDescription="Thêm video" />-->
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Thêm video"
-                android:textSize="14sp"
-                android:textStyle="bold"
-                android:textColor="#D2691E"/>
+<!--            <TextView-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:text="Thêm video"-->
+<!--                android:textSize="14sp"-->
+<!--                android:textStyle="bold"-->
+<!--                android:textColor="#D2691E"/>-->
 
-        </LinearLayout>
+<!--        </LinearLayout>-->
 
     </LinearLayout>
 

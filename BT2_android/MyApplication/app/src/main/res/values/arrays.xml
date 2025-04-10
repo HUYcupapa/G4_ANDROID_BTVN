@@ -17,12 +17,21 @@
     </string-array>
 
     <!-- Hoạt động -->
-    <string-array name="activity_options">
+    <string-array name="activity_search_options">
         <item>Tất cả</item>
+        <item>Không có</item>
         <item>Boardgame</item>
         <item>Book</item>
         <item>Workshop</item>
         <item>Others</item>
-        <item>Không có</item>
     </string-array>
+
+    <string-array name="activity_review_options">
+        <item>Không có</item>
+        <item>Boardgame</item>
+        <item>Book</item>
+        <item>Workshop</item>
+        <item>Others</item>
+    </string-array>
+
 </resources>

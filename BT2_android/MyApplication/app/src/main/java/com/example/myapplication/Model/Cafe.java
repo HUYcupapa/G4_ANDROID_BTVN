@@ -13,7 +13,7 @@ public class Cafe {
     private String image1;
     private double lat;
     private double lng;
-    private List<Comment> comments;
+    private List<Review> reviews;
 
     // Constructor rỗng (yêu cầu bởi Firestore)
     public Cafe() {}
@@ -99,11 +99,11 @@ public class Cafe {
         this.lng = lng;
     }
 
-    public List<Comment> getComments() {
-        return comments;
+    public List<Review> getComments() {
+        return reviews;
     }
 
-    public void setComments(List<Comment> comments) {
-        this.comments = comments;
+    public void setComments(List<Review> reviews) {
+        this.reviews = reviews;
     }
 }

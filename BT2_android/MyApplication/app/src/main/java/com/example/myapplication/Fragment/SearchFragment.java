@@ -140,6 +140,7 @@ public class SearchFragment extends Fragment {
                         if (cafe != null) {
                             Intent intent = new Intent(requireContext(), ReviewActivity.class);
                             intent.putExtra("cafeId", cafe.getId());
+                            intent.putExtra("sourceFragment", "SearchFragment"); // Thêm sourceFragment
                             startActivity(intent);
                         }
                     }

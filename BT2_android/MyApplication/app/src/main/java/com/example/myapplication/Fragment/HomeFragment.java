@@ -95,6 +95,7 @@ public class HomeFragment extends Fragment {
             // Xử lý khi nhấn vào quán cafe
             Intent intent = new Intent(requireContext(), ReviewActivity.class);
             intent.putExtra("cafeId", cafe.getId());
+            intent.putExtra("sourceFragment", "HomeFragment"); // Thêm sourceFragment
             startActivity(intent);
         });
         recyclerView.setAdapter(cafeAdapter);
