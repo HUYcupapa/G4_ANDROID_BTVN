@@ -46,9 +46,9 @@ public class HomeCafeAdapter extends RecyclerView.Adapter<HomeCafeAdapter.CafeVi
         // Hiển thị thông tin quán
         holder.tvCafeName.setText(cafe.getName() != null ? cafe.getName() : "Tên quán");
         holder.tvAddress.setText("Địa chỉ: " + (cafe.getLocationText() != null ? cafe.getLocationText() : "Không có địa chỉ"));
-        holder.tvRating.setText("Đánh giá: " + (cafe.getRatingStar() != null ? String.format("%.1f", cafe.getRatingStar()) : "0.0") + "/5");
         holder.tvDescription.setText("Mô tả: " + (cafe.getDescription() != null ? cafe.getDescription() : "Không có mô tả"));
-        holder.tvActivity.setText("Hoạt động: " + (cafe.getActivity() != null ? cafe.getActivity() : "Không có hoạt động"));
+        holder.tvRating.setText("Đánh giá: " + (cafe.getRatingStar() != null ? String.format("%.1f", cafe.getRatingStar()) : "0.0") + "/5");
+        holder.tvActivity.setText("Hoạt động: " + (cafe.getActivity() != null ? cafe.getActivity() : "Không có"));
 
         // Hiển thị hình ảnh
         if (cafe.getImage1() != null && !cafe.getImage1().isEmpty()) {
@@ -72,15 +72,15 @@ public class HomeCafeAdapter extends RecyclerView.Adapter<HomeCafeAdapter.CafeVi
 
     public static class CafeViewHolder extends RecyclerView.ViewHolder {
         ImageView ivCafeImage;
-        TextView tvCafeName, tvAddress, tvRating, tvDescription, tvActivity;
+        TextView tvCafeName, tvAddress, tvDescription, tvRating, tvActivity;
 
         public CafeViewHolder(@NonNull View itemView) {
             super(itemView);
             ivCafeImage = itemView.findViewById(R.id.ivCafeImage);
             tvCafeName = itemView.findViewById(R.id.tvCafeName);
             tvAddress = itemView.findViewById(R.id.tvAddress);
-            tvRating = itemView.findViewById(R.id.tvRating);
             tvDescription = itemView.findViewById(R.id.tvDescription);
+            tvRating = itemView.findViewById(R.id.tvRating);
             tvActivity = itemView.findViewById(R.id.tvActivity);
         }
     }
