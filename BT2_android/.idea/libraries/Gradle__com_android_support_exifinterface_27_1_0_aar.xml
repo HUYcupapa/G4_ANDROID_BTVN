@@ -1,10 +1,8 @@
 <component name="libraryTable">
   <library name="Gradle: com.android.support:exifinterface:27.1.0@aar" external-system-id="GRADLE">
     <CLASSES>
-
       <root url="file://$PROJECT_DIR$/../../DEMO_CODE/LoginScreenDemo/.gradle/caches/transforms-4/74626ee569a7fe2234ebaa25fdc055a9/transformed/exifinterface-27.1.0/AndroidManifest.xml" />
       <root url="jar://$PROJECT_DIR$/../../DEMO_CODE/LoginScreenDemo/.gradle/caches/transforms-4/74626ee569a7fe2234ebaa25fdc055a9/transformed/exifinterface-27.1.0/jars/classes.jar!/" />
-
     </CLASSES>
     <JAVADOC />
     <SOURCES>
