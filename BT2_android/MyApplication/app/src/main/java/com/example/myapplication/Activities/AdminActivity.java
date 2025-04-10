@@ -1,6 +1,7 @@
 package com.example.myapplication.Activities;
 
 import android.Manifest;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
@@ -66,6 +67,8 @@ public class AdminActivity extends AppCompatActivity implements AdminCafeAdapter
     private static final String IMGUR_UPLOAD_URL = "https://api.imgur.com/3/upload";
     private static final int PERMISSION_REQUEST_CODE = 100;
     private HorizontalScrollView mediaContainer;
+    private ImageButton btnLogout; // Thêm ImageButton cho nút đăng xuất
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -97,6 +100,19 @@ public class AdminActivity extends AppCompatActivity implements AdminCafeAdapter
         // Khởi tạo nút Thêm Quán
         btnAddCafe = findViewById(R.id.btn_add_cafe);
         btnAddCafe.setOnClickListener(v -> showAddEditCafeDialog(null));
+
+
+
+        // Khởi tạo nút Đăng Xuất
+        btnLogout = findViewById(R.id.btn_logout);
+        btnLogout.setOnClickListener(v -> {
+            // Chuyển hướng về màn hình đăng nhập
+            Intent intent = new Intent(AdminActivity.this, LoginActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK); // Xóa toàn bộ stack activity
+            startActivity(intent);
+            finish(); // Đóng AdminActivity
+        });
+
 
         // Khởi tạo ActivityResultLauncher để chọn hình ảnh
         imagePickerLauncher = registerForActivityResult(

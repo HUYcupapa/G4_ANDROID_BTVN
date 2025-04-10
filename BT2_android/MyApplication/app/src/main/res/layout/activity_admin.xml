@@ -28,6 +28,16 @@
             android:text="Quản Lý Quán Cà Phê"
             android:textColor="@color/white"
             android:textSize="18sp" />
+
+        <!-- Biểu tượng Đăng Xuất -->
+        <ImageButton
+            android:id="@+id/btn_logout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:background="@android:color/transparent"
+            android:src="@drawable/ic_logout"
+            android:contentDescription="Đăng Xuất" />
     </androidx.appcompat.widget.Toolbar>
 
     <!-- RecyclerView để hiển thị danh sách quán cà phê -->
