@@ -39,7 +39,7 @@ public class AdminCafeAdapter extends RecyclerView.Adapter<AdminCafeAdapter.Cafe
 
         // Hiển thị thông tin quán
         holder.tvCafeName.setText(cafe.getName() != null ? cafe.getName() : "Tên quán");
-        holder.tvAddress.setText("Địa chỉ: " + (cafe.getLocationText() != null ? cafe.getLocationText() : "Không có địa chỉ"));
+        holder.tvAddress.setText("Địa chỉ: " + (cafe.getLocation() != null ? cafe.getLocation() : "Không có địa chỉ"));
         holder.tvDescription.setText("Mô tả: " + (cafe.getDescription() != null ? cafe.getDescription() : "Không có mô tả"));
         holder.tvActivity.setText("Hoạt động: " + (cafe.getActivity() != null ? cafe.getActivity() : "Không có"));
 

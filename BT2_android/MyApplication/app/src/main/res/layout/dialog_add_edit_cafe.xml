@@ -51,16 +51,7 @@
             android:textColor="@color/text_primary" />
     </com.google.android.material.textfield.TextInputLayout>
 
-    <!-- Nút Chọn Vị Trí Trên Bản Đồ -->
-    <Button
-        android:id="@+id/btn_select_location"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:backgroundTint="@color/coffee_primary"
-        android:text="Chọn Trên Bản Đồ"
-        android:textColor="@color/white"
-        android:textSize="14sp" />
+
 
     <!-- Hoạt Động -->
     <Spinner
@@ -119,16 +110,7 @@
         android:textColor="@color/white"
         android:textSize="14sp" />
 
-    <!-- Nút Thêm Video -->
-    <Button
-        android:id="@+id/btn_add_video"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:backgroundTint="@color/coffee_primary"
-        android:text="Thêm Video (Tùy Chọn)"
-        android:textColor="@color/white"
-        android:textSize="14sp" />
+
 
     <!-- Container Hiển Thị Media -->
     <HorizontalScrollView
