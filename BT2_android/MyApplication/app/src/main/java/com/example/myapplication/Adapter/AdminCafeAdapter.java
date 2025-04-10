@@ -9,7 +9,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
-import com.example.myapplication.Model.Cafe;
+import com.example.myapplication.Model.CafeAdmin;
 import com.example.myapplication.R;
 import com.squareup.picasso.Picasso;
 import java.util.List;
@@ -17,10 +17,10 @@ import java.util.List;
 public class AdminCafeAdapter extends RecyclerView.Adapter<AdminCafeAdapter.CafeViewHolder> {
 
     private Context context;
-    private List<Cafe> cafeList;
+    private List<CafeAdmin> cafeList;
     private OnCafeActionListener onCafeActionListener;
 
-    public AdminCafeAdapter(Context context, List<Cafe> cafeList, OnCafeActionListener listener) {
+    public AdminCafeAdapter(Context context, List<CafeAdmin> cafeList, OnCafeActionListener listener) {
         this.context = context;
         this.cafeList = cafeList;
         this.onCafeActionListener = listener;
@@ -35,7 +35,7 @@ public class AdminCafeAdapter extends RecyclerView.Adapter<AdminCafeAdapter.Cafe
 
     @Override
     public void onBindViewHolder(@NonNull CafeViewHolder holder, int position) {
-        Cafe cafe = cafeList.get(position);
+        CafeAdmin cafe = cafeList.get(position);
 
         // Hiển thị thông tin quán
         holder.tvCafeName.setText(cafe.getName() != null ? cafe.getName() : "Tên quán");
@@ -88,7 +88,7 @@ public class AdminCafeAdapter extends RecyclerView.Adapter<AdminCafeAdapter.Cafe
     }
 
     public interface OnCafeActionListener {
-        void onEditClick(Cafe cafe);
-        void onDeleteClick(Cafe cafe);
+        void onEditClick(CafeAdmin cafe);
+        void onDeleteClick(CafeAdmin cafe);
     }
 }
