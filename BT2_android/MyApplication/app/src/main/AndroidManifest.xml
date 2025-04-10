@@ -58,13 +58,13 @@
             android:name=".Activities.ChatbotActivity"
             android:exported="false" />
 
-        <service
-            android:name=".Model.MyFirebaseMessagingService"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="com.google.firebase.MESSAGING_EVENT" />
-            </intent-filter>
-        </service>
+
+        <activity android:name=".Activities.NotificationActivity"
+            android:exported="false"/>
+
+
+
+
 
 
 

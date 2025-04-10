@@ -1,31 +1,29 @@
 package com.example.myapplication.Activities;
 
-import android.Manifest;
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.TextView;
+import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import com.example.myapplication.Fragment.CheckinFragment;
 import com.example.myapplication.Fragment.HomeFragment;
 import com.example.myapplication.Fragment.RewardsFragment;
 import com.example.myapplication.Fragment.SearchFragment;
+import com.example.myapplication.Model.Notification;
 import com.example.myapplication.R;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.messaging.FirebaseMessaging;
+import java.util.HashMap;
+import java.util.Map;
 
 public class HomeActivity extends AppCompatActivity {
 
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private String currentFragmentTag = "HomeFragment"; // Theo dõi fragment hiện tại
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,43 +37,6 @@ public class HomeActivity extends AppCompatActivity {
             finish();
             return;
         }
-
-        // Yêu cầu quyền thông báo (Android 13+)
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            if (ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
-                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.POST_NOTIFICATIONS}, 100);
-            }
-        }
-
-        // Lấy và lưu FCM token
-        FirebaseMessaging.getInstance().getToken()
-                .addOnCompleteListener(task -> {
-                    if (task.isSuccessful()) {
-                        String token = task.getResult();
-                        Log.d("FCM Token", token);
-                        // Lưu token vào Firestore
-                        db.collection("users").document(user.getUid())
-                                .update("fcmToken", token)
-                                .addOnSuccessListener(aVoid -> Log.d("FCM Token", "Token saved successfully"))
-                                .addOnFailureListener(e -> Log.e("FCM Token", "Error saving token", e));
-                    } else {
-                        Log.e("FCM Token", "Failed to get token", task.getException());
-                    }
-                });
-
-        // Đăng ký topic để nhận thông báo
-        FirebaseMessaging.getInstance().subscribeToTopic("promo_notifications")
-                .addOnCompleteListener(task -> {
-                    if (task.isSuccessful()) {
-                        Log.d("FCM Topic", "Subscribed to promo_notifications");
-                    } else {
-                        Log.e("FCM Topic", "Failed to subscribe to topic", task.getException());
-                    }
-                });
-
-
-
-
 
         // Thiết lập Toolbar
         Toolbar toolbar = findViewById(R.id.toolbar);
@@ -91,6 +52,9 @@ public class HomeActivity extends AppCompatActivity {
                         String name = documentSnapshot.getString("name");
                         TextView toolbarTitle = findViewById(R.id.toolbar_title);
                         toolbarTitle.setText("Xin chào, " + (name != null ? name : "Khách") + " ☕");
+
+                        // Hiển thị thông báo khi đăng nhập thành công
+                        showAndSaveNotification("Đừng bỏ lỡ những ưu đãi hot........");
                     }
                 });
 
@@ -102,8 +66,7 @@ public class HomeActivity extends AppCompatActivity {
         });
 
         findViewById(R.id.notification_icon).setOnClickListener(v -> {
-            // TODO: Mở activity hoặc dialog thông báo
-            // startActivity(new Intent(this, NotificationActivity.class));
+            startActivity(new Intent(this, NotificationActivity.class));
         });
 
         findViewById(R.id.account_icon).setOnClickListener(v -> {
@@ -118,12 +81,18 @@ public class HomeActivity extends AppCompatActivity {
 
             if (itemId == R.id.nav_home) {
                 selectedFragment = new HomeFragment();
+                currentFragmentTag = "HomeFragment";
             } else if (itemId == R.id.nav_checkin) {
                 selectedFragment = new CheckinFragment();
+                currentFragmentTag = "CheckinFragment";
+                // Hiển thị thông báo khi chuyển sang CheckinFragment
+                showAndSaveNotification("Hãy khám phá thêm nhiều quán cafe hot gần đây");
             } else if (itemId == R.id.nav_search) {
                 selectedFragment = new SearchFragment();
+                currentFragmentTag = "SearchFragment";
             } else if (itemId == R.id.nav_rewards) {
                 selectedFragment = new RewardsFragment();
+                currentFragmentTag = "RewardsFragment";
             }
 
             if (selectedFragment != null) {
@@ -140,15 +109,23 @@ public class HomeActivity extends AppCompatActivity {
                 .commit();
     }
 
-    @Override
-    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (requestCode == 100) {
-            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                Log.d("Permission", "Notification permission granted");
-            } else {
-                Log.d("Permission", "Notification permission denied");
-            }
-        }
+    private void showAndSaveNotification(String message) {
+        // Hiển thị thông báo bằng Toast
+        Toast.makeText(this, message, Toast.LENGTH_LONG).show();
+
+        // Lưu thông báo vào Firestore
+        String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        Notification notification = new Notification(message, System.currentTimeMillis());
+
+        db.collection("notifications")
+                .document(userId)
+                .collection("user_notifications")
+                .add(notification)
+                .addOnSuccessListener(documentReference -> {
+                    // Lưu thành công
+                })
+                .addOnFailureListener(e -> {
+                    Toast.makeText(this, "Lỗi khi lưu thông báo!", Toast.LENGTH_SHORT).show();
+                });
     }
 }
