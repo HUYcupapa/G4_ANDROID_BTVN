@@ -1,13 +1,13 @@
 <component name="libraryTable">
   <library name="Gradle: androidx.navigation:navigation-ui:2.8.8@aar" external-system-id="GRADLE">
     <CLASSES>
-      <root url="file://$USER_HOME$/.gradle/caches/transforms-4/3436e0f4175ce9704096e5cf2e8f39c4/transformed/navigation-ui-2.8.8/res" />
-      <root url="file://$USER_HOME$/.gradle/caches/transforms-4/3436e0f4175ce9704096e5cf2e8f39c4/transformed/navigation-ui-2.8.8/AndroidManifest.xml" />
-      <root url="jar://$USER_HOME$/.gradle/caches/transforms-4/3436e0f4175ce9704096e5cf2e8f39c4/transformed/navigation-ui-2.8.8/jars/classes.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../../DEMO_CODE/LoginScreenDemo/.gradle/caches/transforms-4/3436e0f4175ce9704096e5cf2e8f39c4/transformed/navigation-ui-2.8.8/jars/classes.jar!/" />
+      <root url="file://$PROJECT_DIR$/../../DEMO_CODE/LoginScreenDemo/.gradle/caches/transforms-4/3436e0f4175ce9704096e5cf2e8f39c4/transformed/navigation-ui-2.8.8/res" />
+      <root url="file://$PROJECT_DIR$/../../DEMO_CODE/LoginScreenDemo/.gradle/caches/transforms-4/3436e0f4175ce9704096e5cf2e8f39c4/transformed/navigation-ui-2.8.8/AndroidManifest.xml" />
     </CLASSES>
     <JAVADOC />
     <SOURCES>
-      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/androidx.navigation/navigation-ui/2.8.8/794ff876987dc95057bbf0a112930ef1023ca27f/navigation-ui-2.8.8-sources.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../../DEMO_CODE/LoginScreenDemo/.gradle/caches/modules-2/files-2.1/androidx.navigation/navigation-ui/2.8.8/794ff876987dc95057bbf0a112930ef1023ca27f/navigation-ui-2.8.8-sources.jar!/" />
     </SOURCES>
   </library>
 </component>

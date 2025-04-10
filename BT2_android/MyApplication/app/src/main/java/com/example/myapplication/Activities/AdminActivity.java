@@ -198,7 +198,7 @@ public class AdminActivity extends AppCompatActivity implements AdminCafeAdapter
         // Thiết lập Spinner
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(
                 this,
-                R.array.activity_options,
+                R.array.activity_review_options,
                 android.R.layout.simple_spinner_item
         );
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);

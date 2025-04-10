@@ -1,12 +1,12 @@
 <component name="libraryTable">
   <library name="Gradle: com.google.firebase:firebase-firestore:25.1.2@aar" external-system-id="GRADLE">
     <CLASSES>
-      <root url="file://$USER_HOME$/.gradle/caches/transforms-4/107bc49aa1e4a27ee17bbb96e57b531b/transformed/firebase-firestore-25.1.2/AndroidManifest.xml" />
-      <root url="jar://$USER_HOME$/.gradle/caches/transforms-4/107bc49aa1e4a27ee17bbb96e57b531b/transformed/firebase-firestore-25.1.2/jars/classes.jar!/" />
+      <root url="file://$PROJECT_DIR$/../../DEMO_CODE/LoginScreenDemo/.gradle/caches/transforms-4/107bc49aa1e4a27ee17bbb96e57b531b/transformed/firebase-firestore-25.1.2/AndroidManifest.xml" />
+      <root url="jar://$PROJECT_DIR$/../../DEMO_CODE/LoginScreenDemo/.gradle/caches/transforms-4/107bc49aa1e4a27ee17bbb96e57b531b/transformed/firebase-firestore-25.1.2/jars/classes.jar!/" />
     </CLASSES>
     <JAVADOC />
     <SOURCES>
-      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.google.firebase/firebase-firestore/25.1.2/58204c92c1d93be89c304d1fbf36d1521e4d8f6b/firebase-firestore-25.1.2-sources.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../../DEMO_CODE/LoginScreenDemo/.gradle/caches/modules-2/files-2.1/com.google.firebase/firebase-firestore/25.1.2/58204c92c1d93be89c304d1fbf36d1521e4d8f6b/firebase-firestore-25.1.2-sources.jar!/" />
     </SOURCES>
   </library>
 </component>
