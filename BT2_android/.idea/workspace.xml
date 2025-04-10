@@ -81,7 +81,9 @@
     <option name="autoReloadType" value="NONE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="25dc4141-94f9-4db8-9caf-6e884ed3b10e" name="Changes" comment="Refactor Project #2" />
+    <list default="true" id="25dc4141-94f9-4db8-9caf-6e884ed3b10e" name="Changes" comment="Refactor Project #2">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
