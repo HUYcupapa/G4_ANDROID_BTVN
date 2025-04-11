@@ -242,22 +242,22 @@ public class SearchFragment extends Fragment {
         });
     }
 
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (requestCode == 100 && grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-            getCurrentLocation();
-            if (mMap != null) {
-                try {
-                    mMap.setMyLocationEnabled(true);
-                } catch (SecurityException e) {
-                    Log.e(TAG, "SecurityException: " + e.getMessage());
-                }
-            }
-        } else {
-            Toast.makeText(requireContext(), "Bạn cần cấp quyền để sử dụng tính năng này!", Toast.LENGTH_SHORT).show();
-        }
-    }
+//    @Override
+//    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+//        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+//        if (requestCode == 100 && grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+//            getCurrentLocation();
+//            if (mMap != null) {
+//                try {
+//                    mMap.setMyLocationEnabled(true);
+//                } catch (SecurityException e) {
+//                    Log.e(TAG, "SecurityException: " + e.getMessage());
+//                }
+//            }
+//        } else {
+//            Toast.makeText(requireContext(), "Bạn cần cấp quyền để sử dụng tính năng này!", Toast.LENGTH_SHORT).show();
+//        }
+//    }
 
     private void loadCafesFromFirestore() {
         db.collection("cafes")
