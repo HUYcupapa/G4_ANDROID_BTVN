@@ -29,7 +29,6 @@
                 android:layout_height="match_parent">
 
                 <!-- Icon tài khoản (hồ sơ) - ngoài cùng bên phải -->
-
                 <TextView
                     android:id="@+id/toolbar_title"
                     android:layout_width="wrap_content"
@@ -70,12 +69,40 @@
             </RelativeLayout>
         </androidx.appcompat.widget.Toolbar>
 
+        <!-- LinearLayout để hiển thị thông báo tùy chỉnh -->
+        <LinearLayout
+            android:id="@+id/notification_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/toolbar"
+            android:background="@color/coffee_accent"
+            android:padding="10dp"
+            android:visibility="gone"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/notification_text"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:textColor="@color/white"
+                android:textSize="16sp" />
+
+            <ImageButton
+                android:id="@+id/notification_close"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@android:color/transparent"
+                android:src="@android:drawable/ic_menu_close_clear_cancel"
+                android:contentDescription="Đóng thông báo" />
+        </LinearLayout>
+
         <!-- Fragment container -->
         <FrameLayout
             android:id="@+id/fragment_container"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_below="@id/toolbar"
+            android:layout_below="@id/notification_container"
             android:layout_above="@id/bottom_navigation" />
 
         <!-- Bottom navigation -->
