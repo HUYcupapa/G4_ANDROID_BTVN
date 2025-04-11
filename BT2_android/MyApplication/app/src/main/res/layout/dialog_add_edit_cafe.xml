@@ -42,18 +42,34 @@
         android:textColorHint="@color/coffee_primary"
         android:hint="Địa Chỉ">
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/et_cafe_address"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/custtomedit"
-            android:paddingStart="10dp"
-            android:textColor="@color/text_primary" />
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/et_cafe_address"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@drawable/custtomedit"
+                android:paddingStart="10dp"
+                android:textColor="@color/text_primary" />
+
+            <ImageButton
+                android:id="@+id/btn_select_location"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginStart="8dp"
+                android:background="@android:color/transparent"
+                android:src="@drawable/ic_location"
+                android:contentDescription="Chọn vị trí trên bản đồ" />
+
+        </LinearLayout>
     </com.google.android.material.textfield.TextInputLayout>
 
-
-
-    <!-- Hoạt Động -->
+    <!-- Ho slice Động -->
     <Spinner
         android:id="@+id/spinner_activity"
         android:layout_width="match_parent"
@@ -109,8 +125,6 @@
         android:text="Thêm Hình Ảnh (Tối Đa 3)"
         android:textColor="@color/white"
         android:textSize="14sp" />
-
-
 
     <!-- Container Hiển Thị Media -->
     <HorizontalScrollView
