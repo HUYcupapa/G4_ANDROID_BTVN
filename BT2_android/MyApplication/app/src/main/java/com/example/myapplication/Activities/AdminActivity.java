@@ -255,7 +255,12 @@ public class AdminActivity extends AppCompatActivity implements AdminCafeAdapter
         updateMediaContainer();
 
         AlertDialog dialog = builder.create();
+
         btnConfirm.setOnClickListener(v -> {
+            // Vô hiệu hóa nút ngay khi nhấn
+            btnConfirm.setEnabled(false);
+            btnConfirm.setAlpha(0.5f); // Làm mờ nút để phản hồi trực quan
+
             String name = etCafeName.getText().toString().trim();
             String locationText = etCafeAddress.getText().toString().trim();
             String description = etCafeDescription.getText().toString().trim();
@@ -264,10 +269,14 @@ public class AdminActivity extends AppCompatActivity implements AdminCafeAdapter
 
             if (name.isEmpty()) {
                 Toast.makeText(this, "Vui lòng nhập tên quán!", Toast.LENGTH_SHORT).show();
+                btnConfirm.setEnabled(true); // Kích hoạt lại nếu validation thất bại
+                btnConfirm.setAlpha(1.0f);
                 return;
             }
             if (locationText.isEmpty()) {
                 Toast.makeText(this, "Vui lòng nhập địa chỉ!", Toast.LENGTH_SHORT).show();
+                btnConfirm.setEnabled(true);
+                btnConfirm.setAlpha(1.0f);
                 return;
             }
             if (activity.equals("Chọn hoạt động")) {
@@ -276,32 +285,40 @@ public class AdminActivity extends AppCompatActivity implements AdminCafeAdapter
             if (activity != null && activity.equals("others")) {
                 if (otherActivity.isEmpty()) {
                     Toast.makeText(this, "Vui lòng nhập mô tả hoạt động!", Toast.LENGTH_SHORT).show();
+                    btnConfirm.setEnabled(true);
+                    btnConfirm.setAlpha(1.0f);
                     return;
                 }
                 if (otherActivity.length() > 50) {
                     Toast.makeText(this, "Mô tả hoạt động không được vượt quá 50 ký tự!", Toast.LENGTH_SHORT).show();
+                    btnConfirm.setEnabled(true);
+                    btnConfirm.setAlpha(1.0f);
                     return;
                 }
             }
             if (selectedImageUris.isEmpty() && uploadedImageUrls.isEmpty()) {
                 Toast.makeText(this, "Vui lòng chọn ít nhất 1 hình ảnh!", Toast.LENGTH_SHORT).show();
+                btnConfirm.setEnabled(true);
+                btnConfirm.setAlpha(1.0f);
                 return;
             }
             if (selectedLat == 0.0 && selectedLng == 0.0 && cafe == null) {
                 Toast.makeText(this, "Vui lòng chọn vị trí trên bản đồ!", Toast.LENGTH_SHORT).show();
+                btnConfirm.setEnabled(true);
+                btnConfirm.setAlpha(1.0f);
                 return;
             }
 
-            uploadMediaAndSaveCafe(cafe, name, locationText, description, activity, otherActivity, dialog);
+            uploadMediaAndSaveCafe(cafe, name, locationText, description, activity, otherActivity, dialog, btnConfirm);
         });
 
         dialog.show();
     }
 
     private void uploadMediaAndSaveCafe(CafeAdmin cafe, String name, String locationText, String description,
-                                        String activity, String otherActivity, AlertDialog dialog) {
+                                        String activity, String otherActivity, AlertDialog dialog, Button btnConfirm) {
         if (selectedImageUris.isEmpty() && !uploadedImageUrls.isEmpty()) {
-            saveCafe(cafe, name, locationText, description, activity, otherActivity, dialog);
+            saveCafe(cafe, name, locationText, description, activity, otherActivity, dialog, btnConfirm);
             return;
         }
 
@@ -313,8 +330,12 @@ public class AdminActivity extends AppCompatActivity implements AdminCafeAdapter
             try {
                 byte[] imageBytes = readBytesFromUri(imageUri);
                 if (imageBytes == null) {
-                    runOnUiThread(() -> Toast.makeText(this, "Không thể đọc dữ liệu hình ảnh!", Toast.LENGTH_SHORT).show());
-                    dialog.dismiss();
+                    runOnUiThread(() -> {
+                        Toast.makeText(this, "Không thể đọc dữ liệu hình ảnh!", Toast.LENGTH_SHORT).show();
+                        btnConfirm.setEnabled(true); // Kích hoạt lại nếu thất bại
+                        btnConfirm.setAlpha(1.0f);
+                        dialog.dismiss();
+                    });
                     return;
                 }
 
@@ -336,6 +357,8 @@ public class AdminActivity extends AppCompatActivity implements AdminCafeAdapter
                         runOnUiThread(() -> {
                             if (!isFinishing()) {
                                 Toast.makeText(AdminActivity.this, "Lỗi khi upload hình ảnh: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                                btnConfirm.setEnabled(true); // Kích hoạt lại nếu thất bại
+                                btnConfirm.setAlpha(1.0f);
                                 dialog.dismiss();
                             }
                         });
@@ -355,12 +378,14 @@ public class AdminActivity extends AppCompatActivity implements AdminCafeAdapter
                                 uploadedCount[0]++;
 
                                 if (uploadedCount[0] == totalImages) {
-                                    runOnUiThread(() -> saveCafe(cafe, name, locationText, description, activity, otherActivity, dialog));
+                                    runOnUiThread(() -> saveCafe(cafe, name, locationText, description, activity, otherActivity, dialog, btnConfirm));
                                 }
                             } catch (JSONException e) {
                                 runOnUiThread(() -> {
                                     if (!isFinishing()) {
                                         Toast.makeText(AdminActivity.this, "Lỗi phân tích JSON: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                                        btnConfirm.setEnabled(true); // Kích hoạt lại nếu thất bại
+                                        btnConfirm.setAlpha(1.0f);
                                         dialog.dismiss();
                                     }
                                 });
@@ -369,6 +394,8 @@ public class AdminActivity extends AppCompatActivity implements AdminCafeAdapter
                             runOnUiThread(() -> {
                                 if (!isFinishing()) {
                                     Toast.makeText(AdminActivity.this, "Lỗi khi upload hình ảnh!", Toast.LENGTH_SHORT).show();
+                                    btnConfirm.setEnabled(true); // Kích hoạt lại nếu thất bại
+                                    btnConfirm.setAlpha(1.0f);
                                     dialog.dismiss();
                                 }
                             });
@@ -380,6 +407,8 @@ public class AdminActivity extends AppCompatActivity implements AdminCafeAdapter
                 runOnUiThread(() -> {
                     if (!isFinishing()) {
                         Toast.makeText(AdminActivity.this, "Lỗi xử lý hình ảnh: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                        btnConfirm.setEnabled(true); // Kích hoạt lại nếu thất bại
+                        btnConfirm.setAlpha(1.0f);
                         dialog.dismiss();
                     }
                 });
@@ -388,7 +417,7 @@ public class AdminActivity extends AppCompatActivity implements AdminCafeAdapter
     }
 
     private void saveCafe(CafeAdmin cafe, String name, String locationText, String description,
-                          String activity, String otherActivity, AlertDialog dialog) {
+                          String activity, String otherActivity, AlertDialog dialog, Button btnConfirm) {
         Map<String, Object> cafeData = new HashMap<>();
         cafeData.put("name", name);
         cafeData.put("locationText", locationText);
@@ -408,11 +437,15 @@ public class AdminActivity extends AppCompatActivity implements AdminCafeAdapter
                     .addOnSuccessListener(documentReference -> {
                         Log.d(TAG, "Added cafe with ID: " + documentReference.getId());
                         Toast.makeText(this, "Thêm quán thành công!", Toast.LENGTH_SHORT).show();
+                        btnConfirm.setEnabled(true); // Kích hoạt lại sau khi thành công
+                        btnConfirm.setAlpha(1.0f);
                         dialog.dismiss();
                     })
                     .addOnFailureListener(e -> {
                         Log.e(TAG, "Error adding cafe: ", e);
                         Toast.makeText(this, "Lỗi khi thêm quán: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                        btnConfirm.setEnabled(true); // Kích hoạt lại nếu thất bại
+                        btnConfirm.setAlpha(1.0f);
                         dialog.dismiss();
                     });
         } else {
@@ -424,11 +457,15 @@ public class AdminActivity extends AppCompatActivity implements AdminCafeAdapter
                     .addOnSuccessListener(aVoid -> {
                         Log.d(TAG, "Updated cafe with ID: " + docId);
                         Toast.makeText(this, "Sửa quán thành công!", Toast.LENGTH_SHORT).show();
+                        btnConfirm.setEnabled(true); // Kích hoạt lại sau khi thành công
+                        btnConfirm.setAlpha(1.0f);
                         dialog.dismiss();
                     })
                     .addOnFailureListener(e -> {
                         Log.e(TAG, "Error updating cafe: ", e);
                         Toast.makeText(this, "Lỗi khi sửa quán: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                        btnConfirm.setEnabled(true); // Kích hoạt lại nếu thất bại
+                        btnConfirm.setAlpha(1.0f);
                         dialog.dismiss();
                     });
         }
