@@ -2,10 +2,10 @@
 <resources>
     <!-- Khoảng cách -->
     <string-array name="distance_options">
-        <item>Dưới 1 km</item>
-        <item>1 - 5 km</item>
-        <item>5 - 10 km</item>
-        <item>10 - 20 km</item>
+        <item>1 km</item>
+        <item>5 km</item>
+        <item>10 km</item>
+        <item>20 km</item>
     </string-array>
 
     <!-- Đánh giá -->
