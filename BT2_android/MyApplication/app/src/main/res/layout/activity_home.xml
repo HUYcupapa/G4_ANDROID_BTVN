@@ -86,7 +86,7 @@
             android:layout_alignParentBottom="true"
             android:background="@color/coffee_primary"
             app:itemIconTint="@drawable/bottom_nav_color_selector"
-            app:itemTextColor="@drawable/bottom_nav_color_selector"
+            app:itemTextColor="@color/white"
             app:menu="@menu/bottom_nav_menu" />
     </RelativeLayout>
 
