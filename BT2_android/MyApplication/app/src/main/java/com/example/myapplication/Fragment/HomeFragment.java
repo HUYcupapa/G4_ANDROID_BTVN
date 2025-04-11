@@ -108,7 +108,7 @@ public class HomeFragment extends Fragment {
 
     private void loadCafesFromFirestore() {
         db.collection("cafes")
-                .limit(10) // Giới hạn chỉ lấy 10 quán đầu tiên
+                .limit(5) // Giới hạn chỉ lấy 5 quán đầu tiên
                 .get()
                 .addOnSuccessListener(queryDocumentSnapshots -> {
                     cafeList.clear();

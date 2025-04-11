@@ -10,6 +10,11 @@
           <theme>@style/Theme.MyApplication</theme>
         </config>
       </layout>
+      <layout url="file://$PROJECT_DIR$/MyApplication/app/src/main/res/layout/activity_chatbot.xml">
+        <config>
+          <theme>@style/Theme.MyApplication</theme>
+        </config>
+      </layout>
       <layout url="file://$PROJECT_DIR$/MyApplication/app/src/main/res/layout/activity_forgot_pass.xml">
         <config>
           <theme>@style/Theme.MyApplication</theme>
@@ -40,7 +45,17 @@
           <theme>@style/Theme.MyApplication</theme>
         </config>
       </layout>
+      <layout url="file://$PROJECT_DIR$/MyApplication/app/src/main/res/layout/activity_select_location.xml">
+        <config>
+          <theme>@style/Theme.MyApplication</theme>
+        </config>
+      </layout>
       <layout url="file://$PROJECT_DIR$/MyApplication/app/src/main/res/layout/activity_signup.xml">
+        <config>
+          <theme>@style/Theme.MyApplication</theme>
+        </config>
+      </layout>
+      <layout url="file://$PROJECT_DIR$/MyApplication/app/src/main/res/layout/dialog_add_edit_cafe.xml">
         <config>
           <theme>@style/Theme.MyApplication</theme>
         </config>
@@ -75,7 +90,67 @@
           <theme>@style/Theme.MyApplication</theme>
         </config>
       </layout>
+      <layout url="file://$PROJECT_DIR$/MyApplication/app/src/main/res/layout/item_cafe_admin.xml">
+        <config>
+          <theme>@style/Theme.MyApplication</theme>
+        </config>
+      </layout>
+      <layout url="file://$PROJECT_DIR$/MyApplication/app/src/main/res/layout/item_daily_task.xml">
+        <config>
+          <theme>@style/Theme.MyApplication</theme>
+        </config>
+      </layout>
+      <layout url="file://$PROJECT_DIR$/MyApplication/app/src/main/res/layout/item_image.xml">
+        <config>
+          <theme>@style/Theme.MyApplication</theme>
+        </config>
+      </layout>
+      <layout url="file://$PROJECT_DIR$/MyApplication/app/src/main/res/layout/item_media.xml">
+        <config>
+          <theme>@style/Theme.MyApplication</theme>
+        </config>
+      </layout>
+      <layout url="file://$PROJECT_DIR$/MyApplication/app/src/main/res/layout/item_message_bot.xml">
+        <config>
+          <theme>@style/Theme.MyApplication</theme>
+        </config>
+      </layout>
+      <layout url="file://$PROJECT_DIR$/MyApplication/app/src/main/res/layout/item_message_typing.xml">
+        <config>
+          <theme>@style/Theme.MyApplication</theme>
+        </config>
+      </layout>
+      <layout url="file://$PROJECT_DIR$/MyApplication/app/src/main/res/layout/item_message_user.xml">
+        <config>
+          <theme>@style/Theme.MyApplication</theme>
+        </config>
+      </layout>
+      <layout url="file://$PROJECT_DIR$/MyApplication/app/src/main/res/layout/item_notification.xml">
+        <config>
+          <theme>@style/Theme.MyApplication</theme>
+        </config>
+      </layout>
+      <layout url="file://$PROJECT_DIR$/MyApplication/app/src/main/res/layout/item_review.xml">
+        <config>
+          <theme>@style/Theme.MyApplication</theme>
+        </config>
+      </layout>
+      <layout url="file://$PROJECT_DIR$/MyApplication/app/src/main/res/layout/item_voucher.xml">
+        <config>
+          <theme>@style/Theme.MyApplication</theme>
+        </config>
+      </layout>
+      <layout url="file://$PROJECT_DIR$/MyApplication/app/src/main/res/layout/nav_header.xml">
+        <config>
+          <theme>@style/Theme.MyApplication</theme>
+        </config>
+      </layout>
       <layout url="file://$PROJECT_DIR$/MyApplication/app/src/main/res/menu/bottom_nav_menu.xml">
+        <config>
+          <theme>@style/Theme.MyApplication</theme>
+        </config>
+      </layout>
+      <layout url="file://$PROJECT_DIR$/MyApplication/app/src/main/res/menu/nav_menu.xml">
         <config>
           <theme>@style/Theme.MyApplication</theme>
         </config>
@@ -88,6 +163,9 @@
   <component name="ChangeListManager">
     <list default="true" id="25dc4141-94f9-4db8-9caf-6e884ed3b10e" name="Changes" comment="Refactor Project #2">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/MyApplication/app/src/main/java/com/example/myapplication/Fragment/CheckinFragment.java" beforeDir="false" afterPath="$PROJECT_DIR$/MyApplication/app/src/main/java/com/example/myapplication/Fragment/CheckinFragment.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/MyApplication/app/src/main/java/com/example/myapplication/Fragment/HomeFragment.java" beforeDir="false" afterPath="$PROJECT_DIR$/MyApplication/app/src/main/java/com/example/myapplication/Fragment/HomeFragment.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/MyApplication/app/src/main/java/com/example/myapplication/Fragment/SearchFragment.java" beforeDir="false" afterPath="$PROJECT_DIR$/MyApplication/app/src/main/java/com/example/myapplication/Fragment/SearchFragment.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -97,7 +175,7 @@
   <component name="ClangdSettings">
     <option name="formatViaClangd" value="false" />
   </component>
-  <component name="ExecutionTargetManager" SELECTED_TARGET="device_and_snapshot_combo_box_target[DeviceId(pluginId=PhysicalDevice, isTemplate=false, identifier=serial=cmytmzvkxcd6daga)]" />
+  <component name="ExecutionTargetManager" SELECTED_TARGET="device_and_snapshot_combo_box_target[]" />
   <component name="ExternalProjectsData">
     <projectState path="$PROJECT_DIR$/MyApplication">
       <ProjectState />

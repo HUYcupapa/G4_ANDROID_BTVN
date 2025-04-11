@@ -134,7 +134,7 @@ public class CheckinFragment extends Fragment {
                         loc.setLongitude(cafeLocation.getLongitude());
 
                         float distance = currentLocation.distanceTo(loc);
-                        if (distance <= 5000) { // Cách 50m thì được checkin
+                        if (distance <= 5000) { // KHOẢNG CÁCH CHECKIN
                             canCheckin[0] = true;
                             cafeId[0] = document.getId();
                             cafeName[0] = name;
