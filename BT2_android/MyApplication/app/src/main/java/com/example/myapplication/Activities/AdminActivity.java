@@ -6,6 +6,7 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
@@ -19,6 +20,7 @@ import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AlertDialog;
@@ -28,11 +30,13 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
 import com.example.myapplication.Adapter.AdminCafeAdapter;
 import com.example.myapplication.Model.CafeAdmin;
 import com.example.myapplication.R;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.squareup.picasso.Picasso;
+import com.google.firebase.firestore.GeoPoint;
+
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -40,6 +44,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.MediaType;
@@ -48,34 +53,36 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
-
 import org.json.JSONException;
 import org.json.JSONObject;
 
 public class AdminActivity extends AppCompatActivity implements AdminCafeAdapter.OnCafeActionListener {
 
+    private static final String TAG = "AdminActivity";
     private RecyclerView rvCafes;
     private AdminCafeAdapter cafeAdapter;
     private List<CafeAdmin> cafeList;
     private FirebaseFirestore db;
     private Button btnAddCafe;
+    private ImageButton btnLogout;
     private ActivityResultLauncher<String> imagePickerLauncher;
+    private ActivityResultLauncher<Intent> locationPickerLauncher;
     private List<Uri> selectedImageUris = new ArrayList<>();
     private List<String> uploadedImageUrls = new ArrayList<>();
+    private HorizontalScrollView mediaContainer;
     private OkHttpClient client;
+    private double selectedLat = 0.0;
+    private double selectedLng = 0.0;
+    private View dialogView;
     private static final String IMGUR_CLIENT_ID = "44708ec159ebd14";
     private static final String IMGUR_UPLOAD_URL = "https://api.imgur.com/3/upload";
-    private static final int PERMISSION_REQUEST_CODE = 100;
-    private HorizontalScrollView mediaContainer;
-    private ImageButton btnLogout; // Thêm ImageButton cho nút đăng xuất
-
+    private static final int STORAGE_PERMISSION_CODE = 100;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_admin);
 
-        // Thiết lập Toolbar
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         if (getSupportActionBar() != null) {
@@ -83,87 +90,102 @@ public class AdminActivity extends AppCompatActivity implements AdminCafeAdapter
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
 
-        // Khởi tạo Firestore
         db = FirebaseFirestore.getInstance();
         client = new OkHttpClient();
 
-        // Yêu cầu quyền truy cập bộ nhớ
         requestStoragePermissions();
 
-        // Khởi tạo RecyclerView
         rvCafes = findViewById(R.id.rv_cafes);
         cafeList = new ArrayList<>();
         cafeAdapter = new AdminCafeAdapter(this, cafeList, this);
         rvCafes.setLayoutManager(new LinearLayoutManager(this));
         rvCafes.setAdapter(cafeAdapter);
 
-        // Khởi tạo nút Thêm Quán
         btnAddCafe = findViewById(R.id.btn_add_cafe);
         btnAddCafe.setOnClickListener(v -> showAddEditCafeDialog(null));
 
-
-
-        // Khởi tạo nút Đăng Xuất
         btnLogout = findViewById(R.id.btn_logout);
         btnLogout.setOnClickListener(v -> {
-            // Chuyển hướng về màn hình đăng nhập
             Intent intent = new Intent(AdminActivity.this, LoginActivity.class);
-            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK); // Xóa toàn bộ stack activity
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(intent);
-            finish(); // Đóng AdminActivity
+            finish();
         });
 
-
-        // Khởi tạo ActivityResultLauncher để chọn hình ảnh
         imagePickerLauncher = registerForActivityResult(
                 new ActivityResultContracts.GetContent(),
                 uri -> {
-                    if (uri != null) {
-                        if (selectedImageUris.size() < 3) {
-                            selectedImageUris.add(uri);
-                            Toast.makeText(this, "Đã chọn " + selectedImageUris.size() + "/3 hình ảnh", Toast.LENGTH_SHORT).show();
-                            updateMediaContainer();
-                        } else {
-                            Toast.makeText(this, "Đã đạt tối đa 3 hình ảnh!", Toast.LENGTH_SHORT).show();
+                    if (uri != null && selectedImageUris.size() < 3) {
+                        selectedImageUris.add(uri);
+                        Toast.makeText(this, "Đã chọn " + selectedImageUris.size() + "/3 hình ảnh", Toast.LENGTH_SHORT).show();
+                        updateMediaContainer();
+                    } else if (uri != null) {
+                        Toast.makeText(this, "Đã đạt tối đa 3 hình ảnh!", Toast.LENGTH_SHORT).show();
+                    }
+                }
+        );
+
+        locationPickerLauncher = registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(),
+                result -> {
+                    if (result.getResultCode() == RESULT_OK && result.getData() != null) {
+                        Intent data = result.getData();
+                        selectedLat = data.getDoubleExtra("latitude", 0.0);
+                        selectedLng = data.getDoubleExtra("longitude", 0.0);
+                        String address = data.getStringExtra("address");
+                        EditText etCafeAddress = dialogView != null ? dialogView.findViewById(R.id.et_cafe_address) : null;
+                        if (etCafeAddress != null) {
+                            etCafeAddress.setText(address);
                         }
                     }
                 }
         );
 
-        // Tải danh sách quán cà phê từ collection cafe_admin
         loadCafes();
     }
 
     private void loadCafes() {
-        db.collection("cafe_admin")
+        db.collection("cafes")
                 .addSnapshotListener((value, error) -> {
                     if (error != null) {
+                        Log.e(TAG, "Error loading cafes: ", error);
                         Toast.makeText(this, "Lỗi khi tải danh sách quán!", Toast.LENGTH_SHORT).show();
                         return;
                     }
                     cafeList.clear();
-                    if (value != null) {
+                    if (value != null && !value.isEmpty()) {
                         for (com.google.firebase.firestore.DocumentSnapshot document : value) {
-                            CafeAdmin cafe = document.toObject(CafeAdmin.class);
-                            if (cafe != null) {
-                                cafe.setId(document.getId());
-                                cafeList.add(cafe);
+                            try {
+                                CafeAdmin cafe = document.toObject(CafeAdmin.class);
+                                if (cafe != null) {
+                                    cafe.setId(document.getId());
+                                    cafeList.add(cafe);
+                                    Log.d(TAG, "Loaded cafe: " + cafe.getName() + ", ID: " + cafe.getId());
+                                } else {
+                                    Log.w(TAG, "Failed to deserialize document: " + document.getId());
+                                }
+                            } catch (Exception e) {
+                                Log.e(TAG, "Error deserializing document " + document.getId() + ": " + e.getMessage());
                             }
                         }
+                        cafeAdapter.notifyDataSetChanged();
+                        Log.d(TAG, "Total cafes loaded: " + cafeList.size());
+                    } else {
+                        Log.d(TAG, "No cafes found in collection 'cafes'");
+                        Toast.makeText(this, "Không có quán cà phê nào trong danh sách!", Toast.LENGTH_SHORT).show();
                     }
-                    cafeAdapter.notifyDataSetChanged();
                 });
     }
 
     private void showAddEditCafeDialog(CafeAdmin cafe) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        View dialogView = LayoutInflater.from(this).inflate(R.layout.dialog_add_edit_cafe, null);
+        dialogView = LayoutInflater.from(this).inflate(R.layout.dialog_add_edit_cafe, null);
         builder.setView(dialogView);
 
-        // Khởi tạo các thành phần trong dialog
         TextView tvDialogTitle = dialogView.findViewById(R.id.tv_dialog_title);
         EditText etCafeName = dialogView.findViewById(R.id.et_cafe_name);
         EditText etCafeAddress = dialogView.findViewById(R.id.et_cafe_address);
+        ImageButton btnSelectLocation = dialogView.findViewById(R.id.btn_select_location);
         Spinner spinnerActivity = dialogView.findViewById(R.id.spinner_activity);
         EditText etOtherActivity = dialogView.findViewById(R.id.et_other_activity);
         LinearLayout layoutOtherActivity = dialogView.findViewById(R.id.layout_other_activity);
@@ -172,39 +194,33 @@ public class AdminActivity extends AppCompatActivity implements AdminCafeAdapter
         Button btnConfirm = dialogView.findViewById(R.id.btn_confirm);
         mediaContainer = dialogView.findViewById(R.id.media_container);
 
-        // Reset dữ liệu media
         selectedImageUris.clear();
         uploadedImageUrls.clear();
+        selectedLat = cafe != null ? cafe.getLat() : 0.0;
+        selectedLng = cafe != null ? cafe.getLng() : 0.0;
 
-        // Thiết lập tiêu đề và dữ liệu nếu là chỉnh sửa
         if (cafe != null) {
             tvDialogTitle.setText("Sửa Quán Cà Phê");
             etCafeName.setText(cafe.getName());
-            etCafeAddress.setText(cafe.getLocation());
+            etCafeAddress.setText(cafe.getLocationText());
             etCafeDescription.setText(cafe.getDescription());
-            if (cafe.getImage1() != null && !cafe.getImage1().isEmpty()) {
-                uploadedImageUrls.add(cafe.getImage1());
-            }
-            if (cafe.getImage2() != null && !cafe.getImage2().isEmpty()) {
-                uploadedImageUrls.add(cafe.getImage2());
-            }
-            if (cafe.getImage3() != null && !cafe.getImage3().isEmpty()) {
-                uploadedImageUrls.add(cafe.getImage3());
-            }
+            if (cafe.getImage1() != null && !cafe.getImage1().isEmpty()) uploadedImageUrls.add(cafe.getImage1());
+            if (cafe.getImage2() != null && !cafe.getImage2().isEmpty()) uploadedImageUrls.add(cafe.getImage2());
+            if (cafe.getImage3() != null && !cafe.getImage3().isEmpty()) uploadedImageUrls.add(cafe.getImage3());
         } else {
             tvDialogTitle.setText("Thêm Quán Cà Phê");
         }
 
-        // Thiết lập Spinner
+        btnSelectLocation.setOnClickListener(v -> {
+            Intent intent = new Intent(AdminActivity.this, SelectLocationActivity.class);
+            locationPickerLauncher.launch(intent);
+        });
+
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(
-                this,
-                R.array.activity_review_options,
-                android.R.layout.simple_spinner_item
-        );
+                this, R.array.activity_review_options, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerActivity.setAdapter(adapter);
 
-        // Đặt giá trị mặc định cho Spinner nếu là chỉnh sửa
         if (cafe != null && cafe.getActivity() != null) {
             String activity = cafe.getActivity();
             if (!activity.equals("Boardgame") && !activity.equals("Book") && !activity.equals("Workshop")) {
@@ -216,15 +232,10 @@ public class AdminActivity extends AppCompatActivity implements AdminCafeAdapter
             }
         }
 
-        // Xử lý khi chọn "others" trong Spinner
         spinnerActivity.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                if (parent.getItemAtPosition(position).toString().equals("others")) {
-                    layoutOtherActivity.setVisibility(View.VISIBLE);
-                } else {
-                    layoutOtherActivity.setVisibility(View.GONE);
-                }
+                layoutOtherActivity.setVisibility(parent.getItemAtPosition(position).toString().equals("others") ? View.VISIBLE : View.GONE);
             }
 
             @Override
@@ -233,7 +244,6 @@ public class AdminActivity extends AppCompatActivity implements AdminCafeAdapter
             }
         });
 
-        // Xử lý nút Thêm Hình Ảnh
         btnAddImages.setOnClickListener(v -> {
             if (!hasStoragePermission()) {
                 requestStoragePermissions();
@@ -242,24 +252,21 @@ public class AdminActivity extends AppCompatActivity implements AdminCafeAdapter
             imagePickerLauncher.launch("image/*");
         });
 
-        // Cập nhật media container
         updateMediaContainer();
 
-        // Xử lý nút Xác Nhận
         AlertDialog dialog = builder.create();
         btnConfirm.setOnClickListener(v -> {
             String name = etCafeName.getText().toString().trim();
-            String address = etCafeAddress.getText().toString().trim();
+            String locationText = etCafeAddress.getText().toString().trim();
             String description = etCafeDescription.getText().toString().trim();
             String activity = spinnerActivity.getSelectedItem().toString();
             String otherActivity = etOtherActivity.getText().toString().trim();
 
-            // Kiểm tra dữ liệu
             if (name.isEmpty()) {
                 Toast.makeText(this, "Vui lòng nhập tên quán!", Toast.LENGTH_SHORT).show();
                 return;
             }
-            if (address.isEmpty()) {
+            if (locationText.isEmpty()) {
                 Toast.makeText(this, "Vui lòng nhập địa chỉ!", Toast.LENGTH_SHORT).show();
                 return;
             }
@@ -280,23 +287,24 @@ public class AdminActivity extends AppCompatActivity implements AdminCafeAdapter
                 Toast.makeText(this, "Vui lòng chọn ít nhất 1 hình ảnh!", Toast.LENGTH_SHORT).show();
                 return;
             }
+            if (selectedLat == 0.0 && selectedLng == 0.0 && cafe == null) {
+                Toast.makeText(this, "Vui lòng chọn vị trí trên bản đồ!", Toast.LENGTH_SHORT).show();
+                return;
+            }
 
-            // Upload media và lưu quán
-            uploadMediaAndSaveCafe(cafe, name, address, description, activity, otherActivity, dialog);
+            uploadMediaAndSaveCafe(cafe, name, locationText, description, activity, otherActivity, dialog);
         });
 
         dialog.show();
     }
 
-    private void uploadMediaAndSaveCafe(CafeAdmin cafe, String name, String location, String description,
+    private void uploadMediaAndSaveCafe(CafeAdmin cafe, String name, String locationText, String description,
                                         String activity, String otherActivity, AlertDialog dialog) {
-        // Nếu không có hình ảnh mới để upload, sử dụng URL hiện tại (trong trường hợp chỉnh sửa)
         if (selectedImageUris.isEmpty() && !uploadedImageUrls.isEmpty()) {
-            saveCafe(cafe, name, location, description, activity, otherActivity, dialog);
+            saveCafe(cafe, name, locationText, description, activity, otherActivity, dialog);
             return;
         }
 
-        // Upload hình ảnh
         int totalImages = selectedImageUris.size();
         final int[] uploadedCount = {0};
         uploadedImageUrls.clear();
@@ -305,12 +313,8 @@ public class AdminActivity extends AppCompatActivity implements AdminCafeAdapter
             try {
                 byte[] imageBytes = readBytesFromUri(imageUri);
                 if (imageBytes == null) {
-                    runOnUiThread(() -> {
-                        if (!isFinishing()) {
-                            Toast.makeText(AdminActivity.this, "Không thể đọc dữ liệu hình ảnh!", Toast.LENGTH_SHORT).show();
-                            dialog.dismiss();
-                        }
-                    });
+                    runOnUiThread(() -> Toast.makeText(this, "Không thể đọc dữ liệu hình ảnh!", Toast.LENGTH_SHORT).show());
+                    dialog.dismiss();
                     return;
                 }
 
@@ -340,10 +344,8 @@ public class AdminActivity extends AppCompatActivity implements AdminCafeAdapter
                     @Override
                     public void onResponse(Call call, Response response) throws IOException {
                         if (response.isSuccessful()) {
-                            String responseBody = response.body().string();
-                            android.util.Log.d("ImgurResponse", "Response: " + responseBody);
-
                             try {
+                                String responseBody = response.body().string();
                                 JSONObject json = new JSONObject(responseBody);
                                 if (!json.has("data") || !json.getJSONObject("data").has("link")) {
                                     throw new JSONException("Phản hồi không chứa trường 'data' hoặc 'link'");
@@ -353,29 +355,20 @@ public class AdminActivity extends AppCompatActivity implements AdminCafeAdapter
                                 uploadedCount[0]++;
 
                                 if (uploadedCount[0] == totalImages) {
-                                    runOnUiThread(() -> saveCafe(cafe, name, location, description, activity, otherActivity, dialog));
+                                    runOnUiThread(() -> saveCafe(cafe, name, locationText, description, activity, otherActivity, dialog));
                                 }
                             } catch (JSONException e) {
                                 runOnUiThread(() -> {
                                     if (!isFinishing()) {
-                                        Toast.makeText(AdminActivity.this, "Lỗi khi phân tích phản hồi JSON: " + e.getMessage(), Toast.LENGTH_SHORT).show();
-                                        dialog.dismiss();
-                                    }
-                                });
-                            } catch (Exception e) {
-                                runOnUiThread(() -> {
-                                    if (!isFinishing()) {
-                                        Toast.makeText(AdminActivity.this, "Lỗi không xác định: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(AdminActivity.this, "Lỗi phân tích JSON: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                                         dialog.dismiss();
                                     }
                                 });
                             }
                         } else {
-                            String errorBody = response.body() != null ? response.body().string() : "Không có nội dung lỗi";
-                            android.util.Log.e("ImgurError", "Upload failed: " + response.code() + " - " + errorBody);
                             runOnUiThread(() -> {
                                 if (!isFinishing()) {
-                                    Toast.makeText(AdminActivity.this, "Lỗi khi upload hình ảnh: " + response.message(), Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(AdminActivity.this, "Lỗi khi upload hình ảnh!", Toast.LENGTH_SHORT).show();
                                     dialog.dismiss();
                                 }
                             });
@@ -386,7 +379,7 @@ public class AdminActivity extends AppCompatActivity implements AdminCafeAdapter
             } catch (Exception e) {
                 runOnUiThread(() -> {
                     if (!isFinishing()) {
-                        Toast.makeText(AdminActivity.this, "Lỗi khi xử lý hình ảnh: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(AdminActivity.this, "Lỗi xử lý hình ảnh: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                         dialog.dismiss();
                     }
                 });
@@ -394,39 +387,47 @@ public class AdminActivity extends AppCompatActivity implements AdminCafeAdapter
         }
     }
 
-    private void saveCafe(CafeAdmin cafe, String name, String location, String description,
+    private void saveCafe(CafeAdmin cafe, String name, String locationText, String description,
                           String activity, String otherActivity, AlertDialog dialog) {
         Map<String, Object> cafeData = new HashMap<>();
         cafeData.put("name", name);
-        cafeData.put("location", location);
+        cafeData.put("locationText", locationText);
+        cafeData.put("location", new GeoPoint(selectedLat, selectedLng));
         cafeData.put("description", description);
         cafeData.put("activity", activity != null && activity.equals("others") ? otherActivity : activity);
         cafeData.put("image1", uploadedImageUrls.size() > 0 ? uploadedImageUrls.get(0) : "");
         cafeData.put("image2", uploadedImageUrls.size() > 1 ? uploadedImageUrls.get(1) : "");
         cafeData.put("image3", uploadedImageUrls.size() > 2 ? uploadedImageUrls.get(2) : "");
+        cafeData.put("lat", selectedLat);
+        cafeData.put("lng", selectedLng);
 
         if (cafe == null) {
-            // Thêm quán mới vào collection cafe_admin
-            db.collection("cafe_admin")
+            // Thêm quán mới vào 'cafes'
+            db.collection("cafes")
                     .add(cafeData)
                     .addOnSuccessListener(documentReference -> {
+                        Log.d(TAG, "Added cafe with ID: " + documentReference.getId());
                         Toast.makeText(this, "Thêm quán thành công!", Toast.LENGTH_SHORT).show();
                         dialog.dismiss();
                     })
                     .addOnFailureListener(e -> {
+                        Log.e(TAG, "Error adding cafe: ", e);
                         Toast.makeText(this, "Lỗi khi thêm quán: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                         dialog.dismiss();
                     });
         } else {
-            // Sửa quán trong collection cafe_admin
-            db.collection("cafe_admin")
-                    .document(cafe.getId())
+            // Sửa quán trong 'cafes'
+            String docId = cafe.getId();
+            db.collection("cafes")
+                    .document(docId)
                     .set(cafeData)
                     .addOnSuccessListener(aVoid -> {
+                        Log.d(TAG, "Updated cafe with ID: " + docId);
                         Toast.makeText(this, "Sửa quán thành công!", Toast.LENGTH_SHORT).show();
                         dialog.dismiss();
                     })
                     .addOnFailureListener(e -> {
+                        Log.e(TAG, "Error updating cafe: ", e);
                         Toast.makeText(this, "Lỗi khi sửa quán: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                         dialog.dismiss();
                     });
@@ -441,7 +442,7 @@ public class AdminActivity extends AppCompatActivity implements AdminCafeAdapter
         linearLayout.setOrientation(LinearLayout.HORIZONTAL);
         linearLayout.setLayoutParams(new LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.WRAP_CONTENT,
-                450
+                LinearLayout.LayoutParams.WRAP_CONTENT
         ));
         linearLayout.setPadding(8, 8, 8, 8);
 
@@ -469,31 +470,23 @@ public class AdminActivity extends AppCompatActivity implements AdminCafeAdapter
     }
 
     private void requestStoragePermissions() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_MEDIA_IMAGES) != PackageManager.PERMISSION_GRANTED) {
-                ActivityCompat.requestPermissions(this, new String[]{
-                        Manifest.permission.READ_MEDIA_IMAGES
-                }, PERMISSION_REQUEST_CODE);
-            }
-        } else {
-            if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, PERMISSION_REQUEST_CODE);
-            }
+        String permission = Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU ?
+                Manifest.permission.READ_MEDIA_IMAGES : Manifest.permission.READ_EXTERNAL_STORAGE;
+        if (ContextCompat.checkSelfPermission(this, permission) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{permission}, STORAGE_PERMISSION_CODE);
         }
     }
 
     private boolean hasStoragePermission() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            return ContextCompat.checkSelfPermission(this, Manifest.permission.READ_MEDIA_IMAGES) == PackageManager.PERMISSION_GRANTED;
-        } else {
-            return ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
-        }
+        String permission = Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU ?
+                Manifest.permission.READ_MEDIA_IMAGES : Manifest.permission.READ_EXTERNAL_STORAGE;
+        return ContextCompat.checkSelfPermission(this, permission) == PackageManager.PERMISSION_GRANTED;
     }
 
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (requestCode == PERMISSION_REQUEST_CODE) {
+        if (requestCode == STORAGE_PERMISSION_CODE) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 Toast.makeText(this, "Quyền truy cập đã được cấp!", Toast.LENGTH_SHORT).show();
             } else {
@@ -515,7 +508,7 @@ public class AdminActivity extends AppCompatActivity implements AdminCafeAdapter
             inputStream.close();
             return byteArrayOutputStream.toByteArray();
         } catch (IOException e) {
-            e.printStackTrace();
+            Log.e(TAG, "Error reading URI: ", e);
             return null;
         }
     }
@@ -531,13 +524,16 @@ public class AdminActivity extends AppCompatActivity implements AdminCafeAdapter
                 .setTitle("Xác Nhận Xóa")
                 .setMessage("Bạn có chắc chắn muốn xóa quán " + cafe.getName() + "?")
                 .setPositiveButton("Xóa", (dialog, which) -> {
-                    db.collection("cafe_admin")
-                            .document(cafe.getId())
+                    String docId = cafe.getId();
+                    db.collection("cafes")
+                            .document(docId)
                             .delete()
                             .addOnSuccessListener(aVoid -> {
+                                Log.d(TAG, "Deleted cafe with ID: " + docId);
                                 Toast.makeText(this, "Xóa quán thành công!", Toast.LENGTH_SHORT).show();
                             })
                             .addOnFailureListener(e -> {
+                                Log.e(TAG, "Error deleting cafe: ", e);
                                 Toast.makeText(this, "Lỗi khi xóa quán: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                             });
                 })
