@@ -28,12 +28,12 @@
 
             <ImageView
                 android:id="@+id/back_icon"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
                 android:layout_alignParentEnd="true"
                 android:layout_centerVertical="true"
                 android:layout_marginEnd="16dp"
-                android:src="@drawable/ic_back"
+                android:src="@drawable/ic_back2"
                 android:contentDescription="Quay lại" />
         </RelativeLayout>
     </androidx.appcompat.widget.Toolbar>

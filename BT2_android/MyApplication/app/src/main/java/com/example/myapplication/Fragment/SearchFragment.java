@@ -49,7 +49,7 @@ public class SearchFragment extends Fragment {
     private FusedLocationProviderClient fusedLocationProviderClient;
     private Location currentLocation;
     private List<Cafe> cafeList;
-    private float maxDistance = 5000; // Mặc định 5km
+    private float maxDistance = 20000; // Mặc định 20km
     private float minRating = 0; // Mặc định tất cả
     private String selectedActivity = "Tất cả"; // Mặc định tất cả hoạt động
     private String searchQuery = ""; // Chuỗi tìm kiếm
@@ -78,20 +78,6 @@ public class SearchFragment extends Fragment {
         // Resize icon marker
         cafeMarkerIcon = resizeMarkerIcon(R.drawable.ic_cafe_marker1, 75, 75);
 
-        // Kiểm tra Bundle từ HomeFragment
-        Bundle args = getArguments();
-        if (args != null) {
-            maxDistance = args.getFloat("maxDistance", 5000); // Lấy maxDistance, mặc định 5km
-            boolean fromExplore = args.getBoolean("fromExplore", false);
-            if (fromExplore) {
-                // Đặt Spinner khoảng cách thành "1 - 5 km" sau khi giao diện được tải
-                Spinner spinnerDistance = view.findViewById(R.id.spinner_distance);
-                if (spinnerDistance != null) {
-                    spinnerDistance.post(() -> spinnerDistance.setSelection(1)); // "1 - 5 km" ở vị trí 1
-                }
-            }
-        }
-
         // Thiết lập ô tìm kiếm
         EditText etSearchCafe = view.findViewById(R.id.et_search_cafe);
         etSearchCafe.addTextChangedListener(new TextWatcher() {
@@ -107,6 +93,31 @@ public class SearchFragment extends Fragment {
                 showNearbyCafes();
             }
         });
+
+        // Thiết lập bộ lọc
+        Spinner spinnerDistance = view.findViewById(R.id.spinner_distance);
+        Spinner spinnerRating = view.findViewById(R.id.spinner_rating);
+        Spinner spinnerActivity = view.findViewById(R.id.spinner_activity);
+
+        if (spinnerDistance == null || spinnerRating == null || spinnerActivity == null) {
+            Log.e(TAG, "One or more spinners are null");
+            Toast.makeText(requireContext(), "Lỗi giao diện: Không tìm thấy bộ lọc!", Toast.LENGTH_SHORT).show();
+            return view;
+        }
+
+        // Đặt giá trị mặc định cho Spinner khoảng cách là "Dưới 20km" (position 3)
+        spinnerDistance.setSelection(3);
+
+        // Kiểm tra Bundle từ HomeFragment
+        Bundle args = getArguments();
+        if (args != null) {
+            maxDistance = args.getFloat("maxDistance", 20000); // Lấy maxDistance, mặc định 20km
+            boolean fromExplore = args.getBoolean("fromExplore", false);
+            if (fromExplore) {
+                // Đã đặt spinnerDistance ở trên, không cần đặt lại
+                spinnerDistance.setSelection(3); // "Dưới 20km" ở vị trí 3
+            }
+        }
 
         // Thiết lập bản đồ lớn
         SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map_large);
@@ -140,7 +151,7 @@ public class SearchFragment extends Fragment {
                         if (cafe != null) {
                             Intent intent = new Intent(requireContext(), ReviewActivity.class);
                             intent.putExtra("cafeId", cafe.getId());
-                            intent.putExtra("sourceFragment", "SearchFragment"); // Thêm sourceFragment
+                            intent.putExtra("sourceFragment", "SearchFragment");
                             startActivity(intent);
                         }
                     }
@@ -153,25 +164,14 @@ public class SearchFragment extends Fragment {
             Toast.makeText(requireContext(), "Không thể khởi tạo bản đồ!", Toast.LENGTH_SHORT).show();
         }
 
-        // Thiết lập bộ lọc
-        Spinner spinnerDistance = view.findViewById(R.id.spinner_distance);
-        Spinner spinnerRating = view.findViewById(R.id.spinner_rating);
-        Spinner spinnerActivity = view.findViewById(R.id.spinner_activity);
-
-        if (spinnerDistance == null || spinnerRating == null || spinnerActivity == null) {
-            Log.e(TAG, "One or more spinners are null");
-            Toast.makeText(requireContext(), "Lỗi giao diện: Không tìm thấy bộ lọc!", Toast.LENGTH_SHORT).show();
-            return view;
-        }
-
         spinnerDistance.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 switch (position) {
                     case 0: maxDistance = 1000; break;  // Dưới 1 km
-                    case 1: maxDistance = 5000; break;  // 1 - 5 km
-                    case 2: maxDistance = 10000; break; // 5 - 10 km
-                    case 3: maxDistance = 20000; break; // 10 - 20 km
+                    case 1: maxDistance = 5000; break;  // Dưới 5 km
+                    case 2: maxDistance = 10000; break; // Dưới 10 km
+                    case 3: maxDistance = 20000; break; // Dưới 20 km
                 }
                 showNearbyCafes();
             }
