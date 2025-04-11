@@ -87,10 +87,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="25dc4141-94f9-4db8-9caf-6e884ed3b10e" name="Changes" comment="Refactor Project #2">
-      <change beforePath="$PROJECT_DIR$/.idea/modules/app/My_Application.app.iml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/MyApplication/app/src/main/java/com/example/myapplication/Fragment/SearchFragment.java" beforeDir="false" afterPath="$PROJECT_DIR$/MyApplication/app/src/main/java/com/example/myapplication/Fragment/SearchFragment.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/MyApplication/app/src/main/res/values/arrays.xml" beforeDir="false" afterPath="$PROJECT_DIR$/MyApplication/app/src/main/res/values/arrays.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

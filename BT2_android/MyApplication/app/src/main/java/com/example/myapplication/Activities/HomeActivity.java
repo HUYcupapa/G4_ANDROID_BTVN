@@ -99,9 +99,6 @@ public class HomeActivity extends AppCompatActivity {
         db.collection("users").document(user.getUid()).get()
                 .addOnSuccessListener(documentSnapshot -> {
                     if (documentSnapshot.exists()) {
-                        String name = documentSnapshot.getString("name");
-                        TextView toolbarTitle = findViewById(R.id.toolbar_title);
-                        toolbarTitle.setText("Xin chào, " + (name != null ? name : "Khách") + " ☕");
 
                         // Hiển thị thông báo khi đăng nhập thành công
                         showAndSaveNotification("Đừng bỏ lỡ những ưu đãi hot!");

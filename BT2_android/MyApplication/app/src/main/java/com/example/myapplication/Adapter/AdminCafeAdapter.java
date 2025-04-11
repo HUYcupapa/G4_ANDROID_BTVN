@@ -1,29 +1,33 @@
 package com.example.myapplication.Adapter;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
 import com.example.myapplication.Model.CafeAdmin;
 import com.example.myapplication.R;
 import com.squareup.picasso.Picasso;
+
 import java.util.List;
 
 public class AdminCafeAdapter extends RecyclerView.Adapter<AdminCafeAdapter.CafeViewHolder> {
 
     private Context context;
     private List<CafeAdmin> cafeList;
-    private OnCafeActionListener onCafeActionListener;
+    private OnCafeActionListener listener;
 
     public AdminCafeAdapter(Context context, List<CafeAdmin> cafeList, OnCafeActionListener listener) {
         this.context = context;
         this.cafeList = cafeList;
-        this.onCafeActionListener = listener;
+        this.listener = listener;
     }
 
     @NonNull
@@ -37,32 +41,43 @@ public class AdminCafeAdapter extends RecyclerView.Adapter<AdminCafeAdapter.Cafe
     public void onBindViewHolder(@NonNull CafeViewHolder holder, int position) {
         CafeAdmin cafe = cafeList.get(position);
 
-        // Hiển thị thông tin quán
-        holder.tvCafeName.setText(cafe.getName() != null ? cafe.getName() : "Tên quán");
-        holder.tvAddress.setText("Địa chỉ: " + (cafe.getLocation() != null ? cafe.getLocation() : "Không có địa chỉ"));
-        holder.tvDescription.setText("Mô tả: " + (cafe.getDescription() != null ? cafe.getDescription() : "Không có mô tả"));
-        holder.tvActivity.setText("Hoạt động: " + (cafe.getActivity() != null ? cafe.getActivity() : "Không có"));
+        // Ánh xạ dữ liệu
+        holder.tvCafeName.setText(cafe.getName() != null ? cafe.getName() : "Tên Quán");
+        holder.tvAddress.setText(cafe.getLocationText() != null ? "Địa chỉ: " + cafe.getLocationText() : "Địa chỉ: Không có địa chỉ");
+        holder.tvDescription.setText(cafe.getDescription() != null ? "Mô tả: " + cafe.getDescription() : "Mô tả: Không có mô tả");
+        holder.tvActivity.setText(cafe.getActivity() != null ? "Hoạt động: " + cafe.getActivity() : "Hoạt động: Không có");
 
-        // Hiển thị hình ảnh
+        // Tải hình ảnh
         if (cafe.getImage1() != null && !cafe.getImage1().isEmpty()) {
-            Picasso.get().load(cafe.getImage1()).into(holder.ivCafeImage);
+            Picasso.get()
+                    .load(cafe.getImage1())
+                    .placeholder(R.drawable.ic_placeholder)
+                    .error(R.drawable.ic_placeholder)
+                    .into(holder.ivCafeImage);
         } else {
             holder.ivCafeImage.setImageResource(R.drawable.ic_placeholder);
         }
 
-        // Xử lý nút Sửa
-        holder.btnEdit.setOnClickListener(v -> {
-            if (onCafeActionListener != null) {
-                onCafeActionListener.onEditClick(cafe);
-            }
-        });
+        // Gán sự kiện với kiểm tra null
+        if (holder.btnEdit != null) {
+            holder.btnEdit.setOnClickListener(v -> {
+                if (listener != null) {
+                    listener.onEditClick(cafe);
+                }
+            });
+        } else {
+            Log.e("AdminCafeAdapter", "btnEdit is null at position " + position);
+        }
 
-        // Xử lý nút Xóa
-        holder.btnDelete.setOnClickListener(v -> {
-            if (onCafeActionListener != null) {
-                onCafeActionListener.onDeleteClick(cafe);
-            }
-        });
+        if (holder.btnDelete != null) {
+            holder.btnDelete.setOnClickListener(v -> {
+                if (listener != null) {
+                    listener.onDeleteClick(cafe);
+                }
+            });
+        } else {
+            Log.e("AdminCafeAdapter", "btnDelete is null at position " + position);
+        }
     }
 
     @Override
@@ -70,12 +85,12 @@ public class AdminCafeAdapter extends RecyclerView.Adapter<AdminCafeAdapter.Cafe
         return cafeList.size();
     }
 
-    public static class CafeViewHolder extends RecyclerView.ViewHolder {
+    static class CafeViewHolder extends RecyclerView.ViewHolder {
         ImageView ivCafeImage;
         TextView tvCafeName, tvAddress, tvDescription, tvActivity;
         Button btnEdit, btnDelete;
 
-        public CafeViewHolder(@NonNull View itemView) {
+        CafeViewHolder(@NonNull View itemView) {
             super(itemView);
             ivCafeImage = itemView.findViewById(R.id.ivCafeImage);
             tvCafeName = itemView.findViewById(R.id.tvCafeName);
